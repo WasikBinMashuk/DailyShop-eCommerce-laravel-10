@@ -153,21 +153,24 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
                       </span>
                       <span class="nav-link-title">
-                        Categories
+                        Products
                       </span>
                     </a>
                     <div class="dropdown-menu">
                       <div class="dropdown-menu-columns">
                         <div class="dropdown-menu-column">
                           <a class="dropdown-item" href="{{ route('category.index') }}">
-                            Show Categories
+                            Categories
                           </a>
-                          <a class="dropdown-item" href="{{ route('category.create') }}">
+                          <a class="dropdown-item" href="{{ route('subcategory.index') }}">
+                            Subcategories
+                          </a>
+                          {{-- <a class="dropdown-item" href="{{ route('category.create') }}">
                             Add Category
                           </a>
                           <a class="dropdown-item" href="{{ route('subcategory.create') }}">
                             Add Sub Categories
-                          </a>
+                          </a> --}}
                           {{-- <div class="dropend">
                             <a class="dropdown-item dropdown-toggle" href="#sidebar-cards" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
                               Category 1

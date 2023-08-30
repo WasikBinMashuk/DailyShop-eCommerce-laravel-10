@@ -5,10 +5,16 @@
 <div class="page-wrapper mt-5" style="display: flex; justify-content: center; flex-direction:row">
     <div class="col-md-8 ">
         <div class="card" >
-            <div class="card-header justify-content-center flex-column">
-                <h2>Users Table</h2>
-                <a href="{{ route('users.create') }}" class="btn btn-info">Add User</a>
+          <div class=" card-header justify-content-between ">
+            <div>
+              <h3 class="card-title">Users Table</h3>
             </div>
+            <div>
+              <div class="d-inline">
+                <a class="btn btn-info" href="">Add User</a>
+              </div>
+            </div>
+          </div>
             <div class="card-body">
                 {{-- @if (session('msg'))
                       <div class="alert alert-success alert-dismissible fade show" role="alert">
