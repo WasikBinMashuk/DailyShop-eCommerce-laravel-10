@@ -11,7 +11,7 @@
             </div>
             <div>
               <div class="d-inline">
-                <a class="btn btn-info" href="">Add User</a>
+                <a class="btn btn-info" href="{{ route('users.create') }}">Add User</a>
               </div>
             </div>
           </div>

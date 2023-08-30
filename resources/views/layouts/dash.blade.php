@@ -165,6 +165,9 @@
                           <a class="dropdown-item" href="{{ route('subcategory.index') }}">
                             Subcategories
                           </a>
+                          <a class="dropdown-item" href="{{ route('product.index') }}">
+                            Products
+                          </a>
                           {{-- <a class="dropdown-item" href="{{ route('category.create') }}">
                             Add Category
                           </a>

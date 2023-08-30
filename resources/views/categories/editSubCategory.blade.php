@@ -34,7 +34,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Sub Category Name</label>
                       <div>
-                          <input type="text" class="form-control" name="sub_category_name"  placeholder="Enter email"value="{{ $editCategory->sub_category_name }}">
+                          <input type="text" class="form-control" name="sub_category_name"  placeholder="Enter email" value="{{ $editCategory->sub_category_name }}">
                           @error('sub_category_name')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
