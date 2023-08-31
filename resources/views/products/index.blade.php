@@ -3,7 +3,7 @@
 
 <div class="container">
   <div class="row justify-content-center mt-5">
-      <div class="col-md-8">
+      <div class="col-md-12">
           <div class="card">
               <div class=" card-header justify-content-between ">
                 <div>
@@ -29,6 +29,7 @@
                         <th scope="col">Product Name</th>
                         <th scope="col">Price</th>
                         <th scope="col">status</th>
+                        <th scope="col">Actions</th>
                         
                         <th scope="col"></th>
                         {{-- <th scope="col"></th> --}}
@@ -44,7 +45,13 @@
                               <td>{{ $item->product_code }}</td>
                               <td>{{ $item->product_name }}</td>
                               <td>{{ $item->price }}</td>
-                              <td>{{ $item->status }}</td>
+                              <td>
+                                @if ($item->status == 0)
+                                  <span class="badge bg-red">Inactive</span>
+                                @else
+                                  <span class="badge bg-green">Active</span>
+                                @endif  
+                              </td>
                               
                               <td style="width: 100px">
                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">

@@ -13,9 +13,14 @@ class ProductController extends Controller
         // $products = Product::latest()->paginate(5);
         // dd($shoppers);
 
-        $products = Category::select()
-        ->Join('sub_categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->Join('products', 'sub_categories.id', '=', 'products.sub_category_id')
+        // $products = Category::select()
+        // ->Join('sub_categories', 'categories.id', '=', 'sub_categories.category_id')
+        // ->Join('products', 'sub_categories.id', '=', 'products.sub_category_id')
+        // ->orderBy('categories.category_name', 'ASC')
+        // ->paginate(10);
+        $products = Product::select()
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
         ->orderBy('categories.category_name', 'ASC')
         ->paginate(10);
 
@@ -39,7 +44,7 @@ class ProductController extends Controller
         $request->validate([
             'category_id' => 'required',
             'sub_category_id' => 'required',
-            'product_code' => 'required',
+            'product_code' => 'required|unique:products',
             'product_name' => 'required',
             'price' => 'required',
             // 'product_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
@@ -81,7 +86,7 @@ class ProductController extends Controller
         $request->validate([
             'category_id' => 'required',
             'sub_category_id' => 'required',
-            'product_code' => 'required',
+            'product_code' => 'required|unique:products',
             'product_name' => 'required',
             'price' => 'required',
             // 'product_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
