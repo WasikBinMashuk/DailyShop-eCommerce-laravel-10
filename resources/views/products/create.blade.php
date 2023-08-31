@@ -17,7 +17,7 @@
                   <div>
                     <select name="category_id" class="form-select">
                       @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
                       @endforeach
                     </select>
                   </div>
@@ -27,7 +27,7 @@
                   <div>
                     <select name="sub_category_id" class="form-select">
                       @foreach($subCategories as $subcategory)
-                        <option value="{{ $subcategory->id }}">{{ $subcategory->sub_category_name }}</option>
+                        <option value="{{ $subcategory->id }}" {{ old('sub_category_id') == $subcategory->id ? 'selected' : '' }}>{{ $subcategory->sub_category_name }}</option>
                       @endforeach
                     </select>
                   </div>
@@ -35,7 +35,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Product Code</label>
                       <div>
-                          <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="product_code"  placeholder="Enter Product Code">
+                          <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="product_code"  placeholder="Enter Product Code" value="{{ old('product_code') }}">
                           @error('product_code')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
@@ -44,7 +44,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Product Name</label>
                       <div>
-                          <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name"  placeholder="Enter Product Name">
+                          <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name"  placeholder="Enter Product Name" value="{{ old('product_name') }}">
                           @error('product_name')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
@@ -53,7 +53,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Price</label>
                       <div>
-                          <input type="text" class="form-control @error('price') is-invalid @enderror" name="price"  placeholder="Enter Price">
+                          <input type="text" class="form-control @error('price') is-invalid @enderror" name="price"  placeholder="Enter Price" value="{{ old('price') }}">
                           @error('price')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
@@ -64,8 +64,8 @@
                     <label class="form-label required">Status</label>
                     <div>
                       <select name="status" class="form-select">
-                        <option value="1" selected>Active</option>
-                        <option value="0" >Inactive</option>
+                        <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive</option>
                       </select>
                     </div>
                   </div>

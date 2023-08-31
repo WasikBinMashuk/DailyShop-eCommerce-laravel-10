@@ -39,7 +39,14 @@
                     <tbody>
                       @foreach ($products as $item)
                           <tr>
-                              <td>{{ $item->product_image }}</td>
+                              <td>
+                                {{-- {{ $item->product_image }} --}}
+                                @if($item->product_image)
+                                  <img src="{{ asset('images/'.$item->product_image) }}" style="height: 100px;width:100px;">
+                                  @else 
+                                  <span>No image!</span>
+                                @endif
+                              </td>
                               <td>{{ $item->category_name }}</td>
                               <td>{{ $item->sub_category_name }}</td>
                               <td>{{ $item->product_code }}</td>
@@ -68,7 +75,7 @@
                     </tbody>
                   </table>
   
-                    {{-- {{ $categories->links('pagination::bootstrap-5') }} --}}
+                    {{ $products->links('pagination::bootstrap-5') }}
               </div>
           </div>
       </div>

@@ -36,7 +36,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Product Code</label>
                       <div>
-                          <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="product_code"  placeholder="Enter Product Code" value="{{ $editProduct->product_code }}">
+                          <input type="text" class="form-control @error('product_code') is-invalid @enderror" name="product_code"  placeholder="Enter Product Code" value="{{ old('product_code', $editProduct->product_code) }}">
                           @error('product_code')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
@@ -45,7 +45,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Product Name</label>
                       <div>
-                          <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name"  placeholder="Enter Product Name" value="{{ $editProduct->product_name }}">
+                          <input type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name"  placeholder="Enter Product Name" value="{{ old('product_name', $editProduct->product_name) }}">
                           @error('product_name')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
@@ -54,7 +54,7 @@
                   <div class="col-md-6 mb-3">
                       <label class="form-label required">Price</label>
                       <div>
-                          <input type="text" class="form-control @error('price') is-invalid @enderror" name="price"  placeholder="Enter Price" value="{{ $editProduct->price }}">
+                          <input type="text" class="form-control @error('price') is-invalid @enderror" name="price"  placeholder="Enter Price" value="{{ old('price', $editProduct->price) }} ">
                           @error('price')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
@@ -65,22 +65,33 @@
                     <label class="form-label required">Status</label>
                     <div>
                       <select name="status" class="form-select">
-                        <option value="1" selected>Active</option>
-                        <option value="0" >Inactive</option>
+                        <option value="1"  {{ old('status', $editProduct->status) == '1' ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ old('status', $editProduct->status) == '0' ? 'selected' : '' }}>Inactive</option>
                       </select>
                     </div>
                   </div>
-
-                  <input type="hidden" name="id" value="{{ $editProduct->id }}">
-                  {{-- <div class="col-md-12 mb-3">
-                      <label class="form-label required">Product Image</label>
+                  <div class="col-md-6 mb-3">
+                      <label class="form-label">Upload Image</label>
                       <div>
                           <input type="file" class="form-control" name="product_image" placeholder="Enter mobile no">
                           @error('product_image')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
                       </div>
-                    </div> --}}
+                  </div>
+                  <div class="col-md-6 mb-3 text-center">
+                    <label class="form-label ">Product Image</label>
+                    <div>
+                      @if($editProduct->product_image)
+                        <img src="{{ asset('images/'.$editProduct->product_image) }}" style="height: 100px;width:100px;">
+                      @else 
+                      <img src="{{ asset('images/no.jpg') }}" style="height: 150px; width: 150px;">
+                      @endif
+                    </div>
+                </div>
+
+                  {{-- HIDDEN ID Passing --}}
+                  <input type="hidden" name="id" value="{{ $editProduct->id }}">
               </div>
             </div>
             <div class="card-footer text-end">
