@@ -8,7 +8,7 @@ use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManagerStatic as Image;
-// use Intervention\Image\Image;
+
 
 class ProductController extends Controller
 {
@@ -31,6 +31,7 @@ class ProductController extends Controller
 
         return view('products.index', compact('products'));
     }
+
     public function create(){
 
         // dd($categories);
@@ -170,5 +171,16 @@ class ProductController extends Controller
         toast('Product Deleted!','info');
 
         return redirect()->back();
+    }
+
+    public function getCategory(Request $request){
+        $cid = $request->post('cid');
+
+        $subCategories = SubCategory::where('category_id',$cid)->get();
+        $html = '<option value="">Select Subcategory</option>';
+        foreach($subCategories as $list){
+            $html.='<option value="'.$list->id.'">'.$list->sub_category_name.'</option>';
+        }
+        echo $html;
     }
 }

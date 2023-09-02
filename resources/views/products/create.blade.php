@@ -15,21 +15,29 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label required">Select Category</label>
                   <div>
-                    <select name="category_id" class="form-select">
+                    <select name="category_id" class="form-select" id="category">
+                      <option value="">Select Category</option>
                       @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
                       @endforeach
                     </select>
+                    @error('category_id')
+                      <span class="text-danger">{{ $message }}</span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label required">Select Subcategory</label>
                   <div>
-                    <select name="sub_category_id" class="form-select">
-                      @foreach($subCategories as $subcategory)
+                    <select name="sub_category_id" class="form-select" id="sub_category">
+                      <option value="">Select Subcategory</option>
+                      {{-- @foreach($subCategories as $subcategory)
                         <option value="{{ $subcategory->id }}" {{ old('sub_category_id') == $subcategory->id ? 'selected' : '' }}>{{ $subcategory->sub_category_name }}</option>
-                      @endforeach
+                      @endforeach --}}
                     </select>
+                    @error('sub_category_id')
+                      <span class="text-danger">{{ $message }}</span>
+                    @enderror
                   </div>
                 </div>
                   <div class="col-md-6 mb-3">
@@ -87,5 +95,22 @@
         </form>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+  jQuery(document).ready(function(){
+    jQuery('#category').change(function(){
+      let cid=jQuery(this).val();
+      jQuery.ajax({
+        url:'/getCategory',
+        type:'post',
+        data:'cid='+cid+'&_token={{csrf_token()}}',
+        success:function(result){
+          jQuery('#sub_category').html(result)
+        }
+      });
+    });
+  });
+</script>
 
 @endsection
