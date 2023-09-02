@@ -70,7 +70,7 @@
                     </div>
                   </div>
                   <div class="col-md-12 mb-3">
-                      <label class="form-label required">Product Image</label>
+                      <label class="form-label">Product Image</label>
                       <div>
                           <input type="file" class="form-control" name="product_image" placeholder="Enter mobile no">
                           @error('product_image')

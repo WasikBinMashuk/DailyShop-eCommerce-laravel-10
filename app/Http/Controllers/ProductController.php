@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Intervention\Image\ImageManagerStatic as Image;
+// use Intervention\Image\Image;
 
 class ProductController extends Controller
 {
@@ -41,6 +43,7 @@ class ProductController extends Controller
     public function store(Request $request){
 
         // dd($request->all());
+        // dd($request->file('product_image'));
 
         $request->validate([
             'category_id' => 'required',
@@ -48,13 +51,24 @@ class ProductController extends Controller
             'product_code' => 'required|unique:products',
             'product_name' => 'required',
             'price' => 'required',
-            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|in:0,1',
         ]);
 
-        $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();  
+        if ($request->has('product_image')) {
+            $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
+            Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
+        }else{
+            $imageName = null;
+        }
+
+        
         // dd($imageName);
-        $request->product_image->move(public_path('images'), $imageName);
+        // $request->product_image->move(public_path('images'), $imageName);
+
+        // $product_image = $request->file('product_image');
+        // dd($product_image);
+        
         
         Product::create([
             'category_id' => $request->category_id,
@@ -94,17 +108,30 @@ class ProductController extends Controller
             'product_code' => ['required', Rule::unique('products','product_code')->ignore($request->id)],
             'product_name' => 'required',
             'price' => 'required',
-            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|in:0,1',
         ]);
-        // dd('dada');
-        // Category::where('id', $request->id)->first()->update([
-        //     'category_name' => $request->category_name,
-        // ]);
+        
 
-        $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();  
+        
+
+        if ($request->has('product_image')) {
+            // dd('dada');
+            
+            // DELETING THE OLD IMAGE FILE
+            @unlink(public_path('images' )."/".$request->old_image);
+
+            $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
+            Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
+        }else{
+            // dd('noooo');
+            $imageName = $request->old_image;
+        }
+
+         
         // dd($imageName);
-        $request->product_image->move(public_path('images'), $imageName);
+        // $request->product_image->move(public_path('images'), $imageName);
+        
 
         Product::where('id', $request->id)->first()->update([
             'category_id' => $request->category_id,
@@ -116,6 +143,8 @@ class ProductController extends Controller
             'status' => $request->status,
         ]);
         // dd($user);
+
+
         
         // sweet alert
         toast('Data Updated!','success');

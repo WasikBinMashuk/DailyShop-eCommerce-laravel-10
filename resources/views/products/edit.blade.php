@@ -92,6 +92,9 @@
 
                   {{-- HIDDEN ID Passing --}}
                   <input type="hidden" name="id" value="{{ $editProduct->id }}">
+
+                  {{-- HIDDEN OLD IMAGE PASSING --}}
+                  <input type="hidden" name="old_image" value="{{ $editProduct->product_image }}">
               </div>
             </div>
             <div class="card-footer text-end">
