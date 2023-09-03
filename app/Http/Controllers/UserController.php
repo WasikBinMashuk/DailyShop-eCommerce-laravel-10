@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index(){
 
         $users = User::latest()->paginate(5);
-        // dd($shoppers);
+        
         return view('users', compact('users'));
     }
 
@@ -26,11 +26,10 @@ class UserController extends Controller
     }
 
     public function store(Request $request){
-        // dd($request->all());
 
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
+            'name' => 'required|max:255',
+            'email' => 'required|max:255||unique:users',
             'password' => 'required|confirmed|min:6',
             'mobile' => 'required|max:11',
             'status' => 'required|in:0,1'
@@ -52,36 +51,26 @@ class UserController extends Controller
 
     public function edit($id){
         $editUsers = User::where('id', $id)->first();
-        // $editshoppers = Shopper::all()->find($id);
-        // dd($editShoppers);
         return view('edit', compact('editUsers'));
     }
 
     public function update(Request $request){
-        // dd($request->all());
-        
+
         $request->validate([
             'name' => 'required',
             'email' => 'required',
             'mobile' => 'required|max:11',
             'status' => 'required|in:0,1'
         ]);
-        // dd('dada');
+
         $user = User::where('id', $request->id)->first();
-        // dd($user);
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'mobile' => $request->mobile,
             'status' => $request->status,
         ]);
-
-        // Shopper->update([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'address' => $request->address,
-        //     'mobile' => $request->mobile
-        // ]);
 
         // sweet alert
         toast('User Updated!','success');
@@ -105,27 +94,19 @@ class UserController extends Controller
     }
 
     public function updatePassword(Request $request){
-        // dd($request->all());
 
         $request->validate([
             'old_password' => 'required',
             'password' => 'required|confirmed|min:6',
         ]);
-        // dd('valid');
-
         
         if(!Hash::check($request->old_password, auth()->user()->password)){
             toast('Old Password Does not match!','warning');
             return back();
         }
-        // dd('warning');
-
-        // where('id', $request->id)
-        #Update the new Password
         User::where('id',auth()->user()->id)->update([
             
             'password' => Hash::make($request->password)
-            // 'password' => $request->password
         ]);
 
         toast('Password changed!','success');

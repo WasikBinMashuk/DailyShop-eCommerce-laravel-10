@@ -12,29 +12,31 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class ProductController extends Controller
 {
-    public function index(){
-        // $products = Product::latest()->paginate(5);
-        // dd($shoppers);
+    public function index(Request $request){
 
-        // $products = Category::select()
-        // ->Join('sub_categories', 'categories.id', '=', 'sub_categories.category_id')
-        // ->Join('products', 'sub_categories.id', '=', 'products.sub_category_id')
-        // ->orderBy('categories.category_name', 'ASC')
-        // ->paginate(10);
-        $products = Product::select('products.id','products.product_image','categories.category_name','sub_categories.sub_category_name','products.product_code','products.product_name','products.price','products.status')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->orderBy('categories.category_name', 'ASC')
-        ->paginate(5);
+        $search = $request['search'] ?? "";
+        
+        if ($search != "") {
+            $products = Product::select('products.id','products.product_image','categories.category_name','sub_categories.sub_category_name','products.product_code','products.product_name','products.price','products.status')
+            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+            ->where('product_name','LIKE',"%$search%")
+            ->orWhere('product_code','LIKE',"%$search%")
+            ->orderBy('categories.category_name', 'ASC')
+            ->paginate(5);
+        }else{
+            $products = Product::select('products.id','products.product_image','categories.category_name','sub_categories.sub_category_name','products.product_code','products.product_name','products.price','products.status')
+            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+            ->orderBy('categories.category_name', 'ASC')
+            ->paginate(5);
+        }
 
-        // dd($products);
-
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products','search'));
     }
 
     public function create(){
 
-        // dd($categories);
         $categories = Category::all();
         $subCategories = SubCategory::all();
         
@@ -43,15 +45,13 @@ class ProductController extends Controller
 
     public function store(Request $request){
 
-        // dd($request->all());
-        // dd($request->file('product_image'));
-
         $request->validate([
             'category_id' => 'required',
             'sub_category_id' => 'required',
             'product_code' => 'required|unique:products',
-            'product_name' => 'required',
-            'price' => 'required',
+            'product_name' => 'required|max:255',
+            // 'price' => 'nullable|required_with:product_name',
+            'price' => 'required|integer|digits_between:2,7',
             'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|in:0,1',
         ]);
@@ -91,43 +91,33 @@ class ProductController extends Controller
     public function edit($id){
         
         $editProduct = Product::where('id', $id)->first();
-        // dd($editProduct);
-        
 
         $categories = Category::all();
-        // $subCategories = SubCategory::all();
         $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
-        // dd($subCategories);
-        
+
         return view('products.edit', compact('editProduct', 'categories', 'subCategories'));
     }
 
     public function update(Request $request){
-        // dd($request->all());
-        
+
         $request->validate([
             'category_id' => 'required',
             'sub_category_id' => 'required',
-            'product_code' => ['required', Rule::unique('products','product_code')->ignore($request->id)],
-            'product_name' => 'required',
-            'price' => 'required',
+            'product_code' => ['required','max:255', Rule::unique('products','product_code')->ignore($request->id)],
+            'product_name' => 'required|max:255',
+            'price' => 'required|integer|digits_between:2,7',
             'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|in:0,1',
         ]);
-        
-
-        
 
         if ($request->has('product_image')) {
-            // dd('dada');
-            
+
             // DELETING THE OLD IMAGE FILE
             @unlink(public_path('images' )."/".$request->old_image);
 
             $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
             Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
         }else{
-            // dd('noooo');
             $imageName = $request->old_image;
         }
 
@@ -145,10 +135,7 @@ class ProductController extends Controller
             'product_image' => $imageName,
             'status' => $request->status,
         ]);
-        // dd($user);
 
-
-        
         // sweet alert
         toast('Data Updated!','success');
 
@@ -156,11 +143,8 @@ class ProductController extends Controller
     }
 
     public function delete($id){
-        // dd($id);
         
         $products = Product::where('id', $id)->first();
-        // dd($products);
-        // dd(public_path('images' )."/".$products->product_image);
 
         if (file_exists(public_path('images' )."/".$products->product_image)) {
 
