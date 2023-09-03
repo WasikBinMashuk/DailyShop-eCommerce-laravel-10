@@ -95,7 +95,9 @@ class ProductController extends Controller
         
 
         $categories = Category::all();
-        $subCategories = SubCategory::all();
+        // $subCategories = SubCategory::all();
+        $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
+        // dd($subCategories);
         
         return view('products.edit', compact('editProduct', 'categories', 'subCategories'));
     }
@@ -173,6 +175,7 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
+    // getting this request from ajax for dependant dropdown menus
     public function getCategory(Request $request){
         $cid = $request->post('cid');
 
@@ -183,4 +186,7 @@ class ProductController extends Controller
         }
         echo $html;
     }
+
+    
+    
 }
