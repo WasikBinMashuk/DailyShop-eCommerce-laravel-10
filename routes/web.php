@@ -89,4 +89,3 @@ Route::get('/products/{id}/delete', [ProductController::class, 'delete'])->name(
 
 // Dependant dropdown menu while product
 Route::post('/getCategory', [ProductController::class, 'getCategory']);
-Route::post('/getEditCategory', [ProductController::class, 'getEditCategory']);

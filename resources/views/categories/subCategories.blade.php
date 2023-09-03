@@ -64,38 +64,6 @@
               </div>
           </div>
       </div>
-
-      {{-- <div class="col-md-4">
-          <div class="card">
-              <div class="card-header text-center pt-4">
-                  <h4>Select Category</h4>
-                  
-              </div>
-
-              <div class="card-body">
-                  
-                  <form action="{{ route('category.index') }}" method="POST">
-                      @csrf
-                      <div class="mb-3">
-                        <label class="form-label">Select Category</label>
-                        <div>
-                          <select name="category_id" class="form-select">
-                            @foreach($categories as $category)
-                              <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                            @endforeach
-                          </select>
-                        </div>
-                      </div>
-                      
-
-                        <div class="d-grid mb-2">
-                          <input type="submit" class="btn btn-primary" value="SHOW">
-                        </div>
-                  </form>
-                  
-              </div>
-          </div>
-      </div> --}}
   </div>
 </div>
 

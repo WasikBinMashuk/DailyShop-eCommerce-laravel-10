@@ -12,15 +12,7 @@
             </div>
             <div class="card-body">
               <div class="row">
-                  {{-- <div class="col-md-6 mb-3">
-                      <label class="form-label required">Category Name</label>
-                      <div>
-                          <input type="text" class="form-control" name="category_name" placeholder="Enter name" value="{{ $editCategory->category_name }}" disabled>
-                          @error('category_name')
-                                  <span class="text-danger">{{ $message }}</span>
-                          @enderror
-                      </div>
-                  </div> --}}
+                  
                   <div class="col-md-6 mb-3">
                     <label class="form-label required">Select Category</label>
                   <div>

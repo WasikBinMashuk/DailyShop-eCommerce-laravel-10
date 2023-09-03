@@ -29,12 +29,6 @@
                         @enderror
                     </div>
                 </div>
-                {{-- <div class="mb-3">
-                    <label class="form-label required">Confirm Password</label>
-                    <div>
-                        <input type="password" id="password" class="form-control" name="password_confirmation"  placeholder="Enter password">
-                    </div>
-                </div> --}}
               
             </div>
             <div class="card-footer text-end">
