@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopperController;
 use App\Http\Controllers\SubCategoryController;
@@ -86,6 +87,10 @@ Route::post('/products/store', [ProductController::class, 'store'])->name('produ
 Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
 Route::put('/products/{id}/update', [ProductController::class, 'update'])->name('product.update');
 Route::get('/products/{id}/delete', [ProductController::class, 'delete'])->name('product.delete');
-
 // Dependant dropdown menu while product
 Route::post('/getCategory', [ProductController::class, 'getCategory']);
+
+
+
+// Customer crud routes
+Route::resource('customers', CustomerController::class);
