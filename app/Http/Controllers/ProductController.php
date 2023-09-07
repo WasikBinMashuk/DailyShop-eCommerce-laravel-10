@@ -86,6 +86,7 @@ class ProductController extends Controller
     public function edit($id){
         
         $editProduct = Product::where('id', $id)->first();
+        // dd($editProduct->sub_category_id,$editProduct->category_id);
 
         $categories = Category::all();
         $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
@@ -159,7 +160,7 @@ class ProductController extends Controller
             @unlink(public_path('images' )."/".$products->product_image);
      
         }
-        
+
         $products->delete();
         // sweet alert
         toast('Product Deleted!','info');
