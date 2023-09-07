@@ -3,7 +3,7 @@
 
 <div class="page-wrapper mt-5" style="display: flex; justify-content: center; flex-direction:row">
     <div class="col-md-6 ">
-        <form action="{{ route('product.update') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('product.update',$editProduct->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="card">
@@ -99,11 +99,7 @@
                     </div>
                 </div>
 
-                  {{-- HIDDEN ID Passing --}}
-                  <input type="hidden" name="id" value="{{ $editProduct->id }}">
-
-                  {{-- HIDDEN OLD IMAGE PASSING --}}
-                  <input type="hidden" name="old_image" value="{{ $editProduct->product_image }}">
+            
               </div>
             </div>
             <div class="card-footer text-end">

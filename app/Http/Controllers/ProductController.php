@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -14,77 +15,71 @@ class ProductController extends Controller
 {
     public function index(Request $request){
 
-        $search = $request['search'] ?? "";
-        
-        if ($search != "") {
-            $products = Product::select('products.id','products.product_image','categories.category_name','sub_categories.sub_category_name','products.product_code','products.product_name','products.price','products.status')
-            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-            ->where('product_name','LIKE',"%$search%")
-            ->orWhere('product_code','LIKE',"%$search%")
-            ->orderBy('categories.category_name', 'ASC')
-            ->paginate(5);
-        }else{
-            $products = Product::select('products.id','products.product_image','categories.category_name','sub_categories.sub_category_name','products.product_code','products.product_name','products.price','products.status')
-            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-            ->orderBy('categories.category_name', 'ASC')
-            ->paginate(5);
+        $products = Product::select('products.*','products.product_image','categories.category_name','sub_categories.sub_category_name')
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
+
+        $search = null;
+
+        if($request->filled('search'))
+        {
+            $search = $request->search;
+            $products=$products->where('product_name','LIKE',"%$search%")
+            ->orWhere('product_code','LIKE',"%$search%");
         }
 
+        $products= $products->orderBy('products.id', 'DESC')->paginate(5);
+      
         return view('products.index', compact('products','search'));
     }
 
     public function create(){
 
-        $categories = Category::all();
-        $subCategories = SubCategory::all();
+        $categories = Category::get();
+
         
-        return view('products.create', compact('categories', 'subCategories'));
+        return view('products.create', compact('categories'));
     }
 
     public function store(Request $request){
 
-        $request->validate([
-            'category_id' => 'required',
-            'sub_category_id' => 'required',
-            'product_code' => 'required|unique:products',
-            'product_name' => 'required|max:255',
-            // 'price' => 'nullable|required_with:product_name',
-            'price' => 'required|integer|digits_between:2,7',
-            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
-            'status' => 'required|in:0,1',
-        ]);
+        try{
+            $request->validate([
+                'category_id' => 'required',
+                'sub_category_id' => 'required',
+                'product_code' => 'required|unique:products|min:3|max:10',
+                'product_name' => 'required|min:1|max:50',
+                // 'price' => 'nullable|required_with:product_name',
+                'price' => 'required|integer',
+                'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+                'status' => 'required|in:0,1',
+            ]);
+    
+            if ($request->filled('product_image')) {
+                $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
+                Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
+            }else{
+                $imageName = null;
+            }
+    
+            Product::create([
+                'category_id' => $request->category_id,
+                'sub_category_id' => $request->sub_category_id,
+                'product_code' => $request->product_code,
+                'product_name' => $request->product_name,
+                'price' => $request->price,
+                'product_image' => $imageName,
+                'status' => $request->status,
+            ]);
 
-        if ($request->has('product_image')) {
-            $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
-            Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
-        }else{
-            $imageName = null;
+            // sweet alert
+            toast('Product added!','success');
+        }
+        catch (Exception $e){
+            // dd($e->getMessage());
+            toast('Something went wrong','error');
         }
 
-        
-        // dd($imageName);
-        // $request->product_image->move(public_path('images'), $imageName);
-
-        // $product_image = $request->file('product_image');
-        // dd($product_image);
-        
-        
-        Product::create([
-            'category_id' => $request->category_id,
-            'sub_category_id' => $request->sub_category_id,
-            'product_code' => $request->product_code,
-            'product_name' => $request->product_name,
-            'price' => $request->price,
-            'product_image' => $imageName,
-            'status' => $request->status,
-        ]);
-
-        // sweet alert
-        toast('Product added!','success');
-
-        // return redirect()->route('users.index')->with('msg', 'User listed successfully');
         return redirect()->back();
     }
 
@@ -98,66 +93,84 @@ class ProductController extends Controller
         return view('products.edit', compact('editProduct', 'categories', 'subCategories'));
     }
 
-    public function update(Request $request){
+    public function update(Request $request, $id){
+        // dd($id);
 
-        $request->validate([
-            'category_id' => 'required',
-            'sub_category_id' => 'required',
-            'product_code' => ['required','max:255', Rule::unique('products','product_code')->ignore($request->id)],
-            'product_name' => 'required|max:255',
-            'price' => 'required|integer|digits_between:2,7',
-            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
-            'status' => 'required|in:0,1',
-        ]);
+        try {
+            $request->validate([
+                'category_id' => 'required',
+                'sub_category_id' => 'required',
+                'product_code' => ['required','min:3','max:10', Rule::unique('products','product_code')->ignore($id)],
+                'product_name' => 'required|min:1|max:50',
+                'price' => 'required|integer',
+                'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+                'status' => 'required|in:0,1',
+            ]);
+    
+            $product = Product::find($id);
+    
+            if ($request->filled('product_image')) {
+    
+                if (file_exists(public_path('images')."/".$product->product_image)) {
+    
+                    // DELETING THE OLD IMAGE FILE
+                     unlink(public_path('images' )."/".$product->product_image);
+             
+                }
+    
+                $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
+                Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
+            }else{
+                $imageName = $product->product_image;
+            }
+             
+            // dd($imageName);
+            // $request->product_image->move(public_path('images'), $imageName);
 
-        if ($request->has('product_image')) {
-
-            // DELETING THE OLD IMAGE FILE
-            @unlink(public_path('images' )."/".$request->old_image);
-
-            $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
-            Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
-        }else{
-            $imageName = $request->old_image;
+            // 1/0;
+           $product->update([
+                'category_id' => $request->category_id,
+                'sub_category_id' => $request->sub_category_id,
+                'product_code' => $request->product_code,
+                'product_name' => $request->product_name,
+                'price' => $request->price,
+                'product_image' => $imageName,
+                'status' => $request->status,
+            ]);
+    
+            // sweet alert
+            toast('Data Updated!','success');
         }
-
-         
-        // dd($imageName);
-        // $request->product_image->move(public_path('images'), $imageName);
-        
-
-        Product::where('id', $request->id)->first()->update([
-            'category_id' => $request->category_id,
-            'sub_category_id' => $request->sub_category_id,
-            'product_code' => $request->product_code,
-            'product_name' => $request->product_name,
-            'price' => $request->price,
-            'product_image' => $imageName,
-            'status' => $request->status,
-        ]);
-
-        // sweet alert
-        toast('Data Updated!','success');
+        catch (Exception $e){
+            // dd($e->getMessage());
+            toast('Something went wrong','error');
+        }
 
         return redirect()->route('product.index');
     }
 
     public function delete($id){
         
-        $products = Product::where('id', $id)->first();
+        try{
+            $products = Product::where('id', $id)->first();
 
         if (file_exists(public_path('images' )."/".$products->product_image)) {
 
             @unlink(public_path('images' )."/".$products->product_image);
      
         }
-
+        
         $products->delete();
         // sweet alert
         toast('Product Deleted!','info');
+        }
+        catch(Exception $e){
+            toast('Something went wrong','error');
+        }
 
         return redirect()->back();
     }
+    
 
     // getting this request from ajax for dependant dropdown menus
     public function getCategory(Request $request){
