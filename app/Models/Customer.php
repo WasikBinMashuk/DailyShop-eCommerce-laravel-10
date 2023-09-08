@@ -16,4 +16,8 @@ class Customer extends Model
         'mobile',
         'status',
     ];
+
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 }
