@@ -90,7 +90,30 @@ Route::get('/products/{id}/delete', [ProductController::class, 'delete'])->name(
 // Dependant dropdown menu while product
 Route::post('/getCategory', [ProductController::class, 'getCategory']);
 
-
-
 // Customer crud routes
 Route::resource('customers', CustomerController::class);
+
+
+// frontend template mastering
+
+Route::get('/index', function () {
+    return view('frontend.index');
+});
+Route::get('/frontdashboard', function () {
+    return view('frontend.dashboard');
+});
+Route::get('/cart', function () {
+    return view('frontend.cart');
+});
+Route::get('/checkout', function () {
+    return view('frontend.checkout');
+});
+Route::get('/shop', function () {
+    return view('frontend.shop');
+});
+Route::get('/login', function () {
+    return view('frontend.login');
+});
+Route::get('/front', function () {
+    return view('layouts.front');
+});
