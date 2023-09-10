@@ -46,9 +46,9 @@
                                 <a href="#">Links</a>
                                 <ul>
                                     
-                                    <li><a href="wishlist.html"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
+                                    <li><a href="#"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Contact Us</a></li>
                                     <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
                                 </ul>
                             </li>
@@ -60,7 +60,7 @@
             <div class="header-middle sticky-header">
                 <div class="container">
                     <div class="header-left">
-                        <a href="index.html" class="logo">
+                        <a href="#" class="logo">
                             <img src="frontend/images/logo.png" alt="Molla Logo" width="105" height="25">
                         </a>
 
@@ -71,7 +71,7 @@
                                 </li>
                                 
                                 <li>
-                                    <a href="#" class="sf-with-ul">Pages</a>
+                                    <a href="#" class="sf-with-ul">Shop</a>
 
                                     <ul>
                                         <li>
@@ -220,8 +220,6 @@
         </header><!-- End .header -->
 
         <main class="main">
-            
-            
 
             @yield('front');
 
@@ -263,13 +261,19 @@
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                     <form action="#">
                                         <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                            <label for="singin-email">Email address <b class="required">*</b></label>
+                                            <input type="text" class="form-control" id="singin-email" name="email" required>
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                             @enderror
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                            <label for="singin-password">Password <b class="required">*</b></label>
+                                            <input type="password" class="form-control" id="singin-password" name="password" required>
+                                            @error('password')
+                                                <span class="text-danger">{{ $message }}</span>
+                                             @enderror
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -288,15 +292,37 @@
                                     </form>
                                 </div><!-- .End .tab-pane -->
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <form action="#">
+                                    <form action="{{ route('customers.store') }}" method="POST">
+                                        @csrf
                                         <div class="form-group">
-                                            <label for="register-email">Your email address *</label>
-                                            <input type="email" class="form-control" id="register-email" name="register-email" required>
+                                            <label >Your name *</label>
+                                            <input type="text" class="form-control"  name="name" required>
+                                            @error('name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div><!-- End .form-group -->
+                                        <div class="form-group">
+                                            <label>Your email address *</label>
+                                            <input type="email" class="form-control" name="email" required>
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label for="register-password">Password *</label>
-                                            <input type="password" class="form-control" id="register-password" name="register-password" required>
+                                            <label >Password *</label>
+                                            <input type="password" class="form-control"  name="password" required>
+                                            @error('password')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div><!-- End .form-group -->
+                                        <div class="form-group">
+                                            <label for="register-password">Confirm password *</label>
+                                            <input type="password" class="form-control" id="register-password" name="password_confirmation" required>
+                                        </div><!-- End .form-group -->
+                                        <div class="form-group">
+                                            <label for="register-email">Mobile *</label>
+                                            <input type="text" class="form-control" id="register-email" name="mobile" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -304,11 +330,6 @@
                                                 <span>SIGN UP</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
-
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="register-policy" required>
-                                                <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
-                                            </div><!-- End .custom-checkbox -->
                                         </div><!-- End .form-footer -->
                                     </form>
                                 </div><!-- .End .tab-pane -->

@@ -14,7 +14,7 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label required">Name</label>
                     <div>
-                        <input type="text" class="form-control" name="name" placeholder="Enter name">
+                        <input type="text" class="form-control" name="name" placeholder="Enter name" value="{{ old('name') }}">
                         @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -23,7 +23,7 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label required">Email</label>
                     <div>
-                        <input type="email" class="form-control" name="email"  placeholder="Enter email">
+                        <input type="email" class="form-control" name="email"  placeholder="Enter email" value="{{ old('email') }}">
                         @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -47,7 +47,7 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label required">Mobile</label>
                     <div>
-                        <input type="text" class="form-control" name="mobile" placeholder="Enter mobile no">
+                        <input type="text" class="form-control" name="mobile" placeholder="Enter mobile no" value="{{ old('mobile') }}">
                         @error('mobile')
                                 <span class="text-danger">{{ $message }}</span>
                         @enderror

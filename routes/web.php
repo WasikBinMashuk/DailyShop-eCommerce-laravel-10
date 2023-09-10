@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopperController;
 use App\Http\Controllers\SubCategoryController;
@@ -20,9 +21,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 Route::get('/signin', function () {
     return view('signin');
 });
@@ -94,11 +93,16 @@ Route::post('/getCategory', [ProductController::class, 'getCategory']);
 Route::resource('customers', CustomerController::class);
 
 
+
 // frontend template mastering
 
-Route::get('/index', function () {
-    return view('frontend.index');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+
+
+// Route::get('/index', function () {
+//     return view('frontend.home');
+// });
 Route::get('/frontdashboard', function () {
     return view('frontend.dashboard');
 });
@@ -111,9 +115,9 @@ Route::get('/checkout', function () {
 Route::get('/shop', function () {
     return view('frontend.shop');
 });
-Route::get('/login', function () {
-    return view('frontend.login');
-});
+// Route::get('/login', function () {
+//     return view('frontend.login');
+// });
 Route::get('/front', function () {
     return view('layouts.front');
 });

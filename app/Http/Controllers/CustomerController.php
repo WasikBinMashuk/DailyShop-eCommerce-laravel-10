@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerFormRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -29,16 +30,11 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerFormRequest $request)
     {
-        // dd($request);
-        $request->validate([
-            'name' => 'required|max:20',
-            'email' => 'required|max:100|unique:customers',
-            'password' => 'required|confirmed|min:6',
-            'mobile' => 'required|max:11',
-            // 'status' => 'required|in:0,1'
-        ]);
+        
+        // Retrieve the validated input data...
+        $validated = $request->validated();
         
         Customer::create([
             'name' => $request->name,
