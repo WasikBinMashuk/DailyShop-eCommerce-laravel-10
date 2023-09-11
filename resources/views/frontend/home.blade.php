@@ -115,8 +115,8 @@
                         <div class="product product-11 text-center">
                             <figure class="product-media">
                                 <a href="product.html">
-                                    <img src="assets/images/demos/demo-2/products/product-1-1.jpg" alt="Product image" class="product-image">
-                                    <img src="assets/images/demos/demo-2/products/product-1-2.jpg" alt="Product image" class="product-image-hover">
+                                    <img src="frontend/images/demos/demo-2/products/product-1-1.jpg" alt="Product image" class="product-image">
+                                    <img src="frontend/images/demos/demo-2/products/product-1-2.jpg" alt="Product image" class="product-image-hover">
                                 </a>
 
                                 <div class="product-action-vertical">

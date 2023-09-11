@@ -17,7 +17,7 @@ class ProductController extends Controller
 {
     public function index(Request $request){
 
-        $products = Product::select('products.*','products.product_image','categories.category_name','sub_categories.sub_category_name')
+        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
         ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,6 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.home');
+        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+        ->orderBy('products.id', 'DESC')->paginate(5);
+
+        return view('frontend.home',compact('products'));
     }
 }

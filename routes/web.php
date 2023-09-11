@@ -31,7 +31,7 @@ Auth::routes();
 // Route::get('/dashboard', function () {return view('dashboard');})->Middleware('auth'); // TODO:: controller add
 
 
-// auth group route for users and categories
+// auth group route for users, categories, subcategories and products
 Route::group(['middleware'=>'auth'],function(){
     
     Route::get('/dashboard', [DashboardController::class, 'dashboard']);
