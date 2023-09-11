@@ -1,5 +1,5 @@
-@extends('layouts.front')
-@section('front')
+@extends('frontend.master')
+@section('content')
 
     <div class="mb-6"></div><!-- End .mb-6 -->
     

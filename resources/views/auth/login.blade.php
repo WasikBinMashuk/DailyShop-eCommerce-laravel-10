@@ -1,6 +1,6 @@
-@extends('layouts.dash')
+@extends('backend.master')
+@section('content')
 
-@section('dash')
 <body  class=" d-flex flex-column">
     <script src="js/demo-theme.min.js?1684106062"></script>
     <div class="page page-center">
