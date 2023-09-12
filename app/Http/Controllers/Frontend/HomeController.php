@@ -28,8 +28,33 @@ class HomeController extends Controller
         $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
         ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->orderBy('products.id', 'DESC')->get();
+        ->orderBy('products.id', 'DESC')->take(7)->get();
 
         return view('frontend.home',compact('products'));
     }
+
+    public function shop()
+    {
+        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+        ->orderBy('products.id', 'DESC')->paginate(12);
+
+        return view('frontend.shop',compact('products'));
+    }
+
+    public function productShow($id)
+    {
+        // $product = Product::find($id);
+
+        $product = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+        ->where('products.id',$id)
+        ->orderBy('products.id', 'DESC')->first();
+        // dd($product);
+        return view('frontend.product',compact('product'));
+    }
+
+
 }

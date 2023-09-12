@@ -63,18 +63,18 @@
             <div class="header-middle sticky-header">
                 <div class="container">
                     <div class="header-left">
-                        <a href="{{ route('home.index') }}" class="logo">
+                        <a href="{{ route('home') }}" class="logo">
                             <img src="{{ asset('frontend/images/logo.png') }}" alt="Molla Logo" width="105" height="25">
                         </a>
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container active">
-                                    <a href="#" class="">Home</a>
+                                    <a href="{{ route('home') }}" class="">Home</a>
                                 </li>
                                 
                                 <li>
-                                    <a href="#" class="sf-with-ul">Shop</a>
+                                    <a href="{{ route('shop') }}" class="sf-with-ul">Shop</a>
 
                                     <ul>
                                         <li>

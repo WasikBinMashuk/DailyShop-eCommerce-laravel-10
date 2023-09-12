@@ -80,7 +80,9 @@ Route::group(['middleware'=>'auth'],function(){
 });
 
 // frontend template mastering
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
+Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
 
 
 // Customer login registration routes with middleware
@@ -98,26 +100,18 @@ Route::group(['middleware'=>'customer'],function(){
 
 
 
-
-
-
-
-
-
-
-
-Route::get('/cart', function () {
-    return view('frontend.cart');
-});
-Route::get('/checkout', function () {
-    return view('frontend.checkout');
-});
-Route::get('/shop', function () {
-    return view('frontend.shop');
-});
+// Route::get('/cart', function () {
+//     return view('frontend.cart');
+// });
+// Route::get('/checkout', function () {
+//     return view('frontend.checkout');
+// });
+// Route::get('/shop', function () {
+//     return view('frontend.shop');
+// });
 // Route::get('/login', function () {
 //     return view('frontend.login');
 // });
-Route::get('/front', function () {
-    return view('layouts.front');
-});
+// Route::get('/front', function () {
+//     return view('layouts.front');
+// });
