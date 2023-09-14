@@ -53,7 +53,18 @@ class HomeController extends Controller
         ->where('products.id',$id)
         ->orderBy('products.id', 'DESC')->first();
         // dd($product);
-        return view('frontend.product',compact('product'));
+
+        $categoryId = $product->category_id;
+        // dd($categoryId);
+
+        $relatedProducts = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+        ->where('products.category_id',$categoryId)
+        ->whereNotIn('products.id', [$id])
+        ->orderBy('products.id', 'DESC')->get();
+
+        return view('frontend.product',compact('product','relatedProducts'));
     }
 
 
