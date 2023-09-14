@@ -202,7 +202,7 @@
                         @foreach ($relatedProducts as $item)
                         <div class="product product-7 text-center">
                             <figure class="product-media">
-                                <a href="product.html">
+                                <a href="{{ route('product.show', $item->id) }}">
                                     @if($item->product_image)
                                         <img src="{{ asset('images/'.$item->product_image) }}" alt="Product image" class="product-image" style="height: 280px;width:280px;" >
                                     @else 
@@ -218,7 +218,7 @@
                                 <div class="product-cat">
                                     <a href="#"><span>Category: {{ $item->category_name }} > {{ $item->sub_category_name }}</span></a>
                                 </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">{{ $item->product_name }}</a></h3><!-- End .product-title -->
+                                <h3 class="product-title"><a href="{{ route('product.show', $item->id) }}">{{ $item->product_name }}</a></h3><!-- End .product-title -->
                                 <div class="product-price">
                                     {{ $item->price }} Bdt
                                 </div><!-- End .product-price -->

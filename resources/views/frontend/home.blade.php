@@ -556,7 +556,7 @@
                             <div class="col-6 col-md-4 col-lg-3">
                                 <div class="product product-11 mt-v3 text-center mb-5">
                                     <figure class="product-media">
-                                        <a href="#">
+                                        <a href="{{ route('product.show', $item->id) }}">
                                             @if($item->product_image)
                                             <img src="{{ asset('images/'.$item->product_image) }}" alt="Product image" class="product-image">
                                             @else 
@@ -571,7 +571,7 @@
                                     </figure><!-- End .product-media -->
     
                                     <div class="product-body">
-                                        <h3 class="product-title"><a href="product.html">{{ $item->product_name }}</a></h3><!-- End .product-title -->
+                                        <h3 class="product-title"><a href="{{ route('product.show', $item->id) }}">{{ $item->product_name }}</a></h3><!-- End .product-title -->
                                         <div class="product-price">
                                             {{ $item->price }}bdt
                                         </div><!-- End .product-price -->

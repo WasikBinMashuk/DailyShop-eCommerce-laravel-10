@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -23,12 +24,25 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+     public function __construct()
+    {
+        // Load your objects
+        $shopCategories = Category::all();
+
+        // Make it available to all views by sharing it for the header category dropdown
+        view()->share('shopCategories', $shopCategories);
+    }
+
     public function index()
     {
-        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->orderBy('products.id', 'DESC')->take(7)->get();
+        // $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
+        // ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        // ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+        // ->orderBy('products.id', 'DESC')->take(7)->get();
+
+        $products = Product::orderBy('id','DESC')->take(7)->get();
+        // dd($products);
 
         return view('frontend.home',compact('products'));
     }
