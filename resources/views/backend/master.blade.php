@@ -295,11 +295,6 @@
 
     @include('sweetalert::alert')
     
-    
-    
-
-    {{-- Fontawesome --}}
-    <script src="https://kit.fontawesome.com/d8c89bb2c3.js" crossorigin="anonymous"></script>
     {{-- MODAL --}}
     <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
@@ -404,9 +399,42 @@
       </div>
     </div>
     
+    {{-- Fontawesome --}}
+    <script src="https://kit.fontawesome.com/d8c89bb2c3.js" crossorigin="anonymous"></script>
+
     <!-- Tabler Core -->
     <script src="{{ asset('js/tabler.min.js?1684106062') }}" defer></script>
     <script src="{{ asset('js/demo.min.js?1684106062') }}" defer></script>
+
+    <!-- Libs JS TINY MCE -->
+    <script src="{{ asset('libs/tinymce/tinymce.min.js?1684106062') }}" defer></script>
+    <script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+        let options = {
+          selector: '#tinymce-mytextarea',
+          height: 300,
+          menubar: false,
+          statusbar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+          ],
+          toolbar: 'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat',
+          content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; }'
+        }
+        if (localStorage.getItem("tablerTheme") === 'dark') {
+          options.skin = 'oxide-dark';
+          options.content_css = 'dark';
+        }
+        tinyMCE.init(options);
+      })
+      // @formatter:on
+    </script>
     
     {{-- sweetalert cdn --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

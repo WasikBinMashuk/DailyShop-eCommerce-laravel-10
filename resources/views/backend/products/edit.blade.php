@@ -79,6 +79,10 @@
                       </select>
                     </div>
                   </div>
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                      <textarea id="tinymce-mytextarea" name="description" value="{{ old('description') }}" placeholder="Write a decsription for the product..."> {{ old('description', $editProduct->description) }} </textarea>
+                  </div>
                   <div class="col-md-6 mb-3">
                       <label class="form-label">Upload Image</label>
                       <div>

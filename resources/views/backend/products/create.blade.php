@@ -77,15 +77,19 @@
                       </select>
                     </div>
                   </div>
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                      <textarea id="tinymce-mytextarea" name="description" placeholder="Write a decsription for the product..."> {{ old('description') }} </textarea>
+                  </div>
                   <div class="col-md-12 mb-3">
                       <label class="form-label">Product Image</label>
                       <div>
-                          <input type="file" class="form-control" name="product_image" placeholder="Enter mobile no">
+                          <input type="file" class="form-control" name="product_image">
                           @error('product_image')
                                   <span class="text-danger">{{ $message }}</span>
                           @enderror
                       </div>
-                    </div>
+                  </div>
               </div>
             </div>
             <div class="card-footer text-end">

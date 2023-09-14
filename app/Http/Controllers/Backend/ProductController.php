@@ -44,8 +44,10 @@ class ProductController extends Controller
     }
 
     public function store(Request $request){
-
-        try{
+        // dd($request->all());
+        // dd($request->filled('product_image'));
+        // dd($request->product_image);
+        
             $request->validate([
                 'category_id' => 'required',
                 'sub_category_id' => 'required',
@@ -56,8 +58,9 @@ class ProductController extends Controller
                 'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
                 'status' => 'required|in:0,1',
             ]);
-    
-            if ($request->filled('product_image')) {
+            // dd("validated");
+            try{
+            if ($request->file('product_image')) {
                 $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
                 Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
             }else{
@@ -72,6 +75,7 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'product_image' => $imageName,
                 'status' => $request->status,
+                'description' => $request->description,
             ]);
 
             // sweet alert
@@ -99,7 +103,7 @@ class ProductController extends Controller
     public function update(Request $request, $id){
         // dd($id);
 
-        try {
+        
             $request->validate([
                 'category_id' => 'required',
                 'sub_category_id' => 'required',
@@ -110,14 +114,15 @@ class ProductController extends Controller
                 'status' => 'required|in:0,1',
             ]);
     
+            try {
             $product = Product::find($id);
     
-            if ($request->filled('product_image')) {
+            if ($request->file('product_image')) {
     
                 if (file_exists(public_path('images')."/".$product->product_image)) {
     
                     // DELETING THE OLD IMAGE FILE
-                     unlink(public_path('images' )."/".$product->product_image);
+                     @unlink(public_path('images' )."/".$product->product_image);
              
                 }
     
@@ -139,6 +144,7 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'product_image' => $imageName,
                 'status' => $request->status,
+                'description' => $request->description,
             ]);
     
             // sweet alert
