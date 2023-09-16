@@ -34,6 +34,25 @@ class HomeController extends Controller
         view()->share('shopCategories', $shopCategories);
     }
 
+    public function search(Request $request){
+
+        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
+        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
+
+        $search = null;
+
+        if($request->filled('search')){
+            $search = $request->search;
+            $products= $products->where('product_name','LIKE',"%$search%")
+            ->orWhere('product_code','LIKE',"%$search%");
+        }
+
+        $products= $products->orderBy('products.id', 'DESC')->paginate(12);
+
+        return view('frontend.shop',compact('products'));
+    }
+
     public function index()
     {
         // $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
@@ -47,8 +66,9 @@ class HomeController extends Controller
         return view('frontend.home',compact('products'));
     }
 
-    public function shop()
+    public function shop(Request $request)
     {
+
         $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
         ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')

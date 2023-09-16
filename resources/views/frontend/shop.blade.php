@@ -12,7 +12,7 @@
                 <div class="container">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="">Shop</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
@@ -24,6 +24,19 @@
         				<div class="toolbox-left">
                             <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
         				</div><!-- End .toolbox-left -->
+                        {{-- <div class="toolbox-right">
+        					<div class="toolbox-sort">
+        						<div class="header-search">
+                                    <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                                    <form action="" method="get">
+                                        <div class="header-search-wrapper">
+                                            <label for="search" class="sr-only">Search</label>
+                                            <input type="search" class="form-control" name="search" id="search" placeholder="Search in..." required>
+                                        </div><!-- End .header-search-wrapper -->
+                                    </form>
+                                </div><!-- End .header-search -->
+        					</div><!-- End .toolbox-sort -->
+        				</div><!-- End .toolbox-right --> --}}
         			</div><!-- End .toolbox -->
 
                     <div class="products">
