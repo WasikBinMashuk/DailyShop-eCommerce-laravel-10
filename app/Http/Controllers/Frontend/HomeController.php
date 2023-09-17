@@ -50,7 +50,6 @@ class HomeController extends Controller
 
     public function shop(Request $request)
     {
-        // dd($request->filled('search'));
 
         $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
@@ -77,6 +76,7 @@ class HomeController extends Controller
 
     public function productShow($id)
     {
+        // dd($id);
 
         $product = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
