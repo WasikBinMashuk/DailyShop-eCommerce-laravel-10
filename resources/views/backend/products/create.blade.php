@@ -77,6 +77,13 @@
                       </select>
                     </div>
                   </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-check">
+                      <input class="form-check-input" type="checkbox" name="trendy" value="1"/>
+                      <span class="form-check-label">Trendy Product</span>
+                      <span class="form-check-description">This product will be featured on home page.</span>
+                    </label>
+                  </div>
                   <div class="mb-3">
                     <label class="form-label">Description</label>
                       <textarea id="tinymce-mytextarea" name="description" placeholder="Write a decsription for the product..."> {{ old('description') }} </textarea>

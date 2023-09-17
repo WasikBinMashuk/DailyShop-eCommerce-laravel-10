@@ -43,6 +43,7 @@
                         <th scope="col">Product Name</th>
                         <th scope="col">Price</th>
                         <th scope="col">status</th>
+                        <th scope="col">Trendy</th>
                         <th scope="col">Actions</th>
                         
                         <th scope="col"></th>
@@ -71,6 +72,11 @@
                                   <span class="badge bg-red">Inactive</span>
                                 @else
                                   <span class="badge bg-green">Active</span>
+                                @endif  
+                              </td>
+                              <td>
+                                @if ($item->trendy == 1)
+                                <span class="badge bg-cyan">Trendy</span>
                                 @endif  
                               </td>
                               

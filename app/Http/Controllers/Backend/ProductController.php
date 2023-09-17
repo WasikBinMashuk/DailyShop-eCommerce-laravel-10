@@ -47,19 +47,29 @@ class ProductController extends Controller
         // dd($request->all());
         // dd($request->filled('product_image'));
         // dd($request->product_image);
-        
-            $request->validate([
-                'category_id' => 'required',
-                'sub_category_id' => 'required',
-                'product_code' => 'required|unique:products|min:3|max:10',
-                'product_name' => 'required|min:1|max:50',
-                // 'price' => 'nullable|required_with:product_name',
-                'price' => 'required|integer',
-                'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
-                'status' => 'required|in:0,1',
-            ]);
+
+        if($request->has('trendy')){
+            $trendy = $request->trendy;
+            // dd('trendy');
+        }else{
+            $trendy = 0;
+            // dd(' not trendy');
+        }
+
+        $request->validate([
+            'category_id' => 'required',
+            'sub_category_id' => 'required',
+            'product_code' => 'required|unique:products|min:3|max:10',
+            'product_name' => 'required|min:1|max:50',
+            // 'price' => 'nullable|required_with:product_name',
+            'price' => 'required|integer',
+            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'status' => 'required|in:0,1',
+            'description' => 'nullable|max:65530',
+            'trendy' => 'in:1',
+        ]);
             // dd("validated");
-            try{
+        try{
             if ($request->file('product_image')) {
                 $imageName = $request->product_code.'-'.time().'.'.$request->product_image->extension();
                 Image::make($request->product_image)->resize(300,300)->save('images/'.$imageName);
@@ -76,6 +86,7 @@ class ProductController extends Controller
                 'product_image' => $imageName,
                 'status' => $request->status,
                 'description' => $request->description,
+                'trendy' => $trendy,
             ]);
 
             // sweet alert
@@ -93,6 +104,7 @@ class ProductController extends Controller
         
         $editProduct = Product::where('id', $id)->first();
         // dd($editProduct->sub_category_id,$editProduct->category_id);
+        // dd($editProduct);
 
         $categories = Category::all();
         $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
@@ -103,6 +115,14 @@ class ProductController extends Controller
     public function update(Request $request, $id){
         // dd($id);
 
+        if($request->has('trendy')){
+            $trendy = $request->trendy;
+            // dd('trendy');
+        }else{
+            $trendy = 0;
+            // dd(' not trendy');
+        }
+
         
             $request->validate([
                 'category_id' => 'required',
@@ -112,6 +132,8 @@ class ProductController extends Controller
                 'price' => 'required|integer',
                 'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
                 'status' => 'required|in:0,1',
+                'description' => 'nullable|max:65530',
+                'trendy' => 'in:1',
             ]);
     
             try {
@@ -145,6 +167,7 @@ class ProductController extends Controller
                 'product_image' => $imageName,
                 'status' => $request->status,
                 'description' => $request->description,
+                'trendy' => $trendy,
             ]);
     
             // sweet alert
