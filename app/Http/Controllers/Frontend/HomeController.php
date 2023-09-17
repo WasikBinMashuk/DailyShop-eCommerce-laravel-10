@@ -42,10 +42,11 @@ class HomeController extends Controller
         // ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
         // ->orderBy('products.id', 'DESC')->take(7)->get();
 
+        $trendy = Product::where('trendy','1')->get();
         $products = Product::orderBy('id','DESC')->take(7)->get();
         // dd($products);
 
-        return view('frontend.home',compact('products'));
+        return view('frontend.home',compact('products','trendy'));
     }
 
     public function shop(Request $request)
