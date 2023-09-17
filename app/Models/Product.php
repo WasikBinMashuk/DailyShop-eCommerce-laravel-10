@@ -18,5 +18,6 @@ class Product extends Model
         'product_image',
         'status',
         'description',
+        'trendy',
     ];
 }
