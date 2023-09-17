@@ -34,24 +34,6 @@ class HomeController extends Controller
         view()->share('shopCategories', $shopCategories);
     }
 
-    public function search(Request $request){
-
-        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
-
-        $search = null;
-
-        if($request->filled('search')){
-            $search = $request->search;
-            $products= $products->where('product_name','LIKE',"%$search%")
-            ->orWhere('product_code','LIKE',"%$search%");
-        }
-
-        $products= $products->orderBy('products.id', 'DESC')->paginate(12);
-
-        return view('frontend.shop',compact('products'));
-    }
 
     public function index()
     {
@@ -68,28 +50,41 @@ class HomeController extends Controller
 
     public function shop(Request $request)
     {
+        // dd($request->filled('search'));
 
         $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->orderBy('products.id', 'DESC')->paginate(12);
+        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
 
-        return view('frontend.shop',compact('products'));
+        if($request->filled('category_id')){
+            $categoryId = $request->category_id;
+            $products = $products->where('categories.id',"$categoryId");
+        }
+        elseif($request->filled('search')){
+            $search = $request->search;
+            $products= $products->where('categories.category_name','LIKE',"%$search%")
+            ->orWhere('product_name','LIKE',"%$search%")
+            ->orWhere('sub_categories.sub_category_name','LIKE',"%$search%");
+        }
+
+        $products= $products->orderBy('products.id', 'DESC')->paginate(12);
+
+        $categories = Category::all();
+
+        return view('frontend.shop',compact('products','categories'));
     }
+    
 
     public function productShow($id)
     {
-        // $product = Product::find($id);
 
         $product = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
         ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
         ->where('products.id',$id)
         ->orderBy('products.id', 'DESC')->first();
-        // dd($product);
 
         $categoryId = $product->category_id;
-        // dd($categoryId);
 
         $relatedProducts = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
         ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')

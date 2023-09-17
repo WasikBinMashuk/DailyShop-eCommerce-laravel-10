@@ -81,7 +81,6 @@ Route::group(['middleware'=>'auth'],function(){
 
 // frontend template mastering
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
 

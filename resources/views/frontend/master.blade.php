@@ -86,7 +86,7 @@
                                             </ul>
                                         </li> --}}
                                         @foreach ($shopCategories as $item)
-                                            <li><a href="#">{{ $item->category_name }}</a></li>
+                                            <li><a href="{{ route('shop', ['category_id' => $item->id]) }}">{{ $item->category_name }}</a></li>
                                         @endforeach
                                         
                                     </ul>
@@ -139,8 +139,8 @@
 
                     <div class="header-right">
                         <div class="header-search">
-                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                            <form action="{{ route('search') }}" method="get">
+                            <a href="" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                            <form action="{{ route('shop') }}" method="get">
                                 <div class="header-search-wrapper">
                                     <label for="q" class="sr-only">Search</label>
                                     <input type="search" class="form-control" name="search" id="q" placeholder="Search in..." required>
