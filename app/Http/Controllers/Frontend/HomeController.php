@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -43,10 +44,11 @@ class HomeController extends Controller
         // ->orderBy('products.id', 'DESC')->take(7)->get();
 
         $trendy = Product::where('trendy','1')->get();
+        $sliders = Slider::where('status','1')->get();
         $products = Product::orderBy('id','DESC')->take(7)->get();
         // dd($products);
 
-        return view('frontend.home',compact('products','trendy'));
+        return view('frontend.home',compact('products','trendy','sliders'));
     }
 
     public function shop(Request $request)

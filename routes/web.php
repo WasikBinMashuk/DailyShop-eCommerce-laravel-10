@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,9 @@ Route::group(['middleware'=>'auth'],function(){
 
     // Customer crud routes in admin panel
     Route::resource('customers', CustomerController::class);
+
+    // Sliders crud route in admin panel
+    Route::resource('sliders', SliderController::class);
 });
 
 // frontend template mastering

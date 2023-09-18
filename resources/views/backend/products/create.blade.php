@@ -100,7 +100,7 @@
               </div>
             </div>
             <div class="card-footer text-end">
-              <button type="submit" class="btn btn-primary">Register</button>
+              <button type="submit" class="btn btn-primary">ADD</button>
             </div>
           </div>
         </form>

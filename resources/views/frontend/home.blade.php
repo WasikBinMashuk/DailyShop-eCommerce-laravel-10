@@ -16,62 +16,29 @@
                                 }
                             }
                         }'>
+                        @foreach ($sliders as $slider)
                         <div class="intro-slide">
+                            
                             <figure class="slide-image">
                                 <picture>
-                                    <source media="(max-width: 480px)" srcset="frontend/images/slider/slide-1-480w.jpg">
-                                    <img src="{{ asset('frontend/images/slider/slide-1.jpg') }}" alt="Image Desc">
+                                    {{-- <source media="(max-width: 480px)" srcset="frontend/images/slider/slide-1-480w.jpg"> --}}
+                                    <img src="{{ asset('images/sliders/'.$slider->slider_image) }}" alt="Image Desc">
                                 </picture>
                             </figure><!-- End .slide-image -->
 
                             <div class="intro-content">
-                                <h3 class="intro-subtitle">Topsale Collection</h3><!-- End .h3 intro-subtitle -->
-                                <h1 class="intro-title">Living Room<br>Furniture</h1><!-- End .intro-title -->
+                                
+                                <h1 class="intro-title">{{ $slider->slider_title }}</h1><!-- End .intro-title -->
 
-                                <a href="category.html" class="btn btn-outline-white">
+                                <a href="{{ $slider->slider_link }}" target="_blank" class="btn btn-outline-white">
                                     <span>SHOP NOW</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
                             </div><!-- End .intro-content -->
+                            
+                            
                         </div><!-- End .intro-slide -->
-
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)" srcset="assets/images/slider/slide-2-480w.jpg">
-                                    <img src="{{ asset('frontend/images/slider/slide-2.jpg') }}" alt="Image Desc">
-                                </picture>
-                            </figure><!-- End .slide-image -->
-
-                            <div class="intro-content">
-                                <h3 class="intro-subtitle">News and Inspiration</h3><!-- End .h3 intro-subtitle -->
-                                <h1 class="intro-title">New Arrivals</h1><!-- End .intro-title -->
-
-                                <a href="category.html" class="btn btn-outline-white">
-                                    <span>SHOP NOW</span>
-                                    <i class="icon-long-arrow-right"></i>
-                                </a>
-                            </div><!-- End .intro-content -->
-                        </div><!-- End .intro-slide -->
-
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)" srcset="assets/images/slider/slide-3-480w.jpg">
-                                    <img src="{{ asset('frontend/images/slider/slide-3.jpg') }}" alt="Image Desc">
-                                </picture>
-                            </figure><!-- End .slide-image -->
-
-                            <div class="intro-content">
-                                <h3 class="intro-subtitle">Outdoor Furniture</h3><!-- End .h3 intro-subtitle -->
-                                <h1 class="intro-title">Outdoor Dining <br>Furniture</h1><!-- End .intro-title -->
-
-                                <a href="category.html" class="btn btn-outline-white">
-                                    <span>SHOP NOW</span>
-                                    <i class="icon-long-arrow-right"></i>
-                                </a>
-                            </div><!-- End .intro-content -->
-                        </div><!-- End .intro-slide -->
+                        @endforeach
                     </div><!-- End .intro-slider owl-carousel owl-simple -->
                     
                     <span class="slider-loader"></span><!-- End .slider-loader -->
