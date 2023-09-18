@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Frontend\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -87,6 +88,12 @@ Route::group(['middleware'=>'auth'],function(){
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
+
+// Cart routes
+Route::get('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add_to_cart');
+Route::get('/cart', [CartController::class, 'cart'])->name('cart');
+Route::patch('/update-cart', [CartController::class, 'update'])->name('update_cart');
+Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('remove_from_cart');
 
 
 // Customer login registration routes with middleware

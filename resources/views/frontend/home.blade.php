@@ -145,7 +145,7 @@
                                         </div><!-- End .product-price -->
                                     </div><!-- End .product-body -->
                                     <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
                                     </div><!-- End .product-action -->
                                 </div><!-- End .product -->
                             </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->

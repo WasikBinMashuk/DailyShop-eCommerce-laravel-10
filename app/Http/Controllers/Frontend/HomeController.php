@@ -26,14 +26,7 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-     public function __construct()
-    {
-        // Load your objects
-        $shopCategories = Category::all();
-
-        // Make it available to all views by sharing it for the header category dropdown
-        view()->share('shopCategories', $shopCategories);
-    }
+    
 
 
     public function index()
@@ -98,6 +91,10 @@ class HomeController extends Controller
 
         return view('frontend.product',compact('product','relatedProducts'));
     }
+
+    // CART Methods
+
+    
 
 
 }

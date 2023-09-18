@@ -1,5 +1,5 @@
-@extends('layouts.front')
-@section('front')
+@extends('frontend.master')
+@section('content')
 
         <div class="">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -34,52 +34,43 @@
 									</thead>
 
 									<tbody>
-										<tr>
-											<td class="product-col">
-												<div class="product">
-													<figure class="product-media">
-														<a href="#">
-															<img src="assets/images/products/table/product-1.jpg" alt="Product image">
-														</a>
-													</figure>
+										@php
+											$total = 0
+										@endphp
+										@if (session('cart'))
+										@foreach (session('cart') as $id => $details)
+											@php
+												$total += $details['price'] * $details['quantity']
+											@endphp
+											<tr data-id={{ $id }}>
+												<td data-th="Product" class="product-col">
+													<div class="product">
+														<figure class="product-media">
+															<a href="#">
+																<img src="{{ asset('images') }}/{{ $details['product_image'] }}" width="100" height="100" alt="product">
+															</a>
+														</figure>
+	
+														<h3 class="product-title">
+															<a href="#">{{ $details['product_name'] }}</a>
+														</h3><!-- End .product-title -->
+													</div><!-- End .product -->
+												</td>
+												<td data-th="Price" class="price-col">${{ $details['price'] }}</td>
+												<td data-th="Quantity" class="quantity-col">
+													<div class="cart-product-quantity">
+														<input type="number" value="{{ $details['quantity'] }}" class="form-control quantity cart_update"  min="1">
+													</div><!-- End .cart-product-quantity -->
+												</td>
+												<td data-th="Total" class="total-col">${{ $details['price'] * $details['quantity']}}</td>
+												<td class="remove-col"><button class="btn-remove cart_remove"><i class="icon-close"></i></button></td>
+											</tr>
 
-													<h3 class="product-title">
-														<a href="#">Beige knitted elastic runner shoes</a>
-													</h3><!-- End .product-title -->
-												</div><!-- End .product -->
-											</td>
-											<td class="price-col">$84.00</td>
-											<td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <input type="number" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                                </div><!-- End .cart-product-quantity -->
-                                            </td>
-											<td class="total-col">$84.00</td>
-											<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-										</tr>
-										<tr>
-											<td class="product-col">
-												<div class="product">
-													<figure class="product-media">
-														<a href="#">
-															<img src="assets/images/products/table/product-2.jpg" alt="Product image">
-														</a>
-													</figure>
-
-													<h3 class="product-title">
-														<a href="#">Blue utility pinafore denim dress</a>
-													</h3><!-- End .product-title -->
-												</div><!-- End .product -->
-											</td>
-											<td class="price-col">$76.00</td>
-											<td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <input type="number" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                                </div><!-- End .cart-product-quantity -->                                 
-                                            </td>
-											<td class="total-col">$76.00</td>
-											<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-										</tr>
+										@endforeach
+											
+										@endif
+										
+										
 									</tbody>
 								</table><!-- End .table table-wishlist -->
 
@@ -106,64 +97,64 @@
 	                					<tbody>
 	                						<tr class="summary-subtotal">
 	                							<td>Subtotal:</td>
-	                							<td>$160.00</td>
+	                							<td>${{ $total }}</td>
 	                						</tr><!-- End .summary-subtotal -->
-	                						<tr class="summary-shipping">
-	                							<td>Shipping:</td>
-	                							<td>&nbsp;</td>
-	                						</tr>
 
-	                						<tr class="summary-shipping-row">
-	                							<td>
-													<div class="custom-control custom-radio">
-														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>$0.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="custom-control custom-radio">
-														<input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="standart-shipping">Standart:</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>$10.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="custom-control custom-radio">
-														<input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="express-shipping">Express:</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>$20.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-estimate">
-	                							<td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
-	                							<td>&nbsp;</td>
-	                						</tr><!-- End .summary-shipping-estimate -->
-
-	                						<tr class="summary-total">
-	                							<td>Total:</td>
-	                							<td>$160.00</td>
-	                						</tr><!-- End .summary-total -->
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
 	                				<a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
 
-		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+		            			<a href="{{ route('shop') }}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
 	                		</aside><!-- End .col-lg-3 -->
 	                	</div><!-- End .row -->
 	                </div><!-- End .container -->
                 </div><!-- End .cart -->
             </div><!-- End .page-content -->
         </div><!-- End .main -->
+
+{{-- <script type="text/javascript">
+
+	$(".cart_update").change(function (e){
+		// alert("Hello! I am an alert box!!");
+		e.preventDefault();
+
+		var ele = $(this);
+
+		$.ajax({
+			url:'{{ route('update_cart') }}',
+			method: "patch",
+			data: {
+				_token: '{{ csrf_token() }}',
+				id: ele.parents("tr").attr("data-id"),
+				quantity: ele.parents("tr").find(".quantity").val()
+			},
+			success: function (response){
+				window.location.reload();
+			}
+		});
+	});
+
+	$(".cart_remove").click(function (e) {
+		e.preventDefault();
+
+		var ele = $(this);
+
+		if(confirm("Do you really want to remove?")){
+			$.ajax({
+				url: '{{ route('remove_from_cart') }}',
+				method: "DELETE",
+				data: {
+					_token: '{{ csrf_token() }}',
+					id: ele.parents("tr").attr("data-id")
+				},
+				success: function (response){
+					window.location.reload();
+				}
+			});
+		}
+	});
+</script> --}}
 
 @endsection

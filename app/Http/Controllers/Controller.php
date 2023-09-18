@@ -11,4 +11,13 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function __construct()
+    {
+        // Load your objects
+        $shopCategories = Category::all();
+
+        // Make it available to all views by sharing it for the header category dropdown
+        view()->share('shopCategories', $shopCategories);
+    }
+
 }

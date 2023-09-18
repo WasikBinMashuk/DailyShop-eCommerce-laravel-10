@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/plugins/magnific-popup/magnific-popup.css') }}">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -151,61 +153,58 @@
                         <div class="dropdown cart-dropdown">
                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">2</span>
+                                <span class="cart-count">{{ count((array) session('cart')) }}</span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="dropdown-cart-products">
-                                    <div class="product">
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href="product.html">Beige knitted elastic runner shoes</a>
-                                            </h4>
 
-                                            <span class="cart-product-info">
-                                                <span class="cart-product-qty">1</span>
-                                                x $84.00
-                                            </span>
-                                        </div><!-- End .product-cart-details -->
+                                    @if (session('cart'))
+                                        @foreach (session('cart') as $id => $details)
+                                        <div class="product">
+                                            <div class="product-cart-details">
+                                                <h4 class="product-title">
+                                                    <a href="#">{{ $details['product_name'] }}</a>
+                                                </h4>
+    
+                                                <span class="cart-product-info">
+                                                    <span class="cart-product-qty">{{ $details['quantity'] }}</span>
+                                                    x ${{ $details['price'] }}
+                                                </span>
+                                            </div><!-- End .product-cart-details -->
+    
+                                            <figure class="product-image-container">
+                                                <a href="#" class="product-image">
+                                                    <img src="{{ asset('images') }}/{{ $details['product_image'] }}" alt="product">
+                                                </a>
+                                            </figure>
+                                            {{-- <a href="#" class="btn-remove cart_remove" title="Remove Product"><i class="icon-close"></i></a> --}}
+                                        </div><!-- End .product -->
+                                            
+                                        @endforeach
+                                    @endif
+                                    
+                                    @php
+                                        $total = 0
+                                    @endphp
 
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="frontend/images/products/cart/product-1.jpg" alt="product">
-                                            </a>
-                                        </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                    </div><!-- End .product -->
-
-                                    <div class="product">
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href="product.html">Blue utility pinafore denim dress</a>
-                                            </h4>
-
-                                            <span class="cart-product-info">
-                                                <span class="cart-product-qty">1</span>
-                                                x $76.00
-                                            </span>
-                                        </div><!-- End .product-cart-details -->
-
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="frontend/images/products/cart/product-2.jpg" alt="product">
-                                            </a>
-                                        </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                    </div><!-- End .product -->
+                                    @foreach ((array) session('cart') as $id => $details)
+                                        @php
+                                            $total += $details['price'] * $details['quantity']
+                                        @endphp
+                                        
+                                    @endforeach
                                 </div><!-- End .cart-product -->
 
                                 <div class="dropdown-cart-total">
                                     <span>Total</span>
 
-                                    <span class="cart-total-price">$160.00</span>
+                                    <span class="cart-total-price">${{ $total }}</span>
                                 </div><!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    <a href="{{ route('cart') }}" class="btn btn-primary">View Cart</a>
+                                    <a href="#" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
@@ -350,6 +349,48 @@
     <script src="{{ asset('frontend/js/jquery.magnific-popup.min.js') }}"></script>
     <!-- Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+    <script type="text/javascript">
+
+        $(".cart_update").change(function (e){
+            // alert("Hello! I am an alert box!!");
+            e.preventDefault();
+    
+            var ele = $(this);
+    
+            $.ajax({
+                url:'{{ route('update_cart') }}',
+                method: "patch",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: ele.parents("tr").attr("data-id"),
+                    quantity: ele.parents("tr").find(".quantity").val()
+                },
+                success: function (response){
+                    window.location.reload();
+                }
+            });
+        });
+    
+        $(".cart_remove").click(function (e) {
+            e.preventDefault();
+    
+            var ele = $(this);
+    
+            if(confirm("Do you really want to remove?")){
+                $.ajax({
+                    url: '{{ route('remove_from_cart') }}',
+                    method: "DELETE",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: ele.parents("tr").attr("data-id")
+                    },
+                    success: function (response){
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 
