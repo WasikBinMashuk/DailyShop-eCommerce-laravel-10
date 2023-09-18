@@ -21,12 +21,12 @@
                 </div>
               </div>
               <div class="card-body">
-                <table class="table ">
+                <table class="table align-middle">
                     <thead>
                       <tr>
                         {{-- <th scope="col">Category ID</th> --}}
                         <th scope="col">Slider Image</th>
-                        <th scope="col">Title</th>
+                        <th scope="col" style="width: 100px;">Title</th>
                         <th scope="col">Link</th>
                         <th scope="col">status</th>
                         <th scope="col">Actions</th>
@@ -41,7 +41,7 @@
                           <tr>
                               <td>
                                 {{-- {{ $item->product_image }} --}}
-                                  <img src="{{ asset('images/sliders/'.$item->slider_image) }}" style="height: 100px;width:100px;">
+                                  <img src="{{ asset('images/sliders/'.$item->slider_image) }}" style="height: 100px;width:180px;">
                               </td>
                               <td>{{ $item->slider_title }}</td>
                               <td><a href="{{ $item->slider_link }}">{{ $item->slider_link }}</a></td>
