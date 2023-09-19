@@ -48,21 +48,26 @@
                                         <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
                                     </div><!-- End .product-content -->
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="qty">Qty:</label>
-                                        <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                        </div><!-- End .product-details-quantity -->
-                                    </div><!-- End .details-filter-row -->
 
-                                    <div class="product-details-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-
-                                        <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                            {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
-                                        </div><!-- End .details-action-wrapper -->
-                                    </div><!-- End .product-details-action -->
+                                    <form action="{{ route('add_to_cart_from_product',$product->id) }}" method="POST">
+                                        @csrf
+                                        <div class="details-filter-row details-row-size">
+                                            <label for="qty">Qty:</label>
+                                            <div class="product-details-quantity">
+                                                <input type="number" id="qty" class="form-control" name="quantity" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                            </div><!-- End .product-details-quantity -->
+                                        </div><!-- End .details-filter-row -->
+    
+                                        <div class="product-details-action">
+                                            {{-- <a href="#" class="btn-product btn-cart"><span>add to cart</span></a> --}}
+                                            <button type="submit" class="btn-product btn-cart"><span>add to cart</span></button>
+                                            <div class="details-action-wrapper">
+                                                <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                                {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
+                                            </div><!-- End .details-action-wrapper -->
+                                        </div><!-- End .product-details-action -->
+                                    </form>
+                                    
 
                                     <div class="product-details-footer">
                                         <div class="product-cat">
@@ -198,7 +203,7 @@
                                     @endif
                                 </a>
                                 <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 

@@ -91,6 +91,7 @@ Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('produ
 
 // Cart routes
 Route::get('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add_to_cart');
+Route::post('/add-to-cart-from-product/{id}', [CartController::class, 'addToCartFromProduct'])->name('add_to_cart_from_product');
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 Route::patch('/update-cart', [CartController::class, 'update'])->name('update_cart');
 Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('remove_from_cart');

@@ -33,6 +33,31 @@ class CartController extends Controller
         toast('Product added in cart','success');
         return redirect()->back();
     }
+    
+    public function addToCartFromProduct(Request $request,$id){
+        
+        $quantity = $request->quantity;
+
+        $product = Product::find($id);
+
+        $cart = session()->get('cart',[]);
+
+        if(isset($cart[$id])){
+            $cart[$id]['quantity']++;
+        }else{
+            $cart[$id] = [
+                "product_name" => $product->product_name,
+                "price" => $product->price,
+                "product_image" => $product->product_image,
+                "quantity" => $quantity
+            ];
+        }
+
+        session()->put('cart',$cart);
+
+        toast('Product added in cart','success');
+        return redirect()->back();
+    }
 
     public function update(Request $request){
         if($request->id && $request->quantity){
