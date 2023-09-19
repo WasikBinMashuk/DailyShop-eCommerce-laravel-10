@@ -151,14 +151,16 @@
                         </div><!-- End .header-search -->
 
                         <div class="dropdown cart-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="{{ route('cart') }}" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
                                 <span class="cart-count">{{ count((array) session('cart')) }}</span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="dropdown-cart-products">
-
+                                    @php
+                                        $total = 0
+                                    @endphp
                                     @if (session('cart'))
                                         @foreach (session('cart') as $id => $details)
                                             <div class="product">
@@ -177,20 +179,15 @@
                                                         <img src="{{ asset('images/'.$details['product_image']) }}" alt="product">
                                                     </a>
                                                 </figure>
-                                                {{-- <a href="#" class="btn-remove cart_remove" title="Remove Product"><i class="icon-close"></i></a> --}}
+                                                {{-- <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a> --}}
                                             </div><!-- End .product -->
+
+                                            @php
+                                                $total += $details['price'] * $details['quantity']
+                                            @endphp
                                         @endforeach
                                     @endif
                                     
-                                    @php
-                                        $total = 0
-                                    @endphp
-
-                                    @foreach ((array) session('cart') as $id => $details)
-                                        @php
-                                            $total += $details['price'] * $details['quantity']
-                                        @endphp
-                                    @endforeach
                                 </div><!-- End .cart-product -->
 
                                 <div class="dropdown-cart-total">
@@ -382,6 +379,7 @@
                     },
                     success: function (response){
                         window.location.reload();
+                        // $('#' + ele.parents("tr").attr("data-id")).remove();
                     }
                 });
             }

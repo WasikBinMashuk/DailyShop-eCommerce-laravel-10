@@ -2,16 +2,16 @@
 @section('content')
 
         <div class="">
-        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        	<div class="page-header text-center" style="background-image: url({{ asset('frontend/images/page-header-bg.jpg') }})">
         		<div class="container">
-        			<h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+        			<h1 class="page-title">Shopping Cart</h1>
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
                     </ol>
                 </div><!-- End .container -->
@@ -42,7 +42,7 @@
 											@php
 												$total += $details['price'] * $details['quantity']
 											@endphp
-											<tr data-id={{ $id }}>
+											<tr data-id={{ $id }} id={{ $id }}>
 												<td data-th="Product" class="product-col">
 													<div class="product">
 														<figure class="product-media">
@@ -87,7 +87,7 @@
 
 			            			<a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
 		            			</div><!-- End .cart-bottom --> --}}
-								
+
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
 	                			<div class="summary summary-cart">

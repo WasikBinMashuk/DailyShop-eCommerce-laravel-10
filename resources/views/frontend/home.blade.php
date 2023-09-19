@@ -98,7 +98,7 @@
                                 </div><!-- End .product-price -->
                             </div><!-- End .product-body -->
                             <div class="product-action">
-                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
                             </div><!-- End .product-action -->
                         </div><!-- End .product -->
                         @endforeach
