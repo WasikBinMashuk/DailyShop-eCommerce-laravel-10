@@ -47,25 +47,24 @@
 													<div class="product">
 														<figure class="product-media">
 															<a href="#">
-																<img src="{{ asset('images') }}/{{ $details['product_image'] }}" width="100" height="100" alt="product">
+																<img src="{{ asset('images/'.$details['product_image']) }}" width="100" height="100" alt="product">
 															</a>
 														</figure>
 	
 														<h3 class="product-title">
-															<a href="#">{{ $details['product_name'] }}</a>
+															<a href="{{ route('product.show', $id) }}">{{ $details['product_name'] }}</a>
 														</h3><!-- End .product-title -->
 													</div><!-- End .product -->
 												</td>
 												<td data-th="Price" class="price-col">${{ $details['price'] }}</td>
 												<td data-th="Quantity" class="quantity-col">
 													<div class="cart-product-quantity">
-														<input type="number" value="{{ $details['quantity'] }}" class="form-control quantity cart_update"  min="1">
+														<input type="number" value="{{ $details['quantity'] }}" class="form-control quantity cart_update"  min="1" max="10">
 													</div><!-- End .cart-product-quantity -->
 												</td>
 												<td data-th="Total" class="total-col">${{ $details['price'] * $details['quantity']}}</td>
 												<td class="remove-col"><button class="btn-remove cart_remove"><i class="icon-close"></i></button></td>
 											</tr>
-
 										@endforeach
 											
 										@endif
@@ -74,7 +73,7 @@
 									</tbody>
 								</table><!-- End .table table-wishlist -->
 
-	                			<div class="cart-bottom">
+	                			{{-- <div class="cart-bottom">
 			            			<div class="cart-discount">
 			            				<form action="#">
 			            					<div class="input-group">
@@ -87,7 +86,8 @@
 			            			</div><!-- End .cart-discount -->
 
 			            			<a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
-		            			</div><!-- End .cart-bottom -->
+		            			</div><!-- End .cart-bottom --> --}}
+								
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
 	                			<div class="summary summary-cart">

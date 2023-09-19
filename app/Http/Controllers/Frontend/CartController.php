@@ -39,7 +39,7 @@ class CartController extends Controller
             $cart = session()->get('cart');
             $cart[$request->id]["quantity"] = $request->quantity;
             session()->put('cart',$cart);
-            session()->flash('success','product removed');
+            // session()->flash('success','product removed');
         }
     }
 
@@ -50,7 +50,7 @@ class CartController extends Controller
                 unset($cart[$request->id]);
                 session()->put('cart',$cart);
             }
-            session()->flash('success','product removed');
+            // session()->flash('success','product removed');
         }
     }
 }

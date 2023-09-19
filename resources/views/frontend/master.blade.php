@@ -161,26 +161,24 @@
 
                                     @if (session('cart'))
                                         @foreach (session('cart') as $id => $details)
-                                        <div class="product">
-                                            <div class="product-cart-details">
-                                                <h4 class="product-title">
-                                                    <a href="#">{{ $details['product_name'] }}</a>
-                                                </h4>
-    
-                                                <span class="cart-product-info">
-                                                    <span class="cart-product-qty">{{ $details['quantity'] }}</span>
-                                                    x ${{ $details['price'] }}
-                                                </span>
-                                            </div><!-- End .product-cart-details -->
-    
-                                            <figure class="product-image-container">
-                                                <a href="#" class="product-image">
-                                                    <img src="{{ asset('images') }}/{{ $details['product_image'] }}" alt="product">
-                                                </a>
-                                            </figure>
-                                            {{-- <a href="#" class="btn-remove cart_remove" title="Remove Product"><i class="icon-close"></i></a> --}}
-                                        </div><!-- End .product -->
-                                            
+                                            <div class="product">
+                                                <div class="product-cart-details">
+                                                    <h4 class="product-title">
+                                                        <a href="{{ route('product.show', $id) }}">{{ $details['product_name'] }}</a>
+                                                    </h4>
+                                                    <span class="cart-product-info">
+                                                        <span class="cart-product-qty">{{ $details['quantity'] }}</span>
+                                                        x ${{ $details['price'] }}
+                                                    </span>
+                                                </div><!-- End .product-cart-details -->
+                                                <figure class="product-image-container">
+                                                    <a href="{{ route('product.show', $id) }}" class="product-image">
+                                                        {{-- <img src="{{ asset('images') }}/{{ $details['product_image'] }}" alt="product"> --}}
+                                                        <img src="{{ asset('images/'.$details['product_image']) }}" alt="product">
+                                                    </a>
+                                                </figure>
+                                                {{-- <a href="#" class="btn-remove cart_remove" title="Remove Product"><i class="icon-close"></i></a> --}}
+                                            </div><!-- End .product -->
                                         @endforeach
                                     @endif
                                     
@@ -192,13 +190,11 @@
                                         @php
                                             $total += $details['price'] * $details['quantity']
                                         @endphp
-                                        
                                     @endforeach
                                 </div><!-- End .cart-product -->
 
                                 <div class="dropdown-cart-total">
                                     <span>Total</span>
-
                                     <span class="cart-total-price">${{ $total }}</span>
                                 </div><!-- End .dropdown-cart-total -->
 
