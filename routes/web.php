@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Frontend\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -101,9 +102,14 @@ Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('rem
 Route::post('customer/login', [CustomerAuthController::class, 'customerLogin'])->name('customer.login');
 Route::post('customer/register', [CustomerAuthController::class, 'customerRegister'])->name('customer.register');
 
+
+
 Route::group(['middleware'=>'customer'],function(){
     Route::get('customer/dashboard', [CustomerAuthController::class, 'index'])->name('customer.dashboard');
     Route::get('customer/logout', [CustomerAuthController::class, 'customerLogout'])->name('customer.logout');
+
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 });
 
 
