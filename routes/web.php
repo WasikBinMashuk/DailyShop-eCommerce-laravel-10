@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Customer\LoginController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
@@ -83,6 +84,9 @@ Route::group(['middleware'=>'auth'],function(){
 
     // Sliders crud route in admin panel
     Route::resource('sliders', SliderController::class);
+
+    // orders routes
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
 // frontend template mastering
