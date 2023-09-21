@@ -87,6 +87,7 @@ Route::group(['middleware'=>'auth'],function(){
 
     // orders routes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders/{id}/update', [OrderController::class, 'update'])->name('orders.update');
 });
 
 // frontend template mastering

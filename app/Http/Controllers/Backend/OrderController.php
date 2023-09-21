@@ -12,4 +12,24 @@ class OrderController extends Controller
         $orders = Order::latest()->paginate(10);
         return view('backend.orders.index',compact('orders'));
     }
+
+    public function update(Request $request, $id){
+        
+        // dd($id, $request->all());
+
+        $request->validate([
+            'status' => 'required',
+        ]);
+        
+        $order = Order::find($id);
+
+        $order->update([
+            'status' => $request->status,
+        ]);
+
+        // sweet alert
+        toast('Order Status Updated!','success');
+
+        return redirect()->back();
+    }
 }

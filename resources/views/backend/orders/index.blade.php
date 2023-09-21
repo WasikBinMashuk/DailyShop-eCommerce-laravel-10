@@ -61,13 +61,17 @@
                           <td>{{ $order->subtotal }}</td>
                           <td>
                             @if ($order->status == 1)
-                                <span class="badge bg-orange">Processing</span>
+                              <span class="badge bg-orange">Processing</span>
+                            @elseif ($order->status == 2)
+                              <span class="badge bg-yellow">Shipped</span>
+                            @elseif ($order->status == 3)
+                              <span class="badge bg-green">Delivered</span>
                             @else
                               <span class="badge bg-red">Failed</span>
                             @endif
                           </td>
                           <td style="width: 100px">
-                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-report">
+                            <a href="#" class="btn btn-primary orderStatus" data-status="{{ $order->status }}" data-id="{{ $order->id }}" data-bs-toggle="modal" data-bs-target="#modal-report">
                               <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i>
                             </a>
                           </td>
@@ -89,40 +93,58 @@
           <h5 class="modal-title">Order Status</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="mb-3">
-                <label class="form-label">Status</label>
-                <select class="form-select">
-                  <option value="1" selected>Processing</option>
-                  <option value="2">Shipped</option>
-                  <option value="0">Failed</option>
-                </select>
+        <form action="" method="POST" id="modalForm">
+          @csrf
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <label class="form-label">Status</label>
+                  <select class="form-select" name="status" id="orderStatusId">
+                    <option value="1" selected>Processing</option>
+                    <option value="2">Shipped</option>
+                    <option value="3">Delivered</option>
+                    <option value="0">Failed</option>
+                  </select>
+                  @error('status')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div class="modal-footer">
-          <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-            Cancel
-          </a>
-          <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                <path d="M16 5l3 3"></path>
-             </svg>
-            Edit
-          </a>
-        </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+              Cancel
+            </a>
+            <button type="sumbit" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                  <path d="M16 5l3 3"></path>
+              </svg>
+              Edit
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
-  
+
+  <script>
+    $(document).on("click", ".orderStatus", function () {
+
+      var orderId = $(this).data('id');
+      var oldStatus = $(this).attr("data-status");
+
+      let link = "{{ route('orders.index') }}/" + orderId + "/update";
+      // console.log(link);
+      $('#modalForm').attr('action', link);
+
+     $(".modal-body #orderStatusId").val( oldStatus );
+    });
+  </script>
 
 @endsection

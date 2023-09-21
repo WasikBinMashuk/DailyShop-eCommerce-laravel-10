@@ -14,6 +14,7 @@
     <link href="css/tabler-payments.min.css?1684106062" rel="stylesheet"/>
     <link href="css/tabler-vendors.min.css?1684106062" rel="stylesheet"/>
     <link href="css/demo.min.css?1684106062" rel="stylesheet"/> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     
     
@@ -496,5 +497,6 @@
         });
       }
     </script>
+      
   </body>
 </html>
