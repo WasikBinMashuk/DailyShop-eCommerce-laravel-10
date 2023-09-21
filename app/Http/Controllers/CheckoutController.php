@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CheckoutController extends Controller
@@ -47,6 +48,7 @@ class CheckoutController extends Controller
                 'email' => $request->email,
                 'order_notes' => $request->order_notes,
                 'subtotal' => $subtotal,
+                'customer_id' => Auth::guard('customer')->user()->id,
             ]);
             
             // inserting data to order details table

@@ -21,5 +21,6 @@ class Order extends Model
         'order_notes',
         'status',
         'subtotal',
+        'customer_id',
     ];
 }
