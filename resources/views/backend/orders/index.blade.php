@@ -71,10 +71,17 @@
                             @endif
                           </td>
                           <td style="width: 100px">
-                            <a href="#" class="btn btn-primary orderStatus" data-status="{{ $order->status }}" data-id="{{ $order->id }}" data-bs-toggle="modal" data-bs-target="#modal-report">
-                              <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i>
-                            </a>
+                            <div class="btn-group">
+                              <a href="#" class="btn btn-info orderStatus" data-status="{{ $order->status }}" data-id="{{ $order->id }}" data-bs-toggle="modal" data-bs-target="#modal-report">
+                                <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i>
+                              </a>
+                              <a href="{{ route('orders.details', $order->id) }}" class="btn btn-primary"><i class="fa-solid fa-circle-info" style="color: #ffffff;"></i></a>
+                            </div>
+                            
                           </td>
+                          {{-- <td style="width: 100px">
+                            <a href="{{ route('orders.details', $order->id) }}" class="btn btn-primary"><i class="fa-solid fa-circle-info" style="color: #ffffff;"></i></a>
+                          </td> --}}
                         </tr>
                         @endforeach
                       
@@ -130,7 +137,7 @@
         </form>
       </div>
     </div>
-  </div>
+</div>
 
 
   <script>

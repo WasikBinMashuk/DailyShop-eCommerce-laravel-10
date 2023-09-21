@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -31,5 +32,12 @@ class OrderController extends Controller
         toast('Order Status Updated!','success');
 
         return redirect()->back();
+    }
+
+    public function details($id){
+        $orderDetails = OrderDetail::where('order_id',$id)->get();
+        // dd($orderDetails);
+
+        return view('backend.orders.details',compact('orderDetails'));
     }
 }
