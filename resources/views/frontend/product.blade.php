@@ -41,7 +41,7 @@
                                     <h1 class="product-title">{{ $product->product_name }}</h1><!-- End .product-title -->
 
                                     <div class="product-price">
-                                        {{ $product->price }} bdt
+                                        &#2547;{{ $product->price }} 
                                     </div><!-- End .product-price -->
 
                                     <div class="product-content">
@@ -213,7 +213,7 @@
                                 </div><!-- End .product-cat -->
                                 <h3 class="product-title"><a href="{{ route('product.show', $item->id) }}">{{ $item->product_name }}</a></h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    {{ $item->price }} Bdt
+                                    &#2547;{{ $item->price }}
                                 </div><!-- End .product-price -->
                                 <div class="ratings-container">
                                     <div class="ratings">
@@ -253,7 +253,7 @@
 
                 <div class="col-6 justify-content-end">
                     <div class="product-price">
-                        {{ $product->price }} bdt
+                        &#2547;{{ $product->price }}
                     </div><!-- End .product-price -->
                     <div class="product-details-quantity">
                         <input type="number" id="sticky-cart-qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>

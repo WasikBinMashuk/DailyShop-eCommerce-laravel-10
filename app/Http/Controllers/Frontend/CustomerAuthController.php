@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\Customer;
 use App\Http\Requests\CustomerFormRequest;
 use App\Models\Customer as ModelsCustomer;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +17,26 @@ class CustomerAuthController extends Controller
 
     public function index()
     {
-        return view('frontend.customer-dashboard');
+        // $orders = OrderDetail::select('orders.id','orders.subtotal','order_details.product_name','order_details.quantity','order_details.price_each')
+        // ->Join('orders', 'order_details.order_id', '=', 'orders.id')
+        // ->where('orders.customer_id', Auth::guard('customer')->user()->id)
+        // ->orderBy('orders.id', 'DESC')->get();
+        
+        $orders = Order::where('customer_id',Auth::guard('customer')->user()->id)->orderBy('id', 'DESC')->get();
+        if($orders->isNotEmpty()){
+            foreach($orders as $order){
+                $orderIds[] = $order->id;
+            }
+            $orderDetails = OrderDetail::whereIn('order_id',$orderIds)->get();
+        }else{
+            $orderDetails = null;
+        }
+        
+        // dd($orders);
+        // $orderIds = $orders->id;
+        
+        // dd($orderDetails);
+        return view('frontend.customer-dashboard',compact('orders','orderDetails'));
     }
 
     public function customerLoginForm()

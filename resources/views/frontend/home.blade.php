@@ -94,7 +94,7 @@
                             <div class="product-body">
                                 <h3 class="product-title"><a href="{{ route('product.show', $item->id) }}">{{ $item->product_name }}</a></h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    {{ $item->price }} bdt
+                                    &#2547;{{ $item->price }}
                                 </div><!-- End .product-price -->
                             </div><!-- End .product-body -->
                             <div class="product-action">
@@ -141,7 +141,7 @@
                                     <div class="product-body">
                                         <h3 class="product-title"><a href="{{ route('product.show', $item->id) }}">{{ $item->product_name }}</a></h3><!-- End .product-title -->
                                         <div class="product-price">
-                                            {{ $item->price }}bdt
+                                            &#2547;{{ $item->price }}
                                         </div><!-- End .product-price -->
                                     </div><!-- End .product-body -->
                                     <div class="product-action">

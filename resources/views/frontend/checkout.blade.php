@@ -134,13 +134,13 @@
 															<td>
 																{{ $details['product_name'] }}
 															</td>
-															<td >{{ $details['quantity'] }} x ${{ $details['price'] }}</td>
+															<td >{{ $details['quantity'] }} x &#2547;{{ $details['price'] }}</td>
 														</tr>
 													@endforeach
 												@endif
 		                						<tr class="summary-total">
 		                							<td>Total:</td>
-		                							<td>${{ $total }}</td>
+		                							<td>&#2547;{{ $total }}</td>
 		                						</tr><!-- End .summary-total -->
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->

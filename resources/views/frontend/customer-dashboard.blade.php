@@ -10,8 +10,8 @@
         <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
                     <li class="breadcrumb-item active" aria-current="page">My Account</li>
                 </ol>
             </div><!-- End .container -->
@@ -53,8 +53,56 @@
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-                                    <p>No order has been made yet.</p>
-                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+
+                                    @if ($orders->isEmpty())
+                                        <p>No order has been made yet.</p>
+                                    @endif
+
+                                    @foreach ($orders as $order)
+                                    <div class="row p-2 bg-white border rounded mt-2">
+                                        <div class="col-md-6 mt-1">
+                                            <h5 style="color: orange">Order ID. {{ $order->id }}</h5>
+                                            <h6>Products: </h6>
+                                            
+                                            <div class="mt-1 mb-1 spec-1">
+                                                @foreach ($orderDetails as $detail)
+
+                                                    @if ($detail->order_id == $order->id)
+                                                        <li>{{ $detail->product_name }} x{{ $detail->quantity }}</li>
+                                                    @endif
+
+                                                @endforeach
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <div class="align-items-center align-content-center col-md-6 border-left mt-1">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <h4 class="mr-1" style="color: orange">Total price: <span class="text-dark">&#2547;{{ $order->subtotal }}</span></h4>
+                                            </div>
+                                            <div class="d-flex flex-column mt-4">
+                                                <span class="badge bg-light h5 " style="height: 30px; ">Order Status</span>
+                                                
+                                                @if ( $order->status == 1)
+                                                    <span class="badge  h5 " style="height: 30px; background-color:rgb(157, 103, 2)">Processing</span>
+                                                
+                                                
+                                                @elseif ($order->status  == 2)
+                                                    <span class="badge  h5 " style="height: 30px; background-color:rgb(245, 192, 93)">Shipped</span>
+                                                
+                                                @elseif ( $order->status  == 3)
+                                                    <span class="badge  h5 " style="height: 30px; background-color:rgb(0, 144, 29)">Delivered</span>
+                                                
+                                                @else
+                                                    <span class="badge  h5 " style="height: 30px; background-color:rgb(255, 43, 43)">Failed</span>
+                                                @endif
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                      
+                                    
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">

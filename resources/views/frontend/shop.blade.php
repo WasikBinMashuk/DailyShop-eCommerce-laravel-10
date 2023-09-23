@@ -68,7 +68,7 @@
                                             </div><!-- End .product-cat -->
                                             <h3 class="product-title"><a href="#">{{ $item->product_name }}</a></h3><!-- End .product-title -->
                                             <div class="product-price">
-                                                {{ $item->price }}bdt
+                                                &#2547;{{ $item->price }}
                                             </div><!-- End .product-price -->
                                         </div><!-- End .product-body -->
                                     </div><!-- End .product -->

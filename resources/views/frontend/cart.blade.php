@@ -56,13 +56,13 @@
 														</h3><!-- End .product-title -->
 													</div><!-- End .product -->
 												</td>
-												<td data-th="Price" class="price-col">${{ $details['price'] }}</td>
+												<td data-th="Price" class="price-col">&#2547;{{ $details['price'] }}</td>
 												<td data-th="Quantity" class="quantity-col">
 													<div class="cart-product-quantity">
 														<input type="number" value="{{ $details['quantity'] }}" class="form-control quantity cart_update"  min="1" max="10">
 													</div><!-- End .cart-product-quantity -->
 												</td>
-												<td data-th="Total" class="total-col">${{ $details['price'] * $details['quantity'] }}</td>
+												<td data-th="Total" class="total-col">&#2547;{{ $details['price'] * $details['quantity'] }}</td>
 												<td class="remove-col"><button class="btn-remove cart_remove"><i class="icon-close"></i></button></td>
 											</tr>
 										@endforeach
@@ -97,7 +97,7 @@
 	                					<tbody>
 	                						<tr class="summary-subtotal">
 	                							<td>Subtotal:</td>
-	                							<td>${{ $total }}</td>
+	                							<td>&#2547;{{ $total }}</td>
 	                						</tr><!-- End .summary-subtotal -->
 
 	                					</tbody>
