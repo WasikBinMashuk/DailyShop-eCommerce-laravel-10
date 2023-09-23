@@ -34,8 +34,8 @@
                           <td>{{ $orderDetail->order_id }}</td>
                           <td>{{ $orderDetail->product_name }}</td>
                           <td>{{ $orderDetail->quantity }}</td>
-                          <td>{{ $orderDetail->price_each }}</td>
-                          <td>{{ $orderDetail->total_price }}</td>
+                          <td>&#2547;{{ $orderDetail->price_each }}</td>
+                          <td>&#2547;{{ $orderDetail->total_price }}</td>
                           
                           
                         </tr>

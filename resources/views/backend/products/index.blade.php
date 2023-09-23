@@ -66,7 +66,7 @@
                               <td>{{ $item->sub_category_name }}</td>
                               <td>{{ $item->product_code }}</td>
                               <td>{{ $item->product_name }}</td>
-                              <td>{{ $item->price }}</td>
+                              <td>&#2547;{{ $item->price }}</td>
                               <td>
                                 @if ($item->status == 0)
                                   <span class="badge bg-red">Inactive</span>

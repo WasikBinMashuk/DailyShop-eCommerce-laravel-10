@@ -58,7 +58,7 @@
                                 @endif
                                 {{ $order->order_notes }}
                           </td>
-                          <td>{{ $order->subtotal }}</td>
+                          <td>&#2547;{{ $order->subtotal }}</td>
                           <td>
                             @if ($order->status == 1)
                               <span class="badge bg-orange">Processing</span>
