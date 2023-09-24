@@ -6,11 +6,11 @@
         <div class="card" >
           <div class=" card-header justify-content-between ">
             <div>
-              <h3 class="card-title">Users Table</h3>
+              <h3 class="card-title">Registered Admins</h3>
             </div>
             <div>
               <div class="d-inline">
-                <a class="btn btn-info" href="{{ route('users.create') }}">Add User</a>
+                <a class="btn btn-info" href="{{ route('users.create') }}">Add Admin</a>
               </div>
             </div>
           </div>

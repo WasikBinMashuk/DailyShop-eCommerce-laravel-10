@@ -17,10 +17,6 @@ class CustomerAuthController extends Controller
 
     public function index()
     {
-        // $orders = OrderDetail::select('orders.id','orders.subtotal','order_details.product_name','order_details.quantity','order_details.price_each')
-        // ->Join('orders', 'order_details.order_id', '=', 'orders.id')
-        // ->where('orders.customer_id', Auth::guard('customer')->user()->id)
-        // ->orderBy('orders.id', 'DESC')->get();
         
         $orders = Order::where('customer_id',Auth::guard('customer')->user()->id)->orderBy('id', 'DESC')->get();
         if($orders->isNotEmpty()){
@@ -31,11 +27,7 @@ class CustomerAuthController extends Controller
         }else{
             $orderDetails = null;
         }
-        
-        // dd($orders);
-        // $orderIds = $orders->id;
-        
-        // dd($orderDetails);
+
         return view('frontend.customer-dashboard',compact('orders','orderDetails'));
     }
 

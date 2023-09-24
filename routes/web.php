@@ -27,13 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
-
-Auth::routes();
-
-// Route::get('/dashboard', function () {return view('dashboard');})->Middleware('auth'); // TODO:: controller add
-
+Auth::routes(['register' => false]);
 
 // auth group route for users, categories, subcategories and products
 Route::group(['middleware'=>'auth'],function(){
@@ -91,7 +85,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('/orders/{id}/details', [OrderController::class, 'details'])->name('orders.details');
 });
 
-// frontend template mastering
+// frontend routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
@@ -103,13 +97,11 @@ Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 Route::patch('/update-cart', [CartController::class, 'update'])->name('update_cart');
 Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('remove_from_cart');
 
-
 // Customer login registration routes with middleware
 Route::post('customer/login', [CustomerAuthController::class, 'customerLogin'])->name('customer.login');
 Route::post('customer/register', [CustomerAuthController::class, 'customerRegister'])->name('customer.register');
 
-
-
+// customer dashboard routes with customer middleware
 Route::group(['middleware'=>'customer'],function(){
     Route::get('customer/dashboard', [CustomerAuthController::class, 'index'])->name('customer.dashboard');
     Route::get('customer/logout', [CustomerAuthController::class, 'customerLogout'])->name('customer.logout');
@@ -120,22 +112,6 @@ Route::group(['middleware'=>'customer'],function(){
 
 
 
-
-
-
-
 // Route::get('/cart', function () {
 //     return view('frontend.cart');
-// });
-// Route::get('/checkout', function () {
-//     return view('frontend.checkout');
-// });
-// Route::get('/shop', function () {
-//     return view('frontend.shop');
-// });
-// Route::get('/login', function () {
-//     return view('frontend.login');
-// });
-// Route::get('/front', function () {
-//     return view('layouts.front');
 // });

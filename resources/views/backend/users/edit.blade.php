@@ -8,7 +8,7 @@
         @method('PUT')
         <div class="card">
           <div class="card-header justify-content-center">
-            <h2>Update shopper details</h2>
+            <h2>Update admin's details</h2>
           </div>
           <div class="card-body">
             <div class="row">
