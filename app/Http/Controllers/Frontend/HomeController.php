@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -64,7 +65,15 @@ class HomeController extends Controller
 
         $products= $products->orderBy('products.id', 'DESC')->paginate(12);
 
-        $categories = Category::all();
+        $categories = Category::withCount('products')->get();
+
+        // $categories = DB::table('products')
+        // ->selectRaw('count(*) as product_count, category_name, categories.id')
+        // ->join('categories', 'products.category_id', '=', 'categories.id')
+        // ->groupBy('products.category_id')
+        // ->get();
+
+        // dd($categories);
 
         return view('frontend.shop',compact('products','categories'));
     }

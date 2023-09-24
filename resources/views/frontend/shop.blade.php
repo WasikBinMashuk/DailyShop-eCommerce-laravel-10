@@ -103,7 +103,7 @@
                                                     <label class="custom-control-label" for="cat-1">{{ $item->category_name }}</label> --}}
                                                     <a href="{{ route('shop', ['category_id' => $item->id]) }}">{{ $item->category_name }}</a>
                                                 </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">3</span>
+                                                <span class="item-count">{{ $item->products_count }}</span>
                                             </div><!-- End .filter-item -->
                                             @endforeach
                                             
