@@ -31,10 +31,10 @@
 							@csrf
 		                	<div class="row">
 		                		<div class="col-lg-9">
-		                			<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
+		                			<h2 class="checkout-title">Shipping Details</h2><!-- End .checkout-title -->
 										<div>
 											<label>Name *</label>
-	            							<input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+	            							<input type="text" name="name" class="form-control" value="{{ old('name',Auth::guard('customer')->user()->name) }}" required>
 											@error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                              @enderror
@@ -50,7 +50,7 @@
 
 	            						<div>
 											<label>Address *</label>
-	            							<input type="text" name="address" class="form-control" placeholder="House number and Street name" value="{{ old('address') }}" required>
+	            							<input type="text" name="address" class="form-control" placeholder="House number and Street name" value="{{ old('address',$customer->address) }}" required>
 											@error('address')
                                                 <span class="text-danger">{{ $message }}</span>
                                              @enderror
@@ -59,7 +59,7 @@
 	            						<div class="row">
 		                					<div class="col-sm-6">
 		                						<label>Town / City *</label>
-		                						<input type="text" name="city" class="form-control" value="{{ old('city') }}" required>
+		                						<input type="text" name="city" class="form-control" value="{{ old('city',$customer->city) }}" required>
 												@error('city')
                                                 	<span class="text-danger">{{ $message }}</span>
                                              	@enderror
@@ -67,7 +67,7 @@
 
 		                					<div class="col-sm-6">
 		                						<label>State / County *</label>
-		                						<input type="text" name="country" class="form-control" value="{{ old('country') }}" required>
+		                						<input type="text" name="country" class="form-control" value="{{ old('country',$customer->country) }}" required>
 												@error('country')
                                                 	<span class="text-danger">{{ $message }}</span>
                                              	@enderror
@@ -77,7 +77,7 @@
 		                				<div class="row">
 		                					<div class="col-sm-6">
 		                						<label>Postcode / ZIP *</label>
-		                						<input type="text" name="postcode" class="form-control" value="{{ old('postcode') }}" required>
+		                						<input type="text" name="postcode" class="form-control" value="{{ old('postcode',$customer->postcode) }}" required>
 												@error('postcode')
                                                 	<span class="text-danger">{{ $message }}</span>
                                              	@enderror
@@ -85,7 +85,7 @@
 
 		                					<div class="col-sm-6">
 		                						<label>Mobile *</label>
-		                						<input type="tel" name="mobile" class="form-control" value="{{ old('mobile') }}" required>
+		                						<input type="tel" name="mobile" class="form-control" value="{{ old('mobile',Auth::guard('customer')->user()->mobile) }}" required>
 												@error('mobile')
                                                 	<span class="text-danger">{{ $message }}</span>
                                              	@enderror
@@ -94,11 +94,16 @@
 
 	                					<div>
 											<label>Email address *</label>
-	        								<input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+	        								<input type="email" name="email" class="form-control" value="{{ old('email',Auth::guard('customer')->user()->email) }}" required>
 											@error('email')
                                                 <span class="text-danger">{{ $message }}</span>
                                              @enderror
 										</div>
+
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="checkout-create-acc" name="saveAddress" value="1">
+											<label class="custom-control-label" for="checkout-create-acc">Save address for next orders?</label>
+										</div><!-- End .custom-checkbox -->
 
 	                					<div>
 											<label>Order notes (optional)</label>

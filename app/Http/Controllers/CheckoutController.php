@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Contracts\Session\Session;
@@ -12,7 +13,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 class CheckoutController extends Controller
 {
     public function checkout(){
-        return view('frontend.checkout');
+        $customer = Customer::find(Auth::guard('customer')->user()->id);
+        return view('frontend.checkout',compact('customer'));
     }
 
     public function store(Request $request){
@@ -29,6 +31,16 @@ class CheckoutController extends Controller
             'order_notes' => 'nullable',
             'status' => 'integer',
         ]);
+
+        if($request->has('saveAddress')){
+            Customer::find(Auth::guard('customer')->user()->id)
+            ->update([
+                'address' => $request->address,
+                'city' => $request->city,
+                'country' => $request->country,
+                'postcode' => $request->postcode,
+            ]);
+        }
 
         if(session('cart')){
             $subtotal = 0;

@@ -17,6 +17,10 @@ class Customer extends Authenticatable
         'password',
         'mobile',
         'status',
+        'address',
+        'city',
+        'country',
+        'postcode',
     ];
 
     protected $hidden = [

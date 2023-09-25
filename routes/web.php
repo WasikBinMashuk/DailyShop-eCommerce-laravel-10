@@ -85,7 +85,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('/orders/{id}/details', [OrderController::class, 'details'])->name('orders.details');
 });
 
-// frontend routes
+// frontend routes==============================================================================================================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
@@ -104,6 +104,10 @@ Route::post('customer/register', [CustomerAuthController::class, 'customerRegist
 // customer dashboard routes with customer middleware
 Route::group(['middleware'=>'customer'],function(){
     Route::get('customer/dashboard', [CustomerAuthController::class, 'index'])->name('customer.dashboard');
+    Route::put('customer/update', [CustomerAuthController::class, 'profileUpdate'])->name('customer.update');
+    Route::post('customer/update/password', [CustomerAuthController::class, 'updatePassword'])->name('customer.change.password');
+    Route::put('customer/update/address', [CustomerAuthController::class, 'addressUpdate'])->name('customer.change.address');
+
     Route::get('customer/logout', [CustomerAuthController::class, 'customerLogout'])->name('customer.logout');
 
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');

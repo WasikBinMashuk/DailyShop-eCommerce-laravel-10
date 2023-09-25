@@ -24,19 +24,16 @@
                         <aside class="col-md-4 col-lg-3">
                             <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Profile</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Change Password</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('customer/logout') }}">Sign Out</a>
@@ -46,10 +43,39 @@
 
                         <div class="col-md-8 col-lg-9">
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-                                    <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
-                                    <br>
-                                    From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"                           aria-labelledby="tab-dashboard-link">
+                                    <form action="{{ route('customer.update') }}" method="POST">
+                                        @csrf
+                                        @method('put')
+                                        <div class="form-group">
+                                            <label >Name</label>
+                                            <input type="text" class="form-control"  name="name" value="{{ $profile->name }}" required>
+                                            @error('name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <label >Email</label>
+                                            <input type="email" class="form-control"  name="email" value="{{ $profile->email }}" required>
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <label >Mobile</label>
+                                            <input type="text" class="form-control"  name="mobile" value="{{ $profile->mobile }}" required>
+                                            @error('mobile')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div><!-- End .form-group -->
+
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SAVE CHANGES</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </form>
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
@@ -105,73 +131,85 @@
                                     
                                 </div><!-- .End .tab-pane -->
 
-                                <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
-                                    <p>No downloads available yet.</p>
-                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
-                                </div><!-- .End .tab-pane -->
-
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
                                     <p>The following addresses will be used on the checkout page by default.</p>
 
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="card card-dashboard">
-                                                <div class="card-body">
-                                                    <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                                    <div>
+                                        <div class="card card-dashboard">
+                                            <div class="card-body">
+                                                <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
 
-                                                    <p>User Name<br>
-                                                    User Company<br>
-                                                    John str<br>
-                                                    New York, NY 10001<br>
-                                                    1-234-987-6543<br>
-                                                    yourmail@mail.com<br>
-                                                    <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .card-dashboard -->
-                                        </div><!-- End .col-lg-6 -->
+                                                <form action="{{ route('customer.change.address') }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <label>Address</label>
+                                                            <input type="text" name="address" class="form-control" value="{{ $profile->address }}" required>
+                                                            @error('address')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                             @enderror
+                                                        </div><!-- End .col-sm-6 -->
+                                                        <div class="col-sm-6">
+                                                            <label>Town / City</label>
+                                                            <input type="text" name="city" class="form-control" value="{{ $profile->city }}" required>
+                                                            @error('city')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                             @enderror
+                                                        </div><!-- End .col-sm-6 -->
+    
+                                                        <div class="col-sm-6">
+                                                            <label>State / Country</label>
+                                                            <input type="text" name="country" class="form-control" value="{{ $profile->country }}" required>
+                                                            @error('country')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                             @enderror
+                                                        </div><!-- End .col-sm-6 -->
+            
+                                                        <div class="col-sm-6">
+                                                            <label>Postcode / ZIP *</label>
+                                                            <input type="text" name="postcode" class="form-control" value="{{ $profile->postcode }}" required>
+                                                            @error('postcode')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                             @enderror
+                                                        </div><!-- End .col-sm-6 -->
 
-                                        <div class="col-lg-6">
-                                            <div class="card card-dashboard">
-                                                <div class="card-body">
-                                                    <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
-
-                                                    <p>You have not set up this type of address yet.<br>
-                                                    <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .card-dashboard -->
-                                        </div><!-- End .col-lg-6 -->
-                                    </div><!-- End .row -->
+                                                        <div class="col-sm-6">
+                                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                                <span>SAVE CHANGES</span>
+                                                                <i class="icon-long-arrow-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div><!-- End .row -->
+                                                </form>
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .card-dashboard -->
+                                    </div><!-- End .col-lg-6 -->
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-                                    <form action="#">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label>First Name *</label>
-                                                <input type="text" class="form-control" required>
-                                            </div><!-- End .col-sm-6 -->
+                                    <form action="{{ route('customer.change.password') }}" method="POST">
+                                        @csrf
+                                        <div>
+                                            <label>Old password (leave blank to leave unchanged)</label>
+                                            <input type="password" class="form-control" name="old_password">
+                                            @error('old_password')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
 
-                                            <div class="col-sm-6">
-                                                <label>Last Name *</label>
-                                                <input type="text" class="form-control" required>
-                                            </div><!-- End .col-sm-6 -->
-                                        </div><!-- End .row -->
+                                        <div>
+                                            <label>New password (leave blank to leave unchanged)</label>
+                                            <input type="password" class="form-control" name="password">
+                                            @error('password')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
 
-                                        <label>Display Name *</label>
-                                        <input type="text" class="form-control" required>
-                                        <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
-
-                                        <label>Email address *</label>
-                                        <input type="email" class="form-control" required>
-
-                                        <label>Current password (leave blank to leave unchanged)</label>
-                                        <input type="password" class="form-control">
-
-                                        <label>New password (leave blank to leave unchanged)</label>
-                                        <input type="password" class="form-control">
-
-                                        <label>Confirm new password</label>
-                                        <input type="password" class="form-control mb-2">
+                                        <div>
+                                            <label>Confirm new password</label>
+                                            <input type="password" class="form-control mb-2" name="password_confirmation">
+                                        </div>
 
                                         <button type="submit" class="btn btn-outline-primary-2">
                                             <span>SAVE CHANGES</span>
