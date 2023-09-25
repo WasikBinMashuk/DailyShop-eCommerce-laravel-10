@@ -66,11 +66,8 @@ class CustomerAuthController extends Controller
         ]);
 
         if(Auth::guard('customer')->attempt(['email'=>$request->email,'password'=>$request->password])){
-            // dd(Auth::guard('customer'));
             return redirect('customer/dashboard');
         }else{
-            // dd('bhuul');
-
             // sweet alert
             toast('Email or password invalid','warning');
             return redirect()->back();
@@ -99,7 +96,6 @@ class CustomerAuthController extends Controller
     }
 
     public function addressUpdate(Request $request){
-        // dd($request->all());
         $request->validate([
             'address' => 'required|max:255',
             'city' => 'required|max:50',
@@ -122,7 +118,6 @@ class CustomerAuthController extends Controller
     }
 
     public function updatePassword(Request $request){
-        // dd($request->all());
         $request->validate([
             'old_password' => 'required',
             'password' => 'required|confirmed|min:6',

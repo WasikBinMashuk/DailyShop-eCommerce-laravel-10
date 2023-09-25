@@ -16,31 +16,18 @@ class HomeController extends Controller
      *
      * @return void
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
 
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-
     
-
-
     public function index()
     {
-        // $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        // ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        // ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        // ->orderBy('products.id', 'DESC')->take(7)->get();
-
         $trendy = Product::where('trendy','1')->get();
         $sliders = Slider::where('status','1')->get();
         $products = Product::orderBy('id','DESC')->take(7)->get();
-        // dd($products);
 
         return view('frontend.home',compact('products','trendy','sliders'));
     }
@@ -66,14 +53,6 @@ class HomeController extends Controller
         $products= $products->orderBy('products.id', 'DESC')->paginate(12);
 
         $categories = Category::withCount('products')->get();
-
-        // $categories = DB::table('products')
-        // ->selectRaw('count(*) as product_count, category_name, categories.id')
-        // ->join('categories', 'products.category_id', '=', 'categories.id')
-        // ->groupBy('products.category_id')
-        // ->get();
-
-        // dd($categories);
 
         return view('frontend.shop',compact('products','categories'));
     }
