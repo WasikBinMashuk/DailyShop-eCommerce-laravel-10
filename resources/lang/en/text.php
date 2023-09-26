@@ -56,7 +56,26 @@
         'Change Password' => 'Change Password',
         'Sign Out' => 'Sign Out',
         'SAVE CHANGES' => 'SAVE CHANGES',
-        'Checkout' => 'Checkout',
-        'Checkout' => 'Checkout',
+
+
+        'Shipping Address' => 'Shipping Address',
+
+        'Old password' => 'Old password',
+        'New password' => 'New password',
+        'Confirm new password' => 'Confirm new password',
+        'leave blank to leave unchanged' => 'leave blank to leave unchanged',
+
+
+        'The following addresses will be used on the checkout page by default' => 'The following addresses will be used on the checkout page by default.',
+
+        'Order ID.' => 'Order ID.',
+        'Products' => 'Products',
+        'Order Status' => 'Order Status',
+        
+        'Total Price' => 'Total Price',
+        'Go to shop for more' => 'Go to shop for more',
+        'add to cart' => 'add to cart',
+        'SHOP NOW' => 'SHOP NOW',
+
     ];
 ?>

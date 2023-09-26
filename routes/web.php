@@ -30,6 +30,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
+// Localization Route
+Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
+
 // auth group route for users, categories, subcategories and products
 Route::group(['middleware'=>'auth'],function(){
     
@@ -116,8 +119,7 @@ Route::group(['middleware'=>'customer'],function(){
 });
 
 
-// Localization Route
-Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
+
 
 
 // Route::get('/cart', function () {

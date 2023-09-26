@@ -87,8 +87,8 @@
                                     @foreach ($orders as $order)
                                     <div class="row p-2 bg-white border rounded mt-2">
                                         <div class="col-md-6 mt-1">
-                                            <h5 style="color: orange">Order ID. {{ $order->id }}</h5>
-                                            <h6>Products: </h6>
+                                            <h5 style="color: orange">{{ __('text.Order ID.') }} {{ $order->id }}</h5>
+                                            <h6>{{ __('text.Products') }}: </h6>
                                             
                                             <div class="mt-1 mb-1 spec-1">
                                                 @foreach ($orderDetails as $detail)
@@ -104,10 +104,10 @@
                                         </div>
                                         <div class="align-items-center align-content-center col-md-6 border-left mt-1">
                                             <div class="d-flex flex-row align-items-center">
-                                                <h4 class="mr-1" style="color: orange">Total price: <span class="text-dark">&#2547;{{ $order->subtotal }}</span></h4>
+                                                <h4 class="mr-1" style="color: orange">{{ __('text.Total Price') }}: <span class="text-dark">&#2547;{{ $order->subtotal }}</span></h4>
                                             </div>
                                             <div class="d-flex flex-column mt-4">
-                                                <span class="badge bg-light h5 " style="height: 30px; ">Order Status</span>
+                                                <span class="badge bg-light h5 " style="height: 30px; ">{{ __('text.Order Status') }}</span>
                                                 
                                                 @if ( $order->status == 1)
                                                     <span class="badge  h5 " style="height: 30px; background-color:rgb(157, 103, 2)">Processing</span>
@@ -132,26 +132,26 @@
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-                                    <p>The following addresses will be used on the checkout page by default.</p>
+                                    <p>{{ __('text.The following addresses will be used on the checkout page by default') }}</p>
 
                                     <div>
                                         <div class="card card-dashboard">
                                             <div class="card-body">
-                                                <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
+                                                <h3 class="card-title">{{ __('text.Shipping Address') }}</h3><!-- End .card-title -->
 
                                                 <form action="{{ route('customer.change.address') }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="row">
                                                         <div class="col-sm-6">
-                                                            <label>Address</label>
+                                                            <label>{{ __('text.Address') }}</label>
                                                             <input type="text" name="address" class="form-control" value="{{ $profile->address }}" required>
                                                             @error('address')
                                                                 <span class="text-danger">{{ $message }}</span>
                                                              @enderror
                                                         </div><!-- End .col-sm-6 -->
                                                         <div class="col-sm-6">
-                                                            <label>Town / City</label>
+                                                            <label>{{ __('text.Town / City') }}</label>
                                                             <input type="text" name="city" class="form-control" value="{{ $profile->city }}" required>
                                                             @error('city')
                                                                 <span class="text-danger">{{ $message }}</span>
@@ -159,7 +159,7 @@
                                                         </div><!-- End .col-sm-6 -->
     
                                                         <div class="col-sm-6">
-                                                            <label>State / Country</label>
+                                                            <label>{{ __('text.State / County') }}</label>
                                                             <input type="text" name="country" class="form-control" value="{{ $profile->country }}" required>
                                                             @error('country')
                                                                 <span class="text-danger">{{ $message }}</span>
@@ -167,7 +167,7 @@
                                                         </div><!-- End .col-sm-6 -->
             
                                                         <div class="col-sm-6">
-                                                            <label>Postcode / ZIP *</label>
+                                                            <label>{{ __('text.Postcode / ZIP') }}</label>
                                                             <input type="text" name="postcode" class="form-control" value="{{ $profile->postcode }}" required>
                                                             @error('postcode')
                                                                 <span class="text-danger">{{ $message }}</span>
@@ -176,7 +176,7 @@
 
                                                         <div class="col-sm-6">
                                                             <button type="submit" class="btn btn-outline-primary-2">
-                                                                <span>SAVE CHANGES</span>
+                                                                <span>{{ __('text.SAVE CHANGES') }}</span>
                                                                 <i class="icon-long-arrow-right"></i>
                                                             </button>
                                                         </div>
@@ -191,7 +191,7 @@
                                     <form action="{{ route('customer.change.password') }}" method="POST">
                                         @csrf
                                         <div>
-                                            <label>Old password (leave blank to leave unchanged)</label>
+                                            <label>{{ __('text.Old password') }} ({{ __('text.leave blank to leave unchanged') }})</label>
                                             <input type="password" class="form-control" name="old_password">
                                             @error('old_password')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -199,7 +199,7 @@
                                         </div>
 
                                         <div>
-                                            <label>New password (leave blank to leave unchanged)</label>
+                                            <label>{{ __('text.New password') }} ({{ __('text.leave blank to leave unchanged') }})</label>
                                             <input type="password" class="form-control" name="password">
                                             @error('password')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -207,12 +207,12 @@
                                         </div>
 
                                         <div>
-                                            <label>Confirm new password</label>
+                                            <label>{{ __('text.Confirm new password') }}</label>
                                             <input type="password" class="form-control mb-2" name="password_confirmation">
                                         </div>
 
                                         <button type="submit" class="btn btn-outline-primary-2">
-                                            <span>SAVE CHANGES</span>
+                                            <span>{{ __('text.SAVE CHANGES') }}</span>
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
                                     </form>

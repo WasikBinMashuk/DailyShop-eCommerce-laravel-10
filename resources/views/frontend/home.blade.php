@@ -31,7 +31,7 @@
                                 <h1 class="intro-title">{{ $slider->slider_title }}</h1><!-- End .intro-title -->
 
                                 <a href="{{ $slider->slider_link }}" target="_blank" class="btn btn-outline-white">
-                                    <span>SHOP NOW</span>
+                                    <span>{{ __('text.SHOP NOW') }}</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
                             </div><!-- End .intro-content -->
@@ -98,7 +98,7 @@
                                 </div><!-- End .product-price -->
                             </div><!-- End .product-body -->
                             <div class="product-action">
-                                <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
+                                <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>{{ __('text.add to cart') }}</span></a>
                             </div><!-- End .product-action -->
                         </div><!-- End .product -->
                         @endforeach
@@ -145,7 +145,7 @@
                                         </div><!-- End .product-price -->
                                     </div><!-- End .product-body -->
                                     <div class="product-action">
-                                        <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>{{ __('text.add to cart') }}</span></a>
                                     </div><!-- End .product-action -->
                                 </div><!-- End .product -->
                             </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
@@ -157,7 +157,7 @@
                 </div><!-- .End .tab-pane -->
             </div><!-- End .tab-content -->
             <div class="more-container text-center">
-                <a href="{{ route('shop') }}" class="btn btn-outline-darker btn-more"><span>Go to shop for more</span><i class="icon-long-arrow-right"></i></a>
+                <a href="{{ route('shop') }}" class="btn btn-outline-darker btn-more"><span>{{ __('text.Go to shop for more') }}</span><i class="icon-long-arrow-right"></i></a>
             </div><!-- End .more-container -->
         </div>
     </div><!-- End .container -->

@@ -57,7 +57,23 @@
         'Sign Out' => 'সাইন আউট',
         'SAVE CHANGES' => 'সেভ করুন',
 
-        'Checkout' => 'Checkout',
+        'Shipping Address' => 'শিপিং অ্যাড্রেস',
+
+        'Old password' => 'পুরাতন পাসওয়ার্ড',
+        'New password' => 'নতুন পাসওয়ার্ড',
+        'Confirm new password' => 'নতুন পাসওয়ার্ড পুনরায় দিন',
+        'leave blank to leave unchanged' => 'বদল করতে না চাইলে খালি রাখুন',
+
+        'The following addresses will be used on the checkout page by default' => 'এই অ্যাড্রেসটি চেকআউট পেইজে স্বয়ংক্রিয়ভাবে ব্যবহৃত হবে |',
+        
+        'Order ID.' => 'অর্ডার নাম্বার',
+        'Products' => 'প্রোডাক্ট',
+        'Order Status' => 'বর্তমান অবস্থা',
+        'Total Price' => 'সর্বমোট মুল্য',
+
+        'Go to shop for more' => 'আরও দেখুন',
+        'add to cart' => 'কার্টে যোগ করুন',
+        'SHOP NOW' => 'এখনি কিনুন',
         
     ];
 ?>

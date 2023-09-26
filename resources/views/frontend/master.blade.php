@@ -36,17 +36,7 @@
             <div class="header-top">
                 <div class="container">
                     <div class="header-left">
-                        {{-- <div class="header-dropdown">
-                            <a href="#">Lang</a>
-                            <div class="header-menu">
-                                <ul>
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">French</a></li>
-                                    <li><a href="#">Spanish</a></li>
-                                </ul>
-                                
-                            </div><!-- End .header-menu -->
-                        </div><!-- End .header-dropdown --> --}}
+                        
                         <select class="form-select lang-change" style="color: gray; border:none" name="" id="">
                             <option value="en" {{ session()->get('lang_code')=='en' ? 'selected' : '' }}>ENG</option>
                             <option value="bn" {{ session()->get('lang_code')=='bn' ? 'selected' : '' }}>BN</option>
@@ -402,6 +392,7 @@
         });
     </script>
 
+    {{-- Script for localization --}}
     <script type="text/javascript">
     
         var url = "{{ route('lang.change') }}";
