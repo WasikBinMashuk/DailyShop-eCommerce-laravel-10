@@ -5,14 +5,14 @@
         <div class="">
         	<div class="page-header text-center" style="background-image: url({{ asset('frontend/images/page-header-bg.jpg') }})">
         		<div class="container">
-        			<h1 class="page-title">Shop</h1>
+        			<h1 class="page-title">{{ __('text.Shop') }}</h1>
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('text.Home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">{{ __('text.Shop') }}</a></li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
@@ -22,7 +22,7 @@
         			
                     <div class="toolbox">
         				<div class="toolbox-left">
-                            <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
+                            <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>{{ __('text.FILTERS') }}</a>
         				</div><!-- End .toolbox-left -->
                         {{-- <div class="toolbox-right">
         					<div class="toolbox-sort">

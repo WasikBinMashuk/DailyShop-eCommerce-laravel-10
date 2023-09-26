@@ -4,15 +4,15 @@
     <div class="">
         <div class="page-header text-center" style="background-image: url({{ asset('frontend/images/page-header-bg.jpg') }})">
             <div class="container">
-                <h1 class="page-title">My Account<span>Shop</span></h1>
+                <h1 class="page-title">{{ __('text.My Account') }}</h1>
             </div><!-- End .container -->
         </div><!-- End .page-header -->
         <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">My Account</li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('text.Home') }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('shop') }}">{{ __('text.Shop') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('text.My Account') }}</li>
                 </ol>
             </div><!-- End .container -->
         </nav><!-- End .breadcrumb-nav -->
@@ -24,31 +24,31 @@
                         <aside class="col-md-4 col-lg-3">
                             <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Profile</a>
+                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">{{ __('text.Profile') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">{{ __('text.Orders') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+                                    <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">{{ __('text.Address') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Change Password</a>
+                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">{{ __('text.Change Password') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('customer/logout') }}">Sign Out</a>
+                                    <a class="nav-link" href="{{ url('customer/logout') }}">{{ __('text.Sign Out') }}</a>
                                 </li>
                             </ul>
                         </aside><!-- End .col-lg-3 -->
 
                         <div class="col-md-8 col-lg-9">
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"                           aria-labelledby="tab-dashboard-link">
+                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
                                     <form action="{{ route('customer.update') }}" method="POST">
                                         @csrf
                                         @method('put')
                                         <div class="form-group">
-                                            <label >Name</label>
+                                            <label >{{ __('text.Name') }}</label>
                                             <input type="text" class="form-control"  name="name" value="{{ $profile->name }}" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -56,7 +56,7 @@
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label >Email</label>
+                                            <label >{{ __('text.Email address') }}</label>
                                             <input type="email" class="form-control"  name="email" value="{{ $profile->email }}" required>
                                             @error('email')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -64,7 +64,7 @@
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label >Mobile</label>
+                                            <label >{{ __('text.Mobile') }}</label>
                                             <input type="text" class="form-control"  name="mobile" value="{{ $profile->mobile }}" required>
                                             @error('mobile')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -72,7 +72,7 @@
                                         </div><!-- End .form-group -->
 
                                         <button type="submit" class="btn btn-outline-primary-2">
-                                            <span>SAVE CHANGES</span>
+                                            <span>{{ __('text.SAVE CHANGES') }}</span>
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
                                     </form>

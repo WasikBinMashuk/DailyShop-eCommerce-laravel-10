@@ -5,15 +5,15 @@
         <div class="">
         	<div class="page-header text-center" style="background-image: url({{ asset('frontend/images/page-header-bg.jpg') }})">
         		<div class="container">
-        			<h1 class="page-title">Checkout</h1>
+        			<h1 class="page-title">{{ __('text.Checkout') }}</h1>
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('text.Home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">{{ __('text.Shop') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('text.Checkout') }}</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
@@ -21,19 +21,19 @@
             <div class="page-content">
             	<div class="checkout">
 	                <div class="container">
-            			<div class="checkout-discount">
+            			{{-- <div class="checkout-discount">
             				<form action="#">
         						<input type="text" class="form-control" required id="checkout-discount-input">
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
             				</form>
-            			</div><!-- End .checkout-discount -->
+            			</div><!-- End .checkout-discount --> --}}
             			<form action="{{ route('checkout.store') }}" method="POST">
 							@csrf
 		                	<div class="row">
 		                		<div class="col-lg-9">
-		                			<h2 class="checkout-title">Shipping Details</h2><!-- End .checkout-title -->
+		                			<h2 class="checkout-title">{{ __('text.Shipping Details') }}</h2><!-- End .checkout-title -->
 										<div>
-											<label>Name *</label>
+											<label>{{ __('text.Name') }} *</label>
 	            							<input type="text" name="name" class="form-control" value="{{ old('name',Auth::guard('customer')->user()->name) }}" required>
 											@error('name')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -41,7 +41,7 @@
 										</div>
 
 	            						<div>
-											<label>Company Name (Optional)</label>
+											<label>{{ __('text.Company Name') }} (Optional)</label>
 	            							<input type="text" name="company_name" class="form-control" value="{{ old('company_name') }}">
 											@error('company_name')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -49,7 +49,7 @@
 										</div>
 
 	            						<div>
-											<label>Address *</label>
+											<label>{{ __('text.Address') }} *</label>
 	            							<input type="text" name="address" class="form-control" placeholder="House number and Street name" value="{{ old('address',$customer->address) }}" required>
 											@error('address')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -58,7 +58,7 @@
 
 	            						<div class="row">
 		                					<div class="col-sm-6">
-		                						<label>Town / City *</label>
+		                						<label>{{ __('text.Town / City') }} *</label>
 		                						<input type="text" name="city" class="form-control" value="{{ old('city',$customer->city) }}" required>
 												@error('city')
                                                 	<span class="text-danger">{{ $message }}</span>
@@ -66,7 +66,7 @@
 		                					</div><!-- End .col-sm-6 -->
 
 		                					<div class="col-sm-6">
-		                						<label>State / County *</label>
+		                						<label>{{ __('text.State / County') }} *</label>
 		                						<input type="text" name="country" class="form-control" value="{{ old('country',$customer->country) }}" required>
 												@error('country')
                                                 	<span class="text-danger">{{ $message }}</span>
@@ -76,7 +76,7 @@
 
 		                				<div class="row">
 		                					<div class="col-sm-6">
-		                						<label>Postcode / ZIP *</label>
+		                						<label>{{ __('text.Postcode / ZIP') }} *</label>
 		                						<input type="text" name="postcode" class="form-control" value="{{ old('postcode',$customer->postcode) }}" required>
 												@error('postcode')
                                                 	<span class="text-danger">{{ $message }}</span>
@@ -84,7 +84,7 @@
 		                					</div><!-- End .col-sm-6 -->
 
 		                					<div class="col-sm-6">
-		                						<label>Mobile *</label>
+		                						<label>{{ __('text.Mobile') }} *</label>
 		                						<input type="tel" name="mobile" class="form-control" value="{{ old('mobile',Auth::guard('customer')->user()->mobile) }}" required>
 												@error('mobile')
                                                 	<span class="text-danger">{{ $message }}</span>
@@ -93,7 +93,7 @@
 		                				</div><!-- End .row -->
 
 	                					<div>
-											<label>Email address *</label>
+											<label>{{ __('text.Email address') }} *</label>
 	        								<input type="email" name="email" class="form-control" value="{{ old('email',Auth::guard('customer')->user()->email) }}" required>
 											@error('email')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -102,11 +102,11 @@
 
 										<div class="custom-control custom-checkbox">
 											<input type="checkbox" class="custom-control-input" id="checkout-create-acc" name="saveAddress" value="1">
-											<label class="custom-control-label" for="checkout-create-acc">Save address for next orders?</label>
+											<label class="custom-control-label" for="checkout-create-acc">{{ __('text.Save address for next orders?') }}</label>
 										</div><!-- End .custom-checkbox -->
 
 	                					<div>
-											<label>Order notes (optional)</label>
+											<label>{{ __('text.Order notes') }} (optional)</label>
 	        								<textarea class="form-control" name="order_notes" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
 											@error('order_notes')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -116,13 +116,13 @@
 
 		                		<aside class="col-lg-3">
 		                			<div class="summary">
-		                				<h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+		                				<h3 class="summary-title">{{ __('text.Your Order') }}</h3><!-- End .summary-title -->
 
 		                				<table class="table table-summary">
 		                					<thead>
 		                						<tr>
-		                							<th>Product</th>
-		                							<th>Total</th>
+		                							<th>{{ __('text.Product') }}</th>
+		                							<th>{{ __('text.Total') }}</th>
 		                						</tr>
 		                					</thead>
 
@@ -144,13 +144,13 @@
 													@endforeach
 												@endif
 		                						<tr class="summary-total">
-		                							<td>Total:</td>
+		                							<td>{{ __('text.Total') }}:</td>
 		                							<td>&#2547;{{ $total }}</td>
 		                						</tr><!-- End .summary-total -->
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
 
-		                				<div class="accordion-summary" id="accordion-payment">
+		                				{{-- <div class="accordion-summary" id="accordion-payment">
 										    <div class="card">
 										        <div class="card-header" id="heading-1">
 										            <h2 class="card-title">
@@ -224,17 +224,17 @@
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
-										</div><!-- End .accordion -->
+										</div><!-- End .accordion --> --}}
 
 										@if (session('cart'))
 											<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-												<span class="btn-text">Place Order</span>
-												<span class="btn-hover-text">Proceed to Checkout</span>
+												<span class="btn-text">{{ __('text.Place Order') }}</span>
+												<span class="btn-hover-text">{{ __('text.PROCEED TO CHECKOUT') }}</span>
 											</button>
 										@else
 											<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" disabled>
-												<span class="btn-text">Place Order</span>
-												<span class="btn-hover-text">Your Cart is Empty</span>
+												<span class="btn-text">{{ __('text.Place Order') }}</span>
+												<span class="btn-hover-text">{{ __('text.Your Cart is Empty') }}</span>
 											</button>
 										@endif
 		                				

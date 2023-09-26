@@ -48,7 +48,7 @@
 
         <div class="container">
             <div class="heading heading-center mb-3">
-                <h2 class="title-lg">Trendy Products</h2><!-- End .title -->
+                <h2 class="title-lg">{{ __('text.Trendy Products') }}</h2><!-- End .title -->
             </div><!-- End .heading -->
 
             <div class="tab-content tab-content-carousel">
@@ -112,7 +112,7 @@
 
         <div class="container">
             <div class="heading heading-center mb-6">
-                <h2 class="title">Recent Arrivals</h2><!-- End .title -->
+                <h2 class="title-lg">{{ __('text.Recent Arrivals') }}</h2><!-- End .title -->
             </div><!-- End .heading -->
     
             <div class="tab-content">

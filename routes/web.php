@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\LangController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -114,6 +115,9 @@ Route::group(['middleware'=>'customer'],function(){
     Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 });
 
+
+// Localization Route
+Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
 
 
 // Route::get('/cart', function () {

@@ -4,15 +4,15 @@
         <div class="">
         	<div class="page-header text-center" style="background-image: url({{ asset('frontend/images/page-header-bg.jpg') }})">
         		<div class="container">
-        			<h1 class="page-title">Shopping Cart</h1>
+        			<h1 class="page-title">{{ __('text.Shopping Cart') }}</h1>
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('text.Home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">{{ __('text.Shop') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('text.Shopping Cart') }}</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
@@ -25,10 +25,10 @@
 	                			<table class="table table-cart table-mobile">
 									<thead>
 										<tr>
-											<th>Product</th>
-											<th>Price</th>
-											<th>Quantity</th>
-											<th>Total</th>
+											<th>{{ __('text.Product') }}</th>
+											<th>{{ __('text.Price') }}</th>
+											<th>{{ __('text.Quantity') }}</th>
+											<th>{{ __('text.Total') }}</th>
 											<th></th>
 										</tr>
 									</thead>
@@ -91,22 +91,22 @@
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
 	                			<div class="summary summary-cart">
-	                				<h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+	                				<h3 class="summary-title">{{ __('text.Cart Total') }}</h3><!-- End .summary-title -->
 
 	                				<table class="table table-summary">
 	                					<tbody>
 	                						<tr class="summary-subtotal">
-	                							<td>Subtotal:</td>
+	                							<td>{{ __('text.Subtotal') }}:</td>
 	                							<td>&#2547;{{ $total }}</td>
 	                						</tr><!-- End .summary-subtotal -->
 
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
-	                				<a href="{{ route('checkout') }}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                				<a href="{{ route('checkout') }}" class="btn btn-outline-primary-2 btn-order btn-block">{{ __('text.PROCEED TO CHECKOUT') }}</a>
 	                			</div><!-- End .summary -->
 
-		            			<a href="{{ route('shop') }}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+		            			<a href="{{ route('shop') }}" class="btn btn-outline-dark-2 btn-block mb-3"><span>{{ __('text.CONTINUE SHOPPING') }}</span><i class="icon-refresh"></i></a>
 	                		</aside><!-- End .col-lg-3 -->
 	                	</div><!-- End .row -->
 	                </div><!-- End .container -->

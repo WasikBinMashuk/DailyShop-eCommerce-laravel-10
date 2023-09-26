@@ -36,7 +36,21 @@
             <div class="header-top">
                 <div class="container">
                     <div class="header-left">
-                        
+                        {{-- <div class="header-dropdown">
+                            <a href="#">Lang</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                                
+                            </div><!-- End .header-menu -->
+                        </div><!-- End .header-dropdown --> --}}
+                        <select class="form-select lang-change" style="color: gray; border:none" name="" id="">
+                            <option value="en" {{ session()->get('lang_code')=='en' ? 'selected' : '' }}>ENG</option>
+                            <option value="bn" {{ session()->get('lang_code')=='bn' ? 'selected' : '' }}>BN</option>
+                        </select>
                     </div><!-- End .header-left -->
 
                     <div class="header-right">
@@ -46,13 +60,13 @@
                                 <ul>
                                     
                                     <li><a href="#"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li>
-                                    <li><a href="#">About Us</a></li>
-                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">{{ __('text.About Us') }}</a></li>
+                                    <li><a href="#">{{ __('text.Contact Us') }}</a></li>
                                    
                                     @if (Auth::guard('customer')->check())
                                     <li><a href="{{ route('customer.dashboard') }}"><i class="icon-user"></i>{{ Auth::guard('customer')->user()->name }}</a></li>
                                     @else
-                                        <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
+                                        <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>{{ __('text.login') }}</a></li>
                                     @endif
                                     
                                 </ul>
@@ -72,11 +86,11 @@
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container active">
-                                    <a href="{{ route('home') }}" class="">Home</a>
+                                    <a href="{{ route('home') }}" class="">{{ __('text.Home') }}</a>
                                 </li>
                                 
                                 <li>
-                                    <a href="{{ route('shop') }}" class="sf-with-ul">Shop</a>
+                                    <a href="{{ route('shop') }}" class="sf-with-ul">{{ __('text.Shop') }}</a>
 
                                     <ul>
                                         {{-- <li>
@@ -94,7 +108,7 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="blog.html" class="sf-with-ul">Blog</a>
+                                    <a href="blog.html" class="sf-with-ul">{{ __('text.Blog') }}</a>
 
                                     <ul>
                                         <li><a href="blog.html">Classic</a></li>
@@ -191,13 +205,13 @@
                                 </div><!-- End .cart-product -->
 
                                 <div class="dropdown-cart-total">
-                                    <span>Total</span>
+                                    <span>{{ __('text.Total') }}</span>
                                     <span class="cart-total-price">&#2547;{{ $total }}</span>
                                 </div><!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="{{ route('cart') }}" class="btn btn-primary">View Cart</a>
-                                    <a href="{{ route('checkout') }}" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    <a href="{{ route('cart') }}" class="btn btn-primary">{{ __('text.View Cart') }}</a>
+                                    <a href="{{ route('checkout') }}" class="btn btn-outline-primary-2"><span>{{ __('text.Checkout') }}</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
@@ -238,10 +252,10 @@
                         <div class="form-tab">
                             <ul class="nav nav-pills nav-fill" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">{{ __('text.Sign In') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">{{ __('text.Register') }}</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="tab-content-5">
@@ -249,7 +263,7 @@
                                     <form action="{{ route('customer.login') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <label for="singin-email">Email address <b class="required">*</b></label>
+                                            <label for="singin-email">{{ __('text.Email address') }} <b class="required">*</b></label>
                                             <input type="text" class="form-control" id="singin-email" name="email" required>
                                             @error('email')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -257,7 +271,7 @@
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label for="singin-password">Password <b class="required">*</b></label>
+                                            <label for="singin-password">{{ __('text.Password') }} <b class="required">*</b></label>
                                             <input type="password" class="form-control" id="singin-password" name="password" required>
                                             @error('password')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -266,7 +280,7 @@
 
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>LOG IN</span>
+                                                <span>{{ __('text.LOG IN') }}</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
 
@@ -283,14 +297,14 @@
                                     <form action="{{ route('customer.register') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <label >Your name *</label>
+                                            <label >{{ __('text.Name') }} *</label>
                                             <input type="text" class="form-control"  name="name" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div><!-- End .form-group -->
                                         <div class="form-group">
-                                            <label>Your email address *</label>
+                                            <label>{{ __('text.Email address') }} *</label>
                                             <input type="email" class="form-control" name="email" required>
                                             @error('email')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -298,24 +312,24 @@
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label >Password *</label>
+                                            <label >{{ __('text.Password') }} *</label>
                                             <input type="password" class="form-control"  name="password" required>
                                             @error('password')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div><!-- End .form-group -->
                                         <div class="form-group">
-                                            <label for="register-password">Confirm password *</label>
+                                            <label for="register-password">{{ __('text.Confirm password') }} *</label>
                                             <input type="password" class="form-control" id="register-password" name="password_confirmation" required>
                                         </div><!-- End .form-group -->
                                         <div class="form-group">
-                                            <label for="register-email">Mobile *</label>
+                                            <label for="register-email">{{ __('text.Mobile') }} *</label>
                                             <input type="text" class="form-control" id="register-email" name="mobile" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>SIGN UP</span>
+                                                <span>{{ __('text.SIGN UP') }}</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
                                         </div><!-- End .form-footer -->
@@ -342,6 +356,8 @@
     <script src="{{ asset('frontend/js/jquery.magnific-popup.min.js') }}"></script>
     <!-- Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+
+    {{-- CART update and delete scripts --}}
     <script type="text/javascript">
 
         $(".cart_update").change(function (e){
@@ -384,6 +400,17 @@
                 });
             }
         });
+    </script>
+
+    <script type="text/javascript">
+    
+        var url = "{{ route('lang.change') }}";
+    
+        $('.lang-change').change(function(){
+        let lang_code = $(this).val();
+            window.location.href = url + "?lang="+ lang_code;
+        });
+    
     </script>
 </body>
 
