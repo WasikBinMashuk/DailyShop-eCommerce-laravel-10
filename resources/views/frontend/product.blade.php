@@ -7,9 +7,9 @@
             <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
                 <div class="container d-flex align-items-center">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Product</li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('text.Home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">{{ __('text.Shop') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('text.Product') }}</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
@@ -52,7 +52,7 @@
                                     <form action="{{ route('add_to_cart_from_product',$product->id) }}" method="POST">
                                         @csrf
                                         <div class="details-filter-row details-row-size">
-                                            <label for="qty">Qty:</label>
+                                            <label for="qty">{{ __('text.Quantity') }}:</label>
                                             <div class="product-details-quantity">
                                                 <input type="number" id="qty" class="form-control" name="quantity" value="1" min="1" max="10" step="1" data-decimals="0" required>
                                             </div><!-- End .product-details-quantity -->
@@ -60,7 +60,7 @@
     
                                         <div class="product-details-action">
                                             {{-- <a href="#" class="btn-product btn-cart"><span>add to cart</span></a> --}}
-                                            <button type="submit" class="btn-product btn-cart"><span>add to cart</span></button>
+                                            <button type="submit" class="btn-product btn-cart"><span>{{ __('text.add to cart') }}</span></button>
                                             <div class="details-action-wrapper">
                                                 <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
                                                 {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> --}}
@@ -164,7 +164,7 @@
                         </div><!-- End .tab-content -->
                     </div><!-- End .product-details-tab -->
 
-                    <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+                    <h2 class="title text-center mb-4">{{ __('text.You May Also Like') }}</h2><!-- End .title text-center -->
 
                     <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
                         data-owl-options='{
@@ -203,7 +203,7 @@
                                     @endif
                                 </a>
                                 <div class="product-action">
-                                    <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>{{ __('text.add to cart') }}</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
@@ -260,7 +260,7 @@
                     </div><!-- End .product-details-quantity -->
 
                     <div class="product-details-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        <a href="#" class="btn-product btn-cart"><span>{{ __('text.add to cart') }}</span></a>
                         <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
                     </div><!-- End .product-details-action -->
                 </div><!-- End .col-6 -->

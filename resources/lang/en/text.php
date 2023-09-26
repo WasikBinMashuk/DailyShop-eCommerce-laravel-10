@@ -76,6 +76,7 @@
         'Go to shop for more' => 'Go to shop for more',
         'add to cart' => 'add to cart',
         'SHOP NOW' => 'SHOP NOW',
+        'You May Also Like' => 'You May Also Like',
 
     ];
 ?>

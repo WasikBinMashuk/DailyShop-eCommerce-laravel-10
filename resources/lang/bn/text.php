@@ -74,6 +74,7 @@
         'Go to shop for more' => 'আরও দেখুন',
         'add to cart' => 'কার্টে যোগ করুন',
         'SHOP NOW' => 'এখনি কিনুন',
+        'You May Also Like' => 'সম্পর্কিত প্রোডাক্ট',
         
     ];
 ?>
