@@ -1,4 +1,5 @@
 @extends('frontend.master')
+@section('title',"$product->product_name")
 @section('content')
 
 

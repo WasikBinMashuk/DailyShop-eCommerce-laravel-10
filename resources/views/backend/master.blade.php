@@ -4,10 +4,9 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Ecommerce</title>
-
+    <title>DailyShop - Admin</title>
+    <link rel="icon" type="image/png" href="{{ asset("images/logo/favicon-new.png") }}">
     
-
     <!-- CSS files -->
     <link href="{{ asset('css/tabler.min.css?1684106062') }}" rel="stylesheet"/>
     {{-- <link href="css/tabler-flags.min.css?1684106062" rel="stylesheet"/>
@@ -15,8 +14,6 @@
     <link href="css/tabler-vendors.min.css?1684106062" rel="stylesheet"/>
     <link href="css/demo.min.css?1684106062" rel="stylesheet"/> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-    
     
     <style>
       @import url('https://rsms.me/inter/inter.css');
@@ -39,8 +36,8 @@
           </button>
           <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
             <a href="{{ url('/dashboard') }}" class="nav-link">
-              {{-- <img src="./static/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image"> --}}
-              <div>Ecommerce-Laravel-10</div>
+              <img src="{{ asset('images/logo/logo-new.png') }}" width="105" height="35"  alt="" class="">
+              {{-- <div>Ecommerce-Laravel-10</div> --}}
             </a>
           </h1>
           <div class="navbar-nav flex-row order-md-last">

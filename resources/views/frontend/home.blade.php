@@ -1,4 +1,5 @@
 @extends('frontend.master')
+@section('title','Home')
 @section('content')
 
     <div class="mb-6"></div><!-- End .mb-6 -->
