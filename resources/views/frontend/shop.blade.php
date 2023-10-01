@@ -59,7 +59,7 @@
                                             </div><!-- End .product-action -->
 
                                             <div class="product-action action-icon-top">
-                                                <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart"><span>{{ __('text.add to cart') }}</span></a>
+                                                <a href="{{ route('add_to_cart', $item->id) }}" class="btn-product btn-cart add-to-cart-btn"><span>{{ __('text.add to cart') }}</span></a>
                                             </div><!-- End .product-action -->
                                         </figure><!-- End .product-media -->
 
@@ -118,5 +118,4 @@
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
         </div><!-- End .main -->
-
 @endsection
