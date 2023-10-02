@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
 use Exception;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -17,9 +18,7 @@ class ProductController extends Controller
 {
     public function index(Request $request){
 
-        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
+        $products = Product::with(['category', 'subCategory']);
 
         $search = null;
 
@@ -27,10 +26,18 @@ class ProductController extends Controller
         {
             $search = $request->search;
             $products=$products->where('product_name','LIKE',"%$search%")
-            ->orWhere('product_code','LIKE',"%$search%");
+                                ->orWhere('product_code','LIKE',"%$search%")
+                                // ->orWhere(function ($query) use($search){
+                                //     $query->whereHas('category', function ($query) use($search) {
+                                //         $query->where('category_name','LIKE',"%$search%");
+                                //     });
+                                // });
+                                //using arrow funciton instead of normal function like above.......
+                                ->orWhere(fn($query) => $query->whereHas('category', fn($query) => $query->where('category_name','LIKE',"%$search%")));
+                                
         }
 
-        $products= $products->orderBy('products.id', 'DESC')->paginate(5);
+        $products= $products->orderBy('id', 'DESC')->paginate(5);
       
         return view('backend.products.index', compact('products','search'));
     }

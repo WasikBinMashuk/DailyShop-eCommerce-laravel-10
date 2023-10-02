@@ -33,7 +33,7 @@
                       @foreach ($subCategories as $item)
 
                           <tr>
-                              <td>{{ $item->category_name }}</td>
+                              <td>{{ $item->category->category_name }}</td>
                               <td>{{ $item->sub_category_name }}</td>
                               {{-- <td style="width: 100px">
                                 <a href="{{ route('subcategory.edit', $item->id) }}" class="btn btn-primary">

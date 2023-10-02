@@ -62,8 +62,8 @@
                                   <img src="{{ asset('images/no.jpg') }}" style="height: 100px; width: 100px;">
                                 @endif
                               </td>
-                              <td>{{ $item->category_name }}</td>
-                              <td>{{ $item->sub_category_name }}</td>
+                              <td>{{ $item->category->category_name }}</td>
+                              <td>{{ $item->subCategory->sub_category_name }}</td>
                               <td>{{ $item->product_code }}</td>
                               <td>{{ $item->product_name }}</td>
                               <td>&#2547;{{ $item->price }}</td>

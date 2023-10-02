@@ -63,15 +63,9 @@ class CategoryController extends Controller
         Category::where('id', $id)->first()->delete();
 
         // sweet alert
-        toast('User Deleted!','info');
+        toast('Category Deleted!','info');
 
         return redirect()->back();
     }
-
-    
-
-    
-
-    
 
 }

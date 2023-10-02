@@ -22,8 +22,13 @@ class Product extends Model
         'trendy',
     ];
 
-    public function products():BelongsTo
+    public function subCategory():BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function category():BelongsTo
+    {
+        return $this->belongsTo(Category::class,'category_id');
     }
 }
