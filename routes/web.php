@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes(['register' => false]);
+Auth::routes();
 
 // Localization Route
 Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');

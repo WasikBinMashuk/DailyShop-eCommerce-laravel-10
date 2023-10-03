@@ -26,14 +26,14 @@
               <div class="mb-2">
                 <label class="form-label">
                   Password
-                  {{-- <span class="form-label-description">
+                  <span class="form-label-description">
                     
                     @if (Route::has('password.request'))
                                     <a class="" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                     @endif
-                  </span> --}}
+                  </span>
                 </label>
                 <div class="input-group input-group-flat">
                   <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
