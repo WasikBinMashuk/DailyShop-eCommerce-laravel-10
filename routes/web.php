@@ -16,6 +16,8 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\LangController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,11 +32,27 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+//Email Verification Routes
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
 // Localization Route
 Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
 
 // auth group route for users, categories, subcategories and products
-Route::group(['middleware'=>'auth'],function(){
+Route::group(['middleware'=>['auth','verified']],function(){
     
     Route::get('/dashboard', [DashboardController::class, 'dashboard']);
 

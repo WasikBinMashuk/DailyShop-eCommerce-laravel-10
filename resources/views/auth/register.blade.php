@@ -60,6 +60,24 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 col-form-label text-md-end">Mobile</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="mobile" placeholder="Enter mobile no">
+                                @error('mobile')
+                                        <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-md-4 col-form-label text-md-end">Status</label>
+                          <div class="col-md-6">
+                            <select name="status" class="form-select">
+                              <option value="1">Active</option>
+                              <option value="0" selected>Inactive</option>
+                            </select>
+                          </div>
+                        </div>
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">

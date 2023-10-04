@@ -26,7 +26,7 @@ class ResetPasswordController extends Controller
 
     use ResetsPasswords;
 
-    
+    // Overridding this function from the trait to use the Alert
     protected function sendResetResponse(Request $request, $response)
     {
         if ($request->wantsJson()) {
