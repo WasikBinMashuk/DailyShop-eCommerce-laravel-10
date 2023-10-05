@@ -8,6 +8,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Molla - Bootstrap eCommerce Template">
     <meta name="author" content="p-themes">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset("frontend/images/icons/favicon-new.png") }}">
     <!-- Plugins CSS File -->
