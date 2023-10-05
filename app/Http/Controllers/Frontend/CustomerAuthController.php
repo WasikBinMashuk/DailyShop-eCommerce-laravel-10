@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Customer;
 use App\Http\Requests\CustomerFormRequest;
+use App\Jobs\SendEmailJob;
 use App\Models\Customer as ModelsCustomer;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -44,13 +45,17 @@ class CustomerAuthController extends Controller
         // Retrieve the validated input data...
         $validated = $request->validated();
         
-        ModelsCustomer::create([
+        $customer = ModelsCustomer::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
             'mobile' => $request->mobile,
             // 'status' => $request->status,
         ]);
+
+        // sending email to the customer using queue jobs
+        $userMail = $customer->email;
+        SendEmailJob::dispatch($userMail);
 
         // sweet alert
         toast('Registered! Please Login','success');

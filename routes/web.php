@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\LangController;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -137,6 +138,14 @@ Route::group(['middleware'=>'customer'],function(){
 });
 
 
+Route::get('send/mail', function(){
+    $userMail = 'iqbal@gmail.com';
+
+    // dispatch(new SendEmailJob($userMail));
+    SendEmailJob::dispatch($userMail);
+
+    dd('Send mail successfully');
+});
 
 
 
