@@ -76,7 +76,7 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item">Status</a>
+                <a href="{{ route('roles.index') }}" class="dropdown-item">Roles</a>
                 <a href="./profile.html" class="dropdown-item">Profile</a>
                 <a href="#" class="dropdown-item">Feedback</a>
                 <div class="dropdown-divider"></div>
@@ -298,7 +298,7 @@
               <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
                   Copyright &copy; 2023
-                  <a href="." class="link-secondary">Shop-Lara-10</a>.
+                  <a href="." class="link-secondary">DailyShop</a>.
                   All rights reserved.
                 </li>
               </ul>

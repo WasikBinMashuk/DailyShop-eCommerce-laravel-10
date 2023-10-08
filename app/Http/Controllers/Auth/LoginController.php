@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -21,6 +24,28 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+
+    //overriding the method to suspend inactivated users
+    protected function authenticated(Request $request, $user)
+    {
+        
+        if($user->status == 0){
+            Auth::logout();
+
+            // sweet alert
+            Alert::warning('Inactive', 'You are inactivated, contact Super Admin');
+
+            return redirect()->route('login');
+        }
+        
+    }
     /**
      * Where to redirect users after login.
      *

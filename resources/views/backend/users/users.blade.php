@@ -35,6 +35,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Mobile</th>
+                        <th scope="col">Roles</th>
                         <th scope="col">Status</th>
                         <th scope="col">Actions</th>
                         <th scope="col"></th>
@@ -47,9 +48,10 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->mobile }}</td>
+                        <td>{{ $user->roles[0]->name ?? 'N/A' }}</td>
                         <td>
                           @if ($user->status == 0)
-                              <span class="badge bg-red">Inactive</span>
+                          <span class="badge bg-red">Inactive</span>
                           @else
                             <span class="badge bg-green">Active</span>
                           @endif

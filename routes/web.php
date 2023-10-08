@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\LangController;
+use App\Http\Controllers\RoleController;
 use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -61,9 +62,9 @@ Route::group(['middleware'=>['auth','verified']],function(){
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('permission:user edit');
     Route::put('/users/update', [UserController::class, 'update'])->name('users.update');
-    Route::get('/users/{id}/delete', [UserController::class, 'delete'])->name('users.delete');
+    Route::get('/users/{id}/delete', [UserController::class, 'delete'])->name('users.delete')->middleware('role:Super Admin');
 
     // change password routes
     Route::get('/changePassword',[UserController::class, 'changePassword'])->name('changePassword');
@@ -106,7 +107,14 @@ Route::group(['middleware'=>['auth','verified']],function(){
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{id}/update', [OrderController::class, 'update'])->name('orders.update');
     Route::get('/orders/{id}/details', [OrderController::class, 'details'])->name('orders.details');
+
+    // Roles routes
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('role:Super Admin');
+    Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store')->middleware('role:Super Admin');
+    Route::post('/roles/permission/store', [RoleController::class, 'permissionStore'])->name('permission.store')->middleware('role:Super Admin');
+    Route::post('/roles/permissions/store', [RoleController::class, 'rolePermissionStore'])->name('roles.permission.store')->middleware('role:Super Admin');
 });
+
 
 // frontend routes==============================================================================================================
 Route::get('/', [HomeController::class, 'index'])->name('home');

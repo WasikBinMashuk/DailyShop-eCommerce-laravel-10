@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {   
 
     public function index(){
 
-        $users = User::latest()->paginate(5);
-        
+        $users = User::with('roles')->latest()->paginate(5);
+        //    return $users->roles[0]->name;
+
         return view('backend.users.users', compact('users'));
     }
 
@@ -76,7 +78,6 @@ class UserController extends Controller
 
     public function delete($id){
         User::where('id', $id)->first()->delete();
-
         // sweet alert
         toast('User Deleted!','info');
 

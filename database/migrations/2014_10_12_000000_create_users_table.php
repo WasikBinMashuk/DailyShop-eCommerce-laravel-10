@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('mobile', 11);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->tinyInteger('status')->default(0)->comment('0 = inactive, 1 = active');
+            $table->tinyInteger('status')->default(0)->comment('0 = inactive, 1 = active', '3 = Super Admin');
             $table->rememberToken();
             $table->timestamps();
         });
