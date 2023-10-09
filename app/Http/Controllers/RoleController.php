@@ -14,11 +14,6 @@ class RoleController extends Controller
         $permissions = Permission::all();
         return view('backend.roles.index', compact('roles','permissions'));
     }
-
-    public function create(){
-
-        return view('backend.roles.create');
-    }
     
     public function store(Request $request){
         // dd($request->name);

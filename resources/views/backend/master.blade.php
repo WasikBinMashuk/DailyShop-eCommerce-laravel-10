@@ -77,8 +77,8 @@
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                 <a href="{{ route('roles.index') }}" class="dropdown-item">Roles</a>
-                <a href="./profile.html" class="dropdown-item">Profile</a>
-                <a href="#" class="dropdown-item">Feedback</a>
+                {{-- <a href="#" class="dropdown-item">Profile</a> --}}
+                {{-- <a href="#" class="dropdown-item">Feedback</a> --}}
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('changePassword') }}" class="dropdown-item">Change Password</a>
                 {{-- <a href="./sign-in.html" class="dropdown-item">Logout</a> --}}

@@ -5,6 +5,13 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Routing\Router;
+use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -26,5 +33,38 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    // overriding the render function to use toast notification for Spatie's UnauthorizedException
+    public function render($request, Throwable $e)
+    {
+        $e = $this->mapException($e);
+
+        if (method_exists($e, 'render') && $response = $e->render($request)) {
+            return Router::toResponse($request, $response);
+        }
+
+        if ($e instanceof UnauthorizedException) {
+            // sweet alert
+            toast('403 | You are not authorized','error');
+            return redirect()->back();
+        }
+
+        if ($e instanceof Responsable) {
+            return $e->toResponse($request);
+        }
+
+        $e = $this->prepareException($e);
+
+        if ($response = $this->renderViaCallbacks($request, $e)) {
+            return $response;
+        }
+
+        return match (true) {
+            $e instanceof HttpResponseException => $e->getResponse(),
+            $e instanceof AuthenticationException => $this->unauthenticated($request, $e),
+            $e instanceof ValidationException => $this->convertValidationExceptionToResponse($e, $request),
+            default => $this->renderExceptionResponse($request, $e),
+        };
     }
 }

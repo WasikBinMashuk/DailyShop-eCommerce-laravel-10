@@ -48,7 +48,13 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->mobile }}</td>
-                        <td>{{ $user->roles[0]->name ?? 'N/A' }}</td>
+                        <td>
+                          @if (!empty($user->roles[0]) && $user->roles[0]->name == 'Super Admin')
+                            <span class="badge bg-orange">Super Admin</span>
+                          @else
+                            {{ $user->roles[0]->name ?? '---' }}
+                          @endif
+                        </td>
                         <td>
                           @if ($user->status == 0)
                           <span class="badge bg-red">Inactive</span>

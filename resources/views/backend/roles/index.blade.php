@@ -3,7 +3,7 @@
 
 <div class="page-wrapper mt-5 mx-5" >
   <div class="row">
-    <div class="col-md-8 ">
+    <div class="col-md-7 ">
         <form action="{{ route('roles.permission.store') }}" method="POST">
           @csrf
           <div class="card">
@@ -47,7 +47,7 @@
           </div>
         </form>
     </div>
-    <div class="col-md-4 ">
+    <div class="col-md-5 ">
       <div class="row">
         <div class="col-md-12 ">
             <form action="{{ route('roles.store') }}" method="POST">

@@ -32,7 +32,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 //Email Verification Routes
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -60,10 +60,10 @@ Route::group(['middleware'=>['auth','verified']],function(){
 
     // users CRUD routes
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('permission:user edit');
-    Route::put('/users/update', [UserController::class, 'update'])->name('users.update');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create')->middleware('role:Super Admin');
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store')->middleware('role:Super Admin');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('role:Super Admin');
+    Route::put('/users/update', [UserController::class, 'update'])->name('users.update')->middleware('role:Super Admin');
     Route::get('/users/{id}/delete', [UserController::class, 'delete'])->name('users.delete')->middleware('role:Super Admin');
 
     // change password routes
@@ -108,11 +108,13 @@ Route::group(['middleware'=>['auth','verified']],function(){
     Route::post('/orders/{id}/update', [OrderController::class, 'update'])->name('orders.update');
     Route::get('/orders/{id}/details', [OrderController::class, 'details'])->name('orders.details');
 
-    // Roles routes
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('role:Super Admin');
-    Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store')->middleware('role:Super Admin');
-    Route::post('/roles/permission/store', [RoleController::class, 'permissionStore'])->name('permission.store')->middleware('role:Super Admin');
-    Route::post('/roles/permissions/store', [RoleController::class, 'rolePermissionStore'])->name('roles.permission.store')->middleware('role:Super Admin');
+    // Roles routes with role of Super Admin only
+    Route::group(['middleware'=>'role:Super Admin'],function(){
+        Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+        Route::post('/roles/permission/store', [RoleController::class, 'permissionStore'])->name('permission.store');
+        Route::post('/roles/permissions/store', [RoleController::class, 'rolePermissionStore'])->name('roles.permission.store');
+    });
 });
 
 
