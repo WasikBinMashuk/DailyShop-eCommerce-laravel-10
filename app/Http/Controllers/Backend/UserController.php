@@ -110,17 +110,18 @@ class UserController extends Controller
 
     public function delete($id){
         
-        if(Auth::user()->roles[0]->name == 'Super Admin'){
+        $user = User::where('id', $id)->first();
+        if(($user->roles[0]->name ?? '') == 'Super Admin'){
             // sweet alert
             Alert::warning('Warning!!!', 'Super Admin Cannot be deleted');
             return redirect()->back();
         }
 
-        User::where('id', $id)->first()->delete();
+        $user->delete();
         // sweet alert
         toast('User Deleted!','info');
 
-        return redirect()->route('users.index')->with('danger', 'User deleted successfully');
+        return redirect()->route('users.index');
     }
 
     // password changing -------------------------------
