@@ -49,8 +49,6 @@ class UserController extends Controller
             ->toJson();
         }
         return view('backend.users.users');
-
-        // return view('backend.users.users', compact('users'));
     }
 
     public function create(){

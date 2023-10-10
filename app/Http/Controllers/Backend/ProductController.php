@@ -12,34 +12,62 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManagerStatic as Image;
+use Yajra\DataTables\Facades\DataTables;
 
+use function PHPUnit\Framework\returnSelf;
 
 class ProductController extends Controller
 {
     public function index(Request $request){
-
-        $products = Product::with(['category', 'subCategory']);
-
-        $search = null;
-
-        if($request->filled('search'))
+        
+        if($request->ajax())
         {
-            $search = $request->search;
-            $products=$products->where('product_name','LIKE',"%$search%")
-                                ->orWhere('product_code','LIKE',"%$search%")
-                                // ->orWhere(function ($query) use($search){
-                                //     $query->whereHas('category', function ($query) use($search) {
-                                //         $query->where('category_name','LIKE',"%$search%");
-                                //     });
-                                // });
-                                //using arrow funciton instead of normal function like above.......
-                                ->orWhere(fn($query) => $query->whereHas('category', fn($query) => $query->where('category_name','LIKE',"%$search%")));
-                                
+            $products = Product::with(['category', 'subCategory'])->get();
+            return DataTables::of($products)
+            ->addColumn('product_image', function(Product $product) {
+                
+                if($product->product_image)
+                    return '<img src="'.asset('images/'.$product->product_image).'" style="height: 100px;width:100px;">';
+                else 
+                    return '<img src="'.asset('images/no.jpg').'" style="height: 100px; width: 100px;">';
+                
+            })
+            ->addColumn('category_name', function(Product $product) {
+                return $product->category->category_name;
+                
+            })
+            ->addColumn('sub_category_name', function(Product $product) {
+                return $product->subCategory->sub_category_name;
+                
+            })
+            ->editColumn('price', function(Product $product) {
+                return '&#2547;' . $product->price;
+            })
+            ->editColumn('status', function(Product $product) {
+                if($product->status == 0){
+                    return '<span class="badge bg-red">Inactive</span>';
+                    
+                }
+                else{
+                    return '<span class="badge bg-green">Active</span>';
+                }
+            })
+            ->editColumn('trendy', function(Product $product) {
+                if($product->trendy == 1){
+                    return '<span class="badge bg-cyan">Trendy</span>';
+                }
+            })
+            ->addColumn('action', function(Product $product){
+                $actionBtn = '<div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <a href="'. route('product.edit', $product->id) .'" class="btn btn-primary"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i></a>
+                <a href="'. route('product.delete', $product->id) .'" class="btn btn-danger" onclick="confirmation(event)"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></i></a>
+              </div>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action','status','product_image','trendy','price'])
+            ->toJson();
         }
-
-        $products= $products->orderBy('id', 'DESC')->paginate(5);
-      
-        return view('backend.products.index', compact('products','search'));
+        return view('backend.products.index');
     }
 
     public function create(){
@@ -209,10 +237,5 @@ class ProductController extends Controller
 
         return redirect()->back();
     }
-    
-
-    
-
-    
     
 }
