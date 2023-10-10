@@ -14,7 +14,15 @@
     <link href="css/tabler-payments.min.css?1684106062" rel="stylesheet"/>
     <link href="css/tabler-vendors.min.css?1684106062" rel="stylesheet"/>
     <link href="css/demo.min.css?1684106062" rel="stylesheet"/> --}}
+
+    {{-- Jquery CSS --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    {{-- Jquery CDN --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    {{-- datatables CDN --}}
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     
     <style>
       @import url('https://rsms.me/inter/inter.css');
@@ -454,6 +462,7 @@
     
     {{-- sweetalert cdn --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     {{-- SweetAlert for deletion --}}
     <script>
       function confirmation(ev){

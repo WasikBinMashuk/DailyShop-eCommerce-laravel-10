@@ -28,7 +28,7 @@
                       </div>
                 @endif --}}
 
-                <table class="table">
+                <table class="table" id="myTable">
                     <thead>
                       <tr>
                         <th scope="col">Id</th>
@@ -41,48 +41,35 @@
                         <th scope="col"></th>
                       </tr>
                     </thead>
-                    <tbody>
-                      @foreach ($users as $user)
-                      <tr>
-                        <th>{{ $user->id }}</th>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->mobile }}</td>
-                        <td>
-                          @if (!empty($user->roles[0]) && $user->roles[0]->name == 'Super Admin')
-                            <span class="badge bg-orange">Super Admin</span>
-                          @else
-                            {{ $user->roles[0]->name ?? '---' }}
-                          @endif
-                        </td>
-                        <td>
-                          @if ($user->status == 0)
-                          <span class="badge bg-red">Inactive</span>
-                          @else
-                            <span class="badge bg-green">Active</span>
-                          @endif
-                        </td>
-                        <td style="width: 100px">
-                          <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">
-                            <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i>
-                          </a>
-                        </td>
-                        <td style="width: 100px">
-                          <a href="{{ route('users.delete', $user->id) }}" class="btn btn-danger" onclick="confirmation(event)">
-                            <i class="fa-regular fa-trash-can" style="color: #ffffff;"></i>
-                          </a>
-                          {{-- onclick="confirmation(event)"" --}}
-                        </td>
-                      </tr>
-                      @endforeach
-                      
-                    </tbody>
-                  </table>
-                  {{ $users->links('pagination::bootstrap-5') }}
+                    
+                </table>
             </div>
           </div>    
     </div>
 </div>
+
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable({
+      processing:true,
+      serverSide:true,
+      ajax:{
+        url:"{{ URL::to('/users') }}"
+      },
+      columns:[
+        
+          { data : 'id', name: 'id'},
+          { data : 'name', name: 'name'},
+          { data : 'email', name: 'email'},
+          { data : 'mobile', name: 'mobile'},
+          { data : 'roles', name: 'roles'},
+          { data : 'status', name: 'status'},
+          { data : 'action', name: 'action', orderable: false, searchable: false},
+        
+      ]
+    });
+} );
+</script>
 
   
 

@@ -5,18 +5,52 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {   
 
-    public function index(){
+    public function index(Request $request){
 
-        $users = User::with('roles')->latest()->paginate(5);
-        //    return $users->roles[0]->name;
+        if($request->ajax())
+        {
+            $users = User::with('roles')->get();
+            return DataTables::of($users)
+            // ->addIndexColumn()
+            // ->setRowId(function ($user) {
+            //     return $user->id;
+            // })
+            ->addColumn('action', function($user){
+                $actionBtn = '<a href="'. route("users.edit", $user->id) .'" class="btn btn-primary"><i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i></a> 
+                <a href="'. route('users.delete', $user->id) .'" class="btn btn-danger" onclick="confirmation(event)"><i class="fa-regular fa-trash-can" style="color: #ffffff;"></i></a>';
+                return $actionBtn;
+            })
+            ->addColumn('roles', function(User $user) {
+                if (($user->roles[0]->name ?? '') == 'Super Admin'){
+                    return '<span class="badge bg-orange">Super Admin</span>';
+                }
+                else{
+                    return $user->roles[0]->name ?? '---' ;
+                }
+            })
+            ->editColumn('status', function(User $user) {
+                if($user->status == 0){
+                    return '<span class="badge bg-red">Inactive</span>';
+                    
+                }
+                else{
+                    return '<span class="badge bg-green">Active</span>';
+                }
+            })
+            ->rawColumns(['action','status','roles'])
+            ->toJson();
+        }
+        return view('backend.users.users');
 
-        return view('backend.users.users', compact('users'));
+        // return view('backend.users.users', compact('users'));
     }
 
     public function create(){
@@ -77,6 +111,13 @@ class UserController extends Controller
     }
 
     public function delete($id){
+        
+        if(Auth::user()->roles[0]->name == 'Super Admin'){
+            // sweet alert
+            Alert::warning('Warning!!!', 'Super Admin Cannot be deleted');
+            return redirect()->back();
+        }
+
         User::where('id', $id)->first()->delete();
         // sweet alert
         toast('User Deleted!','info');
