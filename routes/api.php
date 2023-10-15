@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/customer/order', [AuthController::class, 'orders'])->middleware('auth:sanctum');
+
+Route::get('/messages', function(){
+    return response()->json([
+        'message' => 'Hello from the other side...',
+        'status_code' => 200,
+    ]);
+});
+
+Route::controller(AuthController::class)->group(function(){
+    Route::post('login','login');
+    Route::post('register','register');
 });
