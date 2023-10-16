@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\ApiResponseHelper;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -46,8 +47,15 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof UnauthorizedException) {
             // sweet alert
-            toast('403 | You are not authorized','error');
+            toast('403 | You are not authorized', 'error');
             return redirect()->back();
+        }
+
+        //For API authentication exception ex:Token mismatch
+        if ($request->expectsJson()) {
+            if ($e instanceof AuthenticationException) {
+                return ApiResponseHelper::apiResponse('Failed', '401', 'Unauthenticated');
+            }
         }
 
         if ($e instanceof Responsable) {
