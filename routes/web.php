@@ -32,6 +32,9 @@ use Illuminate\Http\Request;
 |
 */
 
+/**
+ * !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKEND ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ */
 Auth::routes(['register' => false]);
 
 //Email Verification Routes
@@ -49,13 +52,12 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-
 // Localization Route
 Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
 
-// auth group route for users, categories, subcategories and products
-Route::group(['middleware'=>['auth','verified']],function(){
-    
+// AUTH group route for users, categories, subcategories and products
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
     Route::get('/dashboard', [DashboardController::class, 'dashboard']);
 
     // users CRUD routes
@@ -67,8 +69,8 @@ Route::group(['middleware'=>['auth','verified']],function(){
     Route::get('/users/{id}/delete', [UserController::class, 'delete'])->name('users.delete')->middleware('role:Super Admin');
 
     // change password routes
-    Route::get('/changePassword',[UserController::class, 'changePassword'])->name('changePassword');
-    Route::post('/updatePassword',[UserController::class, 'updatePassword'])->name('updatePassword');
+    Route::get('/changePassword', [UserController::class, 'changePassword'])->name('changePassword');
+    Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('updatePassword');
 
     // Categories routes
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
@@ -86,6 +88,7 @@ Route::group(['middleware'=>['auth','verified']],function(){
     Route::get('/subCategory/delete/{id}', [SubCategoryController::class, 'delete'])->name('subcategory.delete');
     Route::post('subCategory/store', [SubCategoryController::class, 'storeSubCat'])->name('subcategory.store');
     Route::put('/subCategory/update', [SubCategoryController::class, 'update'])->name('subcategory.update');
+
     // Dependant dropdown menu while product
     Route::post('/getSubCategory', [SubCategoryController::class, 'getSubCategory']);
 
@@ -109,16 +112,22 @@ Route::group(['middleware'=>['auth','verified']],function(){
     Route::get('/orders/{id}/details', [OrderController::class, 'details'])->name('orders.details');
 
     // Roles routes with role of Super Admin only
-    Route::group(['middleware'=>'role:Super Admin'],function(){
+    Route::group(['middleware' => 'role:Super Admin'], function () {
         Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
         Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
         Route::post('/roles/permission/store', [RoleController::class, 'permissionStore'])->name('permission.store');
         Route::post('/roles/permissions/store', [RoleController::class, 'rolePermissionStore'])->name('roles.permission.store');
     });
+
+    Route::post('/getRole', [RoleController::class, 'getRole']);
 });
 
 
-// frontend routes==============================================================================================================
+/**
+ * !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FRONTEND ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ */
+
+//  HOME, Shop and Product
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
@@ -135,7 +144,7 @@ Route::post('customer/login', [CustomerAuthController::class, 'customerLogin'])-
 Route::post('customer/register', [CustomerAuthController::class, 'customerRegister'])->name('customer.register');
 
 // customer dashboard routes with customer middleware
-Route::group(['middleware'=>'customer'],function(){
+Route::group(['middleware' => 'customer'], function () {
     Route::get('customer/dashboard', [CustomerAuthController::class, 'index'])->name('customer.dashboard');
     Route::put('customer/update', [CustomerAuthController::class, 'profileUpdate'])->name('customer.update');
     Route::post('customer/update/password', [CustomerAuthController::class, 'updatePassword'])->name('customer.change.password');
@@ -148,7 +157,7 @@ Route::group(['middleware'=>'customer'],function(){
 });
 
 
-Route::get('send/mail', function(){
+Route::get('send/mail', function () {
     $userMail = 'iqbal@gmail.com';
 
     // dispatch(new SendEmailJob($userMail));

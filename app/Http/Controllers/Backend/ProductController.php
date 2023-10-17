@@ -67,26 +67,14 @@ class ProductController extends Controller
 
     public function create()
     {
-
         $categories = Category::get();
-
 
         return view('backend.products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        // dd($request->all());
-        // dd($request->filled('product_image'));
-        // dd($request->product_image);
-
-        if ($request->has('trendy')) {
-            $trendy = $request->trendy;
-            // dd('trendy');
-        } else {
-            $trendy = 0;
-            // dd(' not trendy');
-        }
+        $trendy = $request->filled('trendy') ? $request->trendy : 0;
 
         $request->validate([
             'category_id' => 'required',
@@ -100,7 +88,7 @@ class ProductController extends Controller
             'description' => 'nullable|max:65530',
             'trendy' => 'in:1',
         ]);
-        // dd("validated");
+
         try {
             if ($request->file('product_image')) {
                 $imageName = $request->product_code . '-' . time() . '.' . $request->product_image->extension();
@@ -133,12 +121,10 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-
         $editProduct = Product::where('id', $id)->first();
-        // dd($editProduct->sub_category_id,$editProduct->category_id);
-        // dd($editProduct);
 
         $categories = Category::all();
+
         $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
 
         return view('backend.products.edit', compact('editProduct', 'categories', 'subCategories'));
@@ -146,16 +132,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($id);
-
-        if ($request->has('trendy')) {
-            $trendy = $request->trendy;
-            // dd('trendy');
-        } else {
-            $trendy = 0;
-            // dd(' not trendy');
-        }
-
+        $trendy = $request->filled('trendy') ? $request->trendy : 0;
 
         $request->validate([
             'category_id' => 'required',
@@ -185,11 +162,8 @@ class ProductController extends Controller
             } else {
                 $imageName = $product->product_image;
             }
-
-            // dd($imageName);
             // $request->product_image->move(public_path('images'), $imageName);
 
-            // 1/0;
             $product->update([
                 'category_id' => $request->category_id,
                 'sub_category_id' => $request->sub_category_id,
@@ -214,7 +188,6 @@ class ProductController extends Controller
 
     public function delete($id)
     {
-
         try {
             $products = Product::where('id', $id)->first();
 
@@ -224,6 +197,7 @@ class ProductController extends Controller
             }
 
             $products->delete();
+
             // sweet alert
             toast('Product Deleted!', 'info');
         } catch (Exception $e) {

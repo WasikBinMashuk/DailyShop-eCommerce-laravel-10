@@ -5,7 +5,7 @@ namespace App\Helpers;
 
 class ApiResponseHelper
 {
-    static public function apiResponse($status, $code, $message, $data = null)
+    public static function apiResponse($status, $code, $message, $data = null)
     {
         $response = [
             'status' => $status,
@@ -13,6 +13,6 @@ class ApiResponseHelper
             'message' => $message,
             'data' => $data,
         ];
-        return response()->json($response, 200);
+        return response()->json($response, $code);
     }
 }

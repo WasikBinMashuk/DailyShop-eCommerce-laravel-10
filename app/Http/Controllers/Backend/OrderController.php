@@ -9,19 +9,18 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $orders = Order::latest()->paginate(10);
-        return view('backend.orders.index',compact('orders'));
+        return view('backend.orders.index', compact('orders'));
     }
 
-    public function update(Request $request, $id){
-        
-        // dd($id, $request->all());
-
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'status' => 'required',
         ]);
-        
+
         $order = Order::find($id);
 
         $order->update([
@@ -29,15 +28,15 @@ class OrderController extends Controller
         ]);
 
         // sweet alert
-        toast('Order Status Updated!','success');
+        toast('Order Status Updated!', 'success');
 
         return redirect()->back();
     }
 
-    public function details($id){
-        $orderDetails = OrderDetail::where('order_id',$id)->get();
-        // dd($orderDetails);
+    public function details($id)
+    {
+        $orderDetails = OrderDetail::where('order_id', $id)->get();
 
-        return view('backend.orders.details',compact('orderDetails'));
+        return view('backend.orders.details', compact('orderDetails'));
     }
 }

@@ -56,11 +56,8 @@ class HomeController extends Controller
         return view('frontend.shop', compact('products', 'categories'));
     }
 
-
     public function productShow($id)
     {
-        // dd($id);
-
         $product = Product::select('products.*', 'categories.category_name', 'sub_categories.sub_category_name')
             ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
             ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
@@ -78,10 +75,4 @@ class HomeController extends Controller
 
         return view('frontend.product', compact('product', 'relatedProducts'));
     }
-
-    // CART Methods
-
-
-
-
 }

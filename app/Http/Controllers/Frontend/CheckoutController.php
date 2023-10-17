@@ -14,12 +14,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class CheckoutController extends Controller
 {
-    public function checkout(){
+    public function checkout()
+    {
         $customer = Customer::find(Auth::guard('customer')->user()->id);
-        return view('frontend.checkout',compact('customer'));
+        return view('frontend.checkout', compact('customer'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $request->validate([
             'name' => 'required|max:255',
@@ -34,19 +36,19 @@ class CheckoutController extends Controller
             'status' => 'integer',
         ]);
 
-        if($request->has('saveAddress')){
+        if ($request->has('saveAddress')) {
             Customer::find(Auth::guard('customer')->user()->id)
-            ->update([
-                'address' => $request->address,
-                'city' => $request->city,
-                'country' => $request->country,
-                'postcode' => $request->postcode,
-            ]);
+                ->update([
+                    'address' => $request->address,
+                    'city' => $request->city,
+                    'country' => $request->country,
+                    'postcode' => $request->postcode,
+                ]);
         }
 
-        if(session('cart')){
+        if (session('cart')) {
             $subtotal = 0;
-            foreach(session('cart') as $id => $details){
+            foreach (session('cart') as $id => $details) {
                 $subtotal += $details['price'] * $details['quantity'];
             }
 
@@ -64,9 +66,9 @@ class CheckoutController extends Controller
                 'subtotal' => $subtotal,
                 'customer_id' => Auth::guard('customer')->user()->id,
             ]);
-            
+
             // inserting data to order details table
-            foreach(session('cart') as $id => $details){
+            foreach (session('cart') as $id => $details) {
 
                 $totalPrice = $details['price'] * $details['quantity'];
 
@@ -80,10 +82,8 @@ class CheckoutController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-                
             }
-            if(isset($data)) OrderDetail::insert($data);
-        
+            if (isset($data)) OrderDetail::insert($data);
         }
 
         // sweet alert
@@ -94,5 +94,4 @@ class CheckoutController extends Controller
 
         return redirect()->route('home');
     }
-
 }

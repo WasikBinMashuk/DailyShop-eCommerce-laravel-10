@@ -21,18 +21,18 @@ class CustomerAuthController extends Controller
     public function index()
     {
         $profile = ModelsCustomer::find(Auth::guard('customer')->user()->id);
-        
-        $orders = Order::where('customer_id',Auth::guard('customer')->user()->id)->orderBy('id', 'DESC')->get();
-        if($orders->isNotEmpty()){
-            foreach($orders as $order){
+
+        $orders = Order::where('customer_id', Auth::guard('customer')->user()->id)->orderBy('id', 'DESC')->get();
+        if ($orders->isNotEmpty()) {
+            foreach ($orders as $order) {
                 $orderIds[] = $order->id;
             }
-            $orderDetails = OrderDetail::whereIn('order_id',$orderIds)->get();
-        }else{
+            $orderDetails = OrderDetail::whereIn('order_id', $orderIds)->get();
+        } else {
             $orderDetails = null;
         }
 
-        return view('frontend.customer-dashboard',compact('profile','orders','orderDetails'));
+        return view('frontend.customer-dashboard', compact('profile', 'orders', 'orderDetails'));
     }
 
     public function customerLoginForm()
@@ -44,7 +44,7 @@ class CustomerAuthController extends Controller
     {
         // Retrieve the validated input data...
         $validated = $request->validated();
-        
+
         $customer = ModelsCustomer::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -58,7 +58,7 @@ class CustomerAuthController extends Controller
         SendEmailJob::dispatch($userMail);
 
         // sweet alert
-        toast('Registered! Please Login','success');
+        toast('Registered! Please Login', 'success');
 
         return redirect()->back();
     }
@@ -66,41 +66,43 @@ class CustomerAuthController extends Controller
     public function customerLogin(Request $request)
     {
         $request->validate([
-            'email'=>'required|max:100',
-            'password'=>'required|min:6',
+            'email' => 'required|max:100',
+            'password' => 'required|min:6',
         ]);
 
-        if(Auth::guard('customer')->attempt(['email'=>$request->email,'password'=>$request->password])){
+        if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('customer/dashboard');
-        }else{
+        } else {
             // sweet alert
-            toast('Email or password invalid','warning');
+            toast('Email or password invalid', 'warning');
             return redirect()->back();
         }
     }
 
-    public function profileUpdate(Request $request){
+    public function profileUpdate(Request $request)
+    {
 
         $request->validate([
             'name' => 'required|max:20',
-            'email' =>  ['required','max:100',Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
+            'email' =>  ['required', 'max:100', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
             'mobile' => 'required|max:11',
         ]);
 
-        $customer = ModelsCustomer::find(Auth::guard('customer')->user()->id)
-                    ->update([
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'mobile' => $request->mobile,
-                    ]);
+        ModelsCustomer::find(Auth::guard('customer')->user()->id)
+            ->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+            ]);
 
         // sweet alert
-        toast('Profile Updated!','success');
+        toast('Profile Updated!', 'success');
 
         return redirect()->back();
     }
 
-    public function addressUpdate(Request $request){
+    public function addressUpdate(Request $request)
+    {
         $request->validate([
             'address' => 'required|max:255',
             'city' => 'required|max:50',
@@ -109,34 +111,35 @@ class CustomerAuthController extends Controller
         ]);
 
         ModelsCustomer::find(Auth::guard('customer')->user()->id)
-                    ->update([
-                        'address' => $request->address,
-                        'city' => $request->city,
-                        'country' => $request->country,
-                        'postcode' => $request->postcode,
-                    ]);
+            ->update([
+                'address' => $request->address,
+                'city' => $request->city,
+                'country' => $request->country,
+                'postcode' => $request->postcode,
+            ]);
 
         // sweet alert
-        toast('Address Updated!','success');
+        toast('Address Updated!', 'success');
 
         return redirect()->back();
     }
 
-    public function updatePassword(Request $request){
+    public function updatePassword(Request $request)
+    {
         $request->validate([
             'old_password' => 'required',
             'password' => 'required|confirmed|min:6',
         ]);
-        
-        if(!Hash::check($request->old_password, Auth::guard('customer')->user()->password)){
-            toast('Old Password Does not match!','warning');
+
+        if (!Hash::check($request->old_password, Auth::guard('customer')->user()->password)) {
+            toast('Old Password Does not match!', 'warning');
             return back();
         }
         ModelsCustomer::find(Auth::guard('customer')->user()->id)->update([
             'password' => Hash::make($request->password)
         ]);
 
-        toast('Password changed!','success');
+        toast('Password changed!', 'success');
         return back();
     }
 
@@ -145,8 +148,4 @@ class CustomerAuthController extends Controller
         Auth::guard('customer')->logout();
         return redirect('/');
     }
-
-    
-
-    
 }

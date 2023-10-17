@@ -9,28 +9,29 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $roles = Role::all();
         $permissions = Permission::all();
-        return view('backend.roles.index', compact('roles','permissions'));
+        return view('backend.roles.index', compact('roles', 'permissions'));
     }
-    
-    public function store(Request $request){
-        // dd($request->name);
+
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required|max:255',
         ]);
 
-        $role = Role::create(['name' => $request->name]);
-        
+        Role::create(['name' => $request->name]);
+
         // sweet alert
-        toast('New Role added!','success');
+        toast('New Role added!', 'success');
 
         return redirect()->back();
     }
 
-    public function permissionStore(Request $request){
-        // dd($request->name);
+    public function permissionStore(Request $request)
+    {
         $request->validate([
             'name' => 'required|max:255',
         ]);
@@ -38,26 +39,21 @@ class RoleController extends Controller
         Permission::create(['name' => $request->name]);
 
         // sweet alert
-        toast('New Permission added!','success');
+        toast('New Permission added!', 'success');
 
         return redirect()->back();
     }
 
-    public function rolePermissionStore(Request $request){
-        
-        // dd($request->all());
+    public function rolePermissionStore(Request $request)
+    {
         $permissions = $request->input('permission_id');
-        // foreach($permissions as $permission){
-        //     orders::create($service);
-        // }
 
         $role = Role::findById($request->role_id);
         $role->givePermissionTo($permissions);
 
         // sweet alert
-        toast('Role/Permissions added!','success');
+        toast('Role/Permissions added!', 'success');
 
         return redirect()->back();
-
     }
 }

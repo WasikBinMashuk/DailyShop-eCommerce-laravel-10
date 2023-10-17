@@ -16,7 +16,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::latest()->paginate(5);
-        return view('backend.customers.index',compact('customers'));
+        return view('backend.customers.index', compact('customers'));
     }
 
     /**
@@ -24,7 +24,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        
+
         return view('backend.customers.create');
     }
 
@@ -33,10 +33,10 @@ class CustomerController extends Controller
      */
     public function store(CustomerFormRequest $request)
     {
-        
+
         // Retrieve the validated input data...
         $validated = $request->validated();
-        
+
         Customer::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -46,7 +46,7 @@ class CustomerController extends Controller
         ]);
 
         // sweet alert
-        toast('Customer registered!','success');
+        toast('Customer registered!', 'success');
 
         return redirect()->route('customers.index');
     }
@@ -73,14 +73,13 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // dd($request);
         $request->validate([
             'name' => 'required|max:20',
-            'email' => ['required','max:100', Rule::unique('customers','email')->ignore($id)],
+            'email' => ['required', 'max:100', Rule::unique('customers', 'email')->ignore($id)],
             'mobile' => 'required|max:11',
             'status' => 'required|in:0,1'
         ]);
-        
+
 
         $customer = Customer::where('id', $id)->first();
 
@@ -92,7 +91,7 @@ class CustomerController extends Controller
         ]);
 
         // sweet alert
-        toast('Customer Updated!','success');
+        toast('Customer Updated!', 'success');
 
         return redirect()->route('customers.index');
     }
@@ -102,11 +101,10 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        // dd($id);
         Customer::where('id', $id)->first()->delete();
 
         // sweet alert
-        toast('Customer Deleted!','info');
+        toast('Customer Deleted!', 'info');
 
         return redirect()->route('customers.index');
     }

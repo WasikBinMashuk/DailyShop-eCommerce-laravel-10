@@ -19,5 +19,4 @@ class Controller extends BaseController
         // Make it available to all views by sharing it for the header category dropdown
         view()->share('shopCategories', $shopCategories);
     }
-
 }
