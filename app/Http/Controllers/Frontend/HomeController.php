@@ -22,67 +22,66 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    
+
     public function index()
     {
-        $trendy = Product::where('trendy','1')->get();
-        $sliders = Slider::where('status','1')->get();
-        $products = Product::orderBy('id','DESC')->take(7)->get();
+        $trendy = Product::where('trendy', '1')->get();
+        $sliders = Slider::where('status', '1')->get();
+        $products = Product::orderBy('id', 'DESC')->take(7)->get();
 
-        return view('frontend.home',compact('products','trendy','sliders'));
+        return view('frontend.home', compact('products', 'trendy', 'sliders'));
     }
 
     public function shop(Request $request)
     {
 
-        $products = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
+        $products = Product::select('products.*', 'categories.category_name', 'sub_categories.sub_category_name')
+            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
 
-        if($request->filled('category_id')){
+        if ($request->filled('category_id')) {
             $categoryId = $request->category_id;
-            $products = $products->where('categories.id',"$categoryId");
-        }
-        elseif($request->filled('search')){
+            $products = $products->where('categories.id', "$categoryId");
+        } elseif ($request->filled('search')) {
             $search = $request->search;
-            $products= $products->where('categories.category_name','LIKE',"%$search%")
-            ->orWhere('product_name','LIKE',"%$search%")
-            ->orWhere('sub_categories.sub_category_name','LIKE',"%$search%");
+            $products = $products->where('categories.category_name', 'LIKE', "%$search%")
+                ->orWhere('product_name', 'LIKE', "%$search%")
+                ->orWhere('sub_categories.sub_category_name', 'LIKE', "%$search%");
         }
 
-        $products= $products->orderBy('products.id', 'DESC')->paginate(12);
+        $products = $products->orderBy('products.id', 'DESC')->paginate(12);
 
         $categories = Category::withCount('products')->get();
 
-        return view('frontend.shop',compact('products','categories'));
+        return view('frontend.shop', compact('products', 'categories'));
     }
-    
+
 
     public function productShow($id)
     {
         // dd($id);
 
-        $product = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->where('products.id',$id)
-        ->orderBy('products.id', 'DESC')->first();
+        $product = Product::select('products.*', 'categories.category_name', 'sub_categories.sub_category_name')
+            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+            ->where('products.id', $id)
+            ->orderBy('products.id', 'DESC')->first();
 
         $categoryId = $product->category_id;
 
-        $relatedProducts = Product::select('products.*','categories.category_name','sub_categories.sub_category_name')
-        ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
-        ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
-        ->where('products.category_id',$categoryId)
-        ->whereNotIn('products.id', [$id])
-        ->orderBy('products.id', 'DESC')->get();
+        $relatedProducts = Product::select('products.*', 'categories.category_name', 'sub_categories.sub_category_name')
+            ->Join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+            ->Join('categories', 'categories.id', '=', 'sub_categories.category_id')
+            ->where('products.category_id', $categoryId)
+            ->whereNotIn('products.id', [$id])
+            ->orderBy('products.id', 'DESC')->get();
 
-        return view('frontend.product',compact('product','relatedProducts'));
+        return view('frontend.product', compact('product', 'relatedProducts'));
     }
 
     // CART Methods
 
-    
+
 
 
 }

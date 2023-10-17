@@ -16,11 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::get('/customer/order', [OrderController::class, 'orders']);
+    Route::get('/shop/products', [OrderController::class, 'products']);
 });
-
-Route::get('/customer/order', [OrderController::class, 'orders'])->middleware('auth:sanctum');
+Route::get('/shop/products', [OrderController::class, 'products']);
 
 Route::get('/messages', function () {
     return response()->json([
