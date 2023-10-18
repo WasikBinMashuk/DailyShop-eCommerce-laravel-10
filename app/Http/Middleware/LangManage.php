@@ -16,7 +16,7 @@ class LangManage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('lang_code')){
+        if (session()->has('lang_code')) {
             App::setLocale(session()->get('lang_code'));
         }
         return $next($request);

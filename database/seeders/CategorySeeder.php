@@ -14,10 +14,10 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = array('Electronics','Accessories','Softwares');
+        $categories = array('Electronics', 'Accessories', 'Softwares');
         $numOfCategories = count($categories);
 
-        for($i = 0; $i < $numOfCategories; $i++){
+        for ($i = 0; $i < $numOfCategories; $i++) {
             Category::create([
                 'category_name' => $categories[$i],
                 'created_at' => now(),

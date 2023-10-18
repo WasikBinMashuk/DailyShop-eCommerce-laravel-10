@@ -79,4 +79,3 @@
         'You May Also Like' => 'You May Also Like',
 
     ];
-?>

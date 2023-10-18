@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('city');
             $table->string('country');
-            $table->string('postcode',6);
+            $table->string('postcode', 6);
             $table->string('mobile', 11);
             $table->string('email');
             $table->text('order_notes')->nullable();

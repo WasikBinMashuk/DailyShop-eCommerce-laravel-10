@@ -14,10 +14,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = array('Pronoy','Wasik');
+        $users = array('Pronoy', 'Wasik');
         $numOfUsers = count($users);
 
-        for($i = 0; $i < $numOfUsers; $i++){
+        for ($i = 0; $i < $numOfUsers; $i++) {
             User::create([
                 'name' => $users[$i],
                 'email' => strtolower($users[$i]) . '@gmail.com',

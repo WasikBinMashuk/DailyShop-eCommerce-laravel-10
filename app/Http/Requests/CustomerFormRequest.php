@@ -21,7 +21,7 @@ class CustomerFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        
+
         return [
             'name' => 'required|max:20',
             'email' => 'required|max:100|unique:customers',
