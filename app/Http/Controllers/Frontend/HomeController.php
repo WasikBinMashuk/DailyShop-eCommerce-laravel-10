@@ -25,8 +25,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        $trendy = Product::where('trendy', '1')->get();
-        $sliders = Slider::where('status', '1')->get();
+        $trendy = Product::status('1')->get();
+        $sliders = Slider::status('1')->get();
         $products = Product::orderBy('id', 'DESC')->take(7)->get();
 
         return view('frontend.home', compact('products', 'trendy', 'sliders'));
@@ -40,8 +40,7 @@ class HomeController extends Controller
             ->Join('categories', 'categories.id', '=', 'sub_categories.category_id');
 
         if ($request->filled('category_id')) {
-            $categoryId = $request->category_id;
-            $products = $products->where('categories.id', "$categoryId");
+            $products = $products->where('categories.id',  $request->category_id);
         } elseif ($request->filled('search')) {
             $search = $request->search;
             $products = $products->where('categories.category_name', 'LIKE', "%$search%")

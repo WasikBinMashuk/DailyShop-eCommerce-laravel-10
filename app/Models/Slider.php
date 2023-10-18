@@ -14,4 +14,9 @@ class Slider extends Model
         'slider_link',
         'status',
     ];
+
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
 }

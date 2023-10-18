@@ -17,7 +17,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label required">Roles</label>
                                     <div>
-                                        <select name="role_id" class="form-select">
+                                        <select name="role_id" class="form-select" id="role">
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach
@@ -26,14 +26,14 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="col-3 col-form-label pt-0">Permissions</label>
-                                    <div class="col">
-                                        @foreach ($permissions as $permission)
+                                    <div class="col" id="permissions">
+                                        {{-- @foreach ($permissions as $permission)
                                             <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="permission_id[]"
                                                     value="{{ $permission->id }}" />
                                                 <span class="form-check-label">{{ $permission->name }}</span>
                                             </label>
-                                        @endforeach
+                                        @endforeach --}}
 
                                     </div>
                                 </div>
@@ -107,4 +107,22 @@
             </div>
         </div>
     </div>
+
+    {{-- Dependent checkbox jquery --}}
+    <script>
+        jQuery(document).ready(function() {
+            jQuery('#role').change(function() {
+                let cid = jQuery(this).val();
+                // alert(cid);
+                jQuery.ajax({
+                    url: '/getRole',
+                    type: 'post',
+                    data: 'cid=' + cid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#permissions').html(result)
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

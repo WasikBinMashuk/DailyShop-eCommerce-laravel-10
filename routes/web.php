@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Customer\LoginController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\EmailVerifyController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\ProductController;
@@ -32,25 +33,17 @@ use Illuminate\Http\Request;
 |
 */
 
-/**
- * !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKEND ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- */
+
+//!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKEND ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 Auth::routes(['register' => false]);
 
-//Email Verification Routes
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-Route::get('/email/verify', function () {
-    return view('auth.verify');
-})->middleware('auth')->name('verification.notice');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// Email Verification Routes
+Route::middleware('auth')->prefix('email')->group(function () {
+    Route::get('/verify', [EmailVerifyController::class, 'notice'])->name('verification.notice');
+    Route::post('/verification-notification', [EmailVerifyController::class, 'verificationSend'])->middleware(['throttle:6,1'])->name('verification.send');
+    Route::get('/verify/{id}/{hash}', [EmailVerifyController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
+});
 
 // Localization Route
 Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
@@ -119,13 +112,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('/roles/permissions/store', [RoleController::class, 'rolePermissionStore'])->name('roles.permission.store');
     });
 
+    // Dependant Role-Permission Checkbox AJAX call route
     Route::post('/getRole', [RoleController::class, 'getRole']);
 });
 
 
-/**
- * !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FRONTEND ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- */
+//!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FRONTEND ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //  HOME, Shop and Product
 Route::get('/', [HomeController::class, 'index'])->name('home');

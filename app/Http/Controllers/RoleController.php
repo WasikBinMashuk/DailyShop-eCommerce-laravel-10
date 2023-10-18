@@ -56,4 +56,27 @@ class RoleController extends Controller
 
         return redirect()->back();
     }
+
+    public function getRole(Request $request)
+    {
+        //INCOMPLETE........
+
+        $cid = $request->post('cid');
+
+        $allPermissions  = Permission::all();
+
+        $permissions = Role::findById($cid)->permissions;
+
+        $html = '';
+
+        foreach ($permissions as $permission) {
+
+            $html .= '<label class="form-check">
+                        <input class="form-check-input" type="checkbox" name="permission_id[]"
+                            value="' . $permission->id . '" checked />
+                        <span class="form-check-label">' . $permission->name . '</span>
+                    </label>';
+        }
+        echo $html;
+    }
 }
