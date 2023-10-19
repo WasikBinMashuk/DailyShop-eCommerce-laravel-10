@@ -106,13 +106,12 @@
                                                 <h6>{{ __('text.Products') }}: </h6>
 
                                                 <div class="mt-1 mb-1 spec-1">
-                                                    @foreach ($orderDetails as $detail)
+                                                    @foreach ($order->orderDetails as $detail)
                                                         @if ($detail->order_id == $order->id)
                                                             <li>{{ $detail->product_name }} x{{ $detail->quantity }}</li>
                                                         @endif
                                                     @endforeach
                                                 </div>
-
 
                                             </div>
                                             <div class="align-items-center align-content-center col-md-6 border-left mt-1">

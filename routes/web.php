@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\RoleController;
 use App\Jobs\SendEmailJob;
@@ -135,18 +136,19 @@ Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('rem
 Route::post('customer/login', [CustomerAuthController::class, 'customerLogin'])->name('customer.login');
 Route::post('customer/register', [CustomerAuthController::class, 'customerRegister'])->name('customer.register');
 
-// customer dashboard routes with customer middleware
-Route::group(['middleware' => 'customer'], function () {
-    Route::get('customer/dashboard', [CustomerAuthController::class, 'index'])->name('customer.dashboard');
-    Route::put('customer/update', [CustomerAuthController::class, 'profileUpdate'])->name('customer.update');
-    Route::post('customer/update/password', [CustomerAuthController::class, 'updatePassword'])->name('customer.change.password');
-    Route::put('customer/update/address', [CustomerAuthController::class, 'addressUpdate'])->name('customer.change.address');
+// customer dashboard routes with verify.customer middleware
+Route::group(['middleware' => 'verify.customer'], function () {
+    Route::get('customer/dashboard', [CustomerDashboardController::class, 'index'])->name('customer.dashboard');
+    Route::put('customer/update', [CustomerDashboardController::class, 'profileUpdate'])->name('customer.update');
+    Route::post('customer/update/password', [CustomerDashboardController::class, 'updatePassword'])->name('customer.change.password');
+    Route::put('customer/update/address', [CustomerDashboardController::class, 'addressUpdate'])->name('customer.change.address');
 
     Route::get('customer/logout', [CustomerAuthController::class, 'customerLogout'])->name('customer.logout');
 
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
     Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 });
+
 
 
 Route::get('send/mail', function () {

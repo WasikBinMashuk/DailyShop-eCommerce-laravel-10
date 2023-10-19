@@ -16,7 +16,6 @@ class Customer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd('addaaaa');
         if (!Auth::guard('customer')->check()) {
             // sweet alert
             toast('Please login', 'warning');

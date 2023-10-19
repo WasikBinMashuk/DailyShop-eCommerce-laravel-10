@@ -34,7 +34,8 @@
                             id="">
                             <option value="en" {{ session()->get('lang_code') == 'en' ? 'selected' : '' }}>ENG
                             </option>
-                            <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>BN</option>
+                            <option value="bn" {{ session()->get('lang_code') == 'bn' ? 'selected' : '' }}>BN
+                            </option>
                         </select>
                     </div><!-- End .header-left -->
 
@@ -315,14 +316,16 @@
                                         @csrf
                                         <div class="form-group">
                                             <label>{{ __('text.Name') }} *</label>
-                                            <input type="text" class="form-control" name="name" required>
+                                            <input type="text" class="form-control" name="name"
+                                                value="{{ old('name') }}" required>
                                             @error('name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div><!-- End .form-group -->
                                         <div class="form-group">
                                             <label>{{ __('text.Email address') }} *</label>
-                                            <input type="email" class="form-control" name="email" required>
+                                            <input type="email" class="form-control" name="email"
+                                                value="{{ old('email') }}" required>
                                             @error('email')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -343,7 +346,10 @@
                                         <div class="form-group">
                                             <label for="register-email">{{ __('text.Mobile') }} *</label>
                                             <input type="text" class="form-control" id="register-email"
-                                                name="mobile" required>
+                                                name="mobile" value="{{ old('mobile') }}" required>
+                                            @error('mobile')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">

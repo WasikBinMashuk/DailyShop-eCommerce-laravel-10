@@ -23,10 +23,10 @@ class CustomerFormRequest extends FormRequest
     {
 
         return [
-            'name' => 'required|max:20',
-            'email' => 'required|max:100|unique:customers',
-            'password' => 'required|confirmed|min:6',
-            'mobile' => 'required|max:11',
+            'name' => 'required|string|min:1|max:20',
+            'email' => 'required|email|min:1|max:100|unique:customers',
+            'password' => 'required|string|confirmed|min:6',
+            'mobile' => 'required|numeric|size:11',
         ];
     }
 }

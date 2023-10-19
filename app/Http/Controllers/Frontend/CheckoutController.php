@@ -36,7 +36,7 @@ class CheckoutController extends Controller
             'status' => 'integer',
         ]);
 
-        if ($request->has('saveAddress')) {
+        if ($request->filled('saveAddress')) {
             Customer::find(Auth::guard('customer')->user()->id)
                 ->update([
                     'address' => $request->address,
