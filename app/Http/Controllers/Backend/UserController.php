@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -57,23 +58,28 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|max:255||unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255||unique:users',
             'password' => 'required|confirmed|min:6',
-            'mobile' => 'required|max:11',
+            'mobile' => 'required|numeric|digits:11',
             'status' => 'required|in:0,1'
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'mobile' => $request->mobile,
-            'status' => $request->status,
-        ]);
+        try {
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'mobile' => $request->mobile,
+                'status' => $request->status,
+            ]);
 
-        // sweet alert
-        toast('User registered!', 'success');
+            // sweet alert
+            toast('User registered!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->route('users.index')->with('msg', 'User listed successfully');
     }
@@ -88,23 +94,29 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'mobile' => 'required|max:11',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255||unique:users',
+            'mobile' => 'required|numeric|digits:11',
             'status' => 'required|in:0,1'
         ]);
 
-        $user = User::where('id', $request->id)->first();
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
-            'status' => $request->status,
-        ]);
+        try {
+            $user = User::where('id', $request->id)->first();
 
-        // sweet alert
-        toast('User Updated!', 'success');
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'status' => $request->status,
+            ]);
+
+            // sweet alert
+            toast('User Updated!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->route('users.index')->with('msg', 'User updated successfully');
     }
@@ -112,16 +124,21 @@ class UserController extends Controller
     public function delete($id)
     {
 
-        $user = User::where('id', $id)->first();
-        if (($user->roles[0]->name ?? '') == 'Super Admin') {
-            // sweet alert
-            Alert::warning('Warning!!!', 'Super Admin Cannot be deleted');
-            return redirect()->back();
-        }
+        try {
+            $user = User::where('id', $id)->first();
+            if (($user->roles[0]->name ?? '') == 'Super Admin') {
+                // sweet alert
+                Alert::warning('Warning!!!', 'Super Admin Cannot be deleted');
+                return redirect()->back();
+            }
 
-        $user->delete();
-        // sweet alert
-        toast('User Deleted!', 'info');
+            $user->delete();
+            // sweet alert
+            toast('User Deleted!', 'info');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->route('users.index');
     }
@@ -141,16 +158,21 @@ class UserController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
-        if (!Hash::check($request->old_password, auth()->user()->password)) {
-            toast('Old Password Does not match!', 'warning');
-            return back();
+        try {
+            if (!Hash::check($request->old_password, auth()->user()->password)) {
+                toast('Old Password Does not match!', 'warning');
+                return back();
+            }
+            User::where('id', auth()->user()->id)->update([
+
+                'password' => Hash::make($request->password)
+            ]);
+
+            toast('Password changed!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
         }
-        User::where('id', auth()->user()->id)->update([
-
-            'password' => Hash::make($request->password)
-        ]);
-
-        toast('Password changed!', 'success');
         return back();
     }
 }

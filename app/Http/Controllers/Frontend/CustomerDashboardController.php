@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,20 +25,25 @@ class CustomerDashboardController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|max:20',
-            'email' =>  ['required', 'max:100', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
-            'mobile' => 'required|max:11',
+            'name' => 'required|string|max:20',
+            'email' =>  ['required', 'email', 'max:100', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
+            'mobile' => 'required|numeric|digits:11',
         ]);
 
-        Customer::find(Auth::guard('customer')->user()->id)
-            ->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-            ]);
+        try {
+            Customer::find(Auth::guard('customer')->user()->id)
+                ->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'mobile' => $request->mobile,
+                ]);
 
-        // sweet alert
-        toast('Profile Updated!', 'success');
+            // sweet alert
+            toast('Profile Updated!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->back();
     }
@@ -45,22 +51,27 @@ class CustomerDashboardController extends Controller
     public function addressUpdate(Request $request)
     {
         $request->validate([
-            'address' => 'required|max:255',
-            'city' => 'required|max:50',
-            'country' => 'required|max:50',
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:50',
+            'country' => 'required|string|max:50',
             'postcode' => 'required|numeric|digits_between:4,6',
         ]);
 
-        Customer::find(Auth::guard('customer')->user()->id)
-            ->update([
-                'address' => $request->address,
-                'city' => $request->city,
-                'country' => $request->country,
-                'postcode' => $request->postcode,
-            ]);
+        try {
+            Customer::find(Auth::guard('customer')->user()->id)
+                ->update([
+                    'address' => $request->address,
+                    'city' => $request->city,
+                    'country' => $request->country,
+                    'postcode' => $request->postcode,
+                ]);
 
-        // sweet alert
-        toast('Address Updated!', 'success');
+            // sweet alert
+            toast('Address Updated!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->back();
     }
@@ -72,15 +83,21 @@ class CustomerDashboardController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
-        if (!Hash::check($request->old_password, Auth::guard('customer')->user()->password)) {
-            toast('Old Password Does not match!', 'warning');
-            return back();
-        }
-        Customer::find(Auth::guard('customer')->user()->id)->update([
-            'password' => Hash::make($request->password)
-        ]);
+        try {
+            if (!Hash::check($request->old_password, Auth::guard('customer')->user()->password)) {
+                toast('Old Password Does not match!', 'warning');
+                return back();
+            }
+            Customer::find(Auth::guard('customer')->user()->id)->update([
+                'password' => Hash::make($request->password)
+            ]);
 
-        toast('Password changed!', 'success');
+            toast('Password changed!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
+
         return back();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use Exception;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -17,18 +18,24 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
+        //! Order status -> 1=processing, 2=shipped, 3=delivered, 0= failed
         $request->validate([
-            'status' => 'required',
+            'status' => 'required|in:1,2,3,0',
         ]);
 
-        $order = Order::find($id);
+        try {
+            $order = Order::find($id);
 
-        $order->update([
-            'status' => $request->status,
-        ]);
+            $order->update([
+                'status' => $request->status,
+            ]);
 
-        // sweet alert
-        toast('Order Status Updated!', 'success');
+            // sweet alert
+            toast('Order Status Updated!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->back();
     }

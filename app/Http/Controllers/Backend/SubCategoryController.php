@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\SubCategory;
+use Exception;
 use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
@@ -38,16 +39,21 @@ class SubCategoryController extends Controller
 
         $request->validate([
             'category_id' => 'required',
-            'sub_category_name' => 'required|max:255',
+            'sub_category_name' => 'required|string|max:255',
         ]);
 
-        SubCategory::create([
-            'category_id' => $request->category_id,
-            'sub_category_name' => $request->sub_category_name,
-        ]);
+        try {
+            SubCategory::create([
+                'category_id' => $request->category_id,
+                'sub_category_name' => $request->sub_category_name,
+            ]);
 
-        // sweet alert
-        toast('Sub Category added!', 'success');
+            // sweet alert
+            toast('Sub Category added!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->back();
     }
@@ -68,13 +74,18 @@ class SubCategoryController extends Controller
             'sub_category_name' => 'required',
         ]);
 
-        SubCategory::where('id', $request->id)->first()->update([
-            'category_id' => $request->category_id,
-            'sub_category_name' => $request->sub_category_name,
-        ]);
+        try {
+            SubCategory::where('id', $request->id)->first()->update([
+                'category_id' => $request->category_id,
+                'sub_category_name' => $request->sub_category_name,
+            ]);
 
-        // sweet alert
-        toast('Data Updated!', 'success');
+            // sweet alert
+            toast('Data Updated!', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->route('subcategory.index');
     }
@@ -82,10 +93,15 @@ class SubCategoryController extends Controller
     public function delete($id)
     {
 
-        SubCategory::where('id', $id)->first()->delete();
+        try {
+            SubCategory::where('id', $id)->first()->delete();
 
-        // sweet alert
-        toast('User Deleted!', 'info');
+            // sweet alert
+            toast('User Deleted!', 'info');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+        }
 
         return redirect()->back();
     }
