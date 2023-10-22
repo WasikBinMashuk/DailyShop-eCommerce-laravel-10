@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 Route::get('/shop/products', [OrderController::class, 'products']);
 
+// Cart API Routes
+Route::get('/view-cart', [CartController::class, 'viewCart'])->middleware('api-session');
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->middleware('auth:sanctum');
+Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->middleware('api-session');
+Route::get('/empty-cart', [CartController::class, 'emptyCart'])->middleware('api-session');
+
+
+
 Route::get('/messages', function () {
     return response()->json([
         'message' => 'Hello from the other side...',
@@ -38,4 +47,5 @@ Route::get('/messages', function () {
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
+    Route::post('logout', 'logout');
 });

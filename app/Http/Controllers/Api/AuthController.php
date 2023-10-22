@@ -60,10 +60,21 @@ class AuthController extends Controller
             $success['token'] = $user->createToken('DailyShop')->plainTextToken;
             $success['name'] = $user->name;
 
-            return ApiResponseHelper::apiResponse('Success', '200', 'Customer login successful', $success);
+            return ApiResponseHelper::apiResponse('Success', '200', 'Login successful', $success);
         } else {
 
             return ApiResponseHelper::apiResponse('Failed', '422', 'Unauthorized');
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        // dd(auth('sanctum')->user());
+        if (auth('sanctum')->check()) {
+            auth('sanctum')->user()->currentAccessToken()->delete();
+            return ApiResponseHelper::apiResponse('Success', '200', 'Customer Logged out');
+        } else {
+            return ApiResponseHelper::apiResponse('Failed', '422', 'No user found');
         }
     }
 }
