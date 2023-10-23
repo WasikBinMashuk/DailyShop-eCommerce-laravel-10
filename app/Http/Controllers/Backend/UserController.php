@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -95,7 +96,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255||unique:users',
+            'email' => ['required', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($request->id)],
             'mobile' => 'required|numeric|digits:11',
             'status' => 'required|in:0,1'
         ]);
