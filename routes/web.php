@@ -160,7 +160,7 @@ Route::get('send/mail', function () {
     dd('Send mail successfully');
 });
 
-
+Route::get('response/api', [DashboardController::class, 'api']);
 
 // Route::get('/cart', function () {
 //     return view('frontend.cart');

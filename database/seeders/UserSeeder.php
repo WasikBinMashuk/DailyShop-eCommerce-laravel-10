@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -14,18 +16,30 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = array('Pronoy', 'Wasik');
-        $numOfUsers = count($users);
 
-        for ($i = 0; $i < $numOfUsers; $i++) {
-            User::create([
-                'name' => $users[$i],
-                'email' => strtolower($users[$i]) . '@gmail.com',
-                'mobile' => '01685010517',
-                'password' => Hash::make('12345678'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        $user = User::create([
+            'name' => 'Pronoy',
+            'email' => 'pronoy@gmail.com',
+            'mobile' => '01685010517',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Role::create(['name' => 'Super Admin']);
+
+        $user->assignRole('Super Admin');
+
+        $permissions = [
+            ['name' => 'user create', 'guard_name' => 'web'],
+            ['name' => 'user edit', 'guard_name' => 'web'],
+            ['name' => 'user delete', 'guard_name' => 'web']
+        ];
+        Permission::insert($permissions);
+
+        $permissionForRole = ['user create', 'user edit', 'user delete'];
+        $role = Role::findByName('Super Admin');
+        $role->givePermissionTo($permissionForRole);
     }
 }
