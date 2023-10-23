@@ -25,13 +25,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         return $request->user();
     });
     Route::get('/customer/order', [OrderController::class, 'orders']);
-    Route::get('/shop/products', [OrderController::class, 'products']);
+
+    // Cart route
+    Route::get('/view-cart', [CartController::class, 'viewCart']);
+    Route::post('/add-to-cart', [CartController::class, 'addToCart']);
 });
+
 Route::get('/shop/products', [OrderController::class, 'products']);
 
 // Cart API Routes
-Route::get('/view-cart', [CartController::class, 'viewCart'])->middleware('api-session');
-Route::post('/add-to-cart', [CartController::class, 'addToCart'])->middleware('auth:sanctum');
+
 Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->middleware('api-session');
 Route::get('/empty-cart', [CartController::class, 'emptyCart'])->middleware('api-session');
 

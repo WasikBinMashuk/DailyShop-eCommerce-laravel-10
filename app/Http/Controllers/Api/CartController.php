@@ -13,9 +13,16 @@ class CartController extends Controller
 {
     public function viewCart(Request $request)
     {
+        $carts = Cart::where('customer_id', auth('sanctum')->user()->id)->get();
 
-        if (session('cart')) {
-            return ApiResponseHelper::apiResponse('Success', '200', 'Order Details Success', $request->session()->get('cart'));
+        // foreach ($carts as $cart) {
+        //     $cd[] = [
+        //         "product_code" => $cart->product_id
+        //     ];
+        // }
+
+        if ($carts) {
+            return ApiResponseHelper::apiResponse('Success', '200', 'Order Details Success', $carts);
         } else {
             return ApiResponseHelper::apiResponse('Failed', '422', 'Cart Empty');
         }
@@ -25,12 +32,17 @@ class CartController extends Controller
     {
 
         try {
-            $product = Product::findOrFail($request->id);    //will throw an error if product not found
+            $product = Product::find($request->id);    //will throw an error if product not found
+
+            //checking if there isn't any product will throw Response failed
+            if (!$product) {
+                return ApiResponseHelper::apiResponse('Failed', '422', 'Product not found');
+            }
 
             //verifying if the product is already added in cart by the same customer
             $verify = Cart::where('customer_id', auth('sanctum')->user()->id)->where('product_id', $product->id)->first();
 
-            if (is_null($verify)) {
+            if (!$verify) {
                 //if its a new product from customer
                 $quantity = 1;
                 Cart::create([
@@ -51,7 +63,7 @@ class CartController extends Controller
             }
             return ApiResponseHelper::apiResponse('Success', '200', 'Product added to cart');
         } catch (Exception $e) {
-            return ApiResponseHelper::apiResponse('Failed', '422', 'Product not found');
+            return $e;
         }
     }
 
