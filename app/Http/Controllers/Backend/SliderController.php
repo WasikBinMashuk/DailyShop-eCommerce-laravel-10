@@ -35,9 +35,9 @@ class SliderController extends Controller
     {
         $request->validate([
             'slider_title' => 'required|string|min:1|max:50',
-            'slider_link' => 'required|min:1|max:400|url',
+            'slider_link' => 'required|string|min:1|max:400|url',
             'slider_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=1920,min_height=1080|max:2048',
-            'status' => 'required|in:0,1',
+            'status' => 'required|string|in:0,1',
         ]);
 
 
@@ -62,22 +62,21 @@ class SliderController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $editSlider = Slider::where('id', $id)->first();
+        try {
+            $editSlider = Slider::findOrFail($id);
 
-        return view('backend.sliders.edit', compact('editSlider'));
+            return view('backend.sliders.edit', compact('editSlider'));
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -86,14 +85,14 @@ class SliderController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'slider_title' => 'required|min:1|max:50',
-            'slider_link' => 'required|min:1|max:400|url',
+            'slider_title' => 'required|string|min:1|max:50',
+            'slider_link' => 'required|string|min:1|max:400|url',
             'slider_image' => 'image|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=1920,min_height=1080|max:2048',
-            'status' => 'required|in:0,1',
+            'status' => 'required|string|in:0,1',
         ]);
 
         try {
-            $slider = Slider::find($id);
+            $slider = Slider::findOrFail($id);
 
             if ($request->file('slider_image')) {
 
@@ -136,7 +135,7 @@ class SliderController extends Controller
     {
 
         try {
-            $slider = Slider::where('id', $id)->first();
+            $slider = Slider::findOrFail($id);
 
             if (file_exists(public_path('images/sliders') . "/" . $slider->slider_image)) {
 

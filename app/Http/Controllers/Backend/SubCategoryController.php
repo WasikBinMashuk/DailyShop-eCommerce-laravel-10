@@ -38,8 +38,8 @@ class SubCategoryController extends Controller
     {
 
         $request->validate([
-            'category_id' => 'required',
-            'sub_category_name' => 'required|string|max:255',
+            'category_id' => 'required|integer',
+            'sub_category_name' => 'required|string|min:1|max:255',
         ]);
 
         try {
@@ -60,18 +60,25 @@ class SubCategoryController extends Controller
 
     public function edit($id)
     {
-        $editCategory = SubCategory::where('id', $id)->first();
+        try {
+            // $editCategory = SubCategory::where('id', $id)->first();
+            $editCategory = SubCategory::findOrFail($id);
 
-        $categories = Category::all();
+            $categories = Category::all();
 
-        return view('categories.editSubCategory', compact('editCategory', 'categories'));
+            return view('backend.categories.editSubCategory', compact('editCategory', 'categories'));
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
-            'sub_category_name' => 'required',
+            'category_id' => 'required|integer',
+            'sub_category_name' => 'required|string',
         ]);
 
         try {
@@ -94,7 +101,7 @@ class SubCategoryController extends Controller
     {
 
         try {
-            SubCategory::where('id', $id)->first()->delete();
+            SubCategory::findOrFail($id)->delete();
 
             // sweet alert
             toast('User Deleted!', 'info');

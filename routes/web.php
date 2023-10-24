@@ -16,7 +16,7 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\LangController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Backend\RoleController;
 use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

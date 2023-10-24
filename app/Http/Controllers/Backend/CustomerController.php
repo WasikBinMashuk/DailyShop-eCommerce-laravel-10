@@ -58,8 +58,14 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
-        $editCustomer = Customer::where('id', $id)->first();
-        return view('backend.customers.edit', compact('editCustomer'));
+        try {
+            $editCustomer = Customer::findOrFail($id);
+            return view('backend.customers.edit', compact('editCustomer'));
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -68,10 +74,10 @@ class CustomerController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|min:1|max:20',
-            'email' => ['required', 'max:100', Rule::unique('customers', 'email')->ignore($id)],
+            'name' => 'required|string|min:1|max:30',
+            'email' => ['required', 'string', 'email:rfc,dns', 'min:1', 'max:100', Rule::unique('customers', 'email')->ignore($id)],
             'mobile' => 'required|numeric|digits:11',
-            'status' => 'required|in:0,1'
+            'status' => 'required|string|in:0,1'
         ]);
 
         try {
@@ -100,7 +106,7 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         try {
-            Customer::where('id', $id)->first()->delete();
+            Customer::findOrFail($id)->delete();
 
             // sweet alert
             toast('Customer Deleted!', 'info');

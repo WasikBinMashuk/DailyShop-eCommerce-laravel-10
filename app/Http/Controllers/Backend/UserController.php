@@ -59,11 +59,11 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255||unique:users',
-            'password' => 'required|confirmed|min:6',
+            'name' => 'required|string|min:1|max:255',
+            'email' => 'required|string|email:rfc,dns|min:1|max:255|unique:users',
+            'password' => 'required|string|confirmed|min:6|max:255',
             'mobile' => 'required|numeric|digits:11',
-            'status' => 'required|in:0,1'
+            'status' => 'required|string|in:0,1'
         ]);
 
         try {
@@ -87,18 +87,25 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $editUsers = User::where('id', $id)->first();
-        return view('backend.users.edit', compact('editUsers'));
+        try {
+            // $editUsers = User::where('id', $id)->first();
+            $editUsers = User::findOrFail($id);
+            return view('backend.users.edit', compact('editUsers'));
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request)
     {
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($request->id)],
+            'name' => 'required|string|min:1|max:255',
+            'email' => ['required','string' ,'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($request->id)],
             'mobile' => 'required|numeric|digits:11',
-            'status' => 'required|in:0,1'
+            'status' => 'required|string|in:0,1'
         ]);
 
 
@@ -155,8 +162,8 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'old_password' => 'required',
-            'password' => 'required|confirmed|min:6',
+            'old_password' => 'required|string|max:255',
+            'password' => 'required|string|confirmed|min:6|max:255',
         ]);
 
         try {

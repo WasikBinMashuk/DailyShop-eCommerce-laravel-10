@@ -77,15 +77,15 @@ class ProductController extends Controller
         $trendy = $request->filled('trendy') ? $request->trendy : 0;
 
         $request->validate([
-            'category_id' => 'required',
-            'sub_category_id' => 'required',
-            'product_code' => 'required|unique:products|min:3|max:10',
-            'product_name' => 'required|min:1|max:50',
+            'category_id' => 'required|integer',
+            'sub_category_id' => 'required|integer',
+            'product_code' => 'required|unique:products|string|min:3|max:10',
+            'product_name' => 'required|string|min:1|max:50',
             // 'price' => 'nullable|required_with:product_name',
-            'price' => 'required|integer',
-            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'price' => 'required|numeric|min:1|digits_between:1,8',
+            'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:0,1',
-            'description' => 'nullable|max:65530',
+            'description' => 'nullable|string|max:65530',
             'trendy' => 'in:1',
         ]);
 
@@ -121,13 +121,20 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $editProduct = Product::where('id', $id)->first();
+        try {
+            // $editProduct = Product::where('id', $id)->first();
+            $editProduct = Product::findOrFail($id);
+        
+            $categories = Category::all();
 
-        $categories = Category::all();
+            $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
 
-        $subCategories = SubCategory::where('category_id', $editProduct->category_id)->get();
-
-        return view('backend.products.edit', compact('editProduct', 'categories', 'subCategories'));
+            return view('backend.products.edit', compact('editProduct', 'categories', 'subCategories'));
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request, $id)
@@ -135,11 +142,11 @@ class ProductController extends Controller
         $trendy = $request->filled('trendy') ? $request->trendy : 0;
 
         $request->validate([
-            'category_id' => 'required',
-            'sub_category_id' => 'required',
-            'product_code' => ['required', 'min:3', 'max:10', Rule::unique('products', 'product_code')->ignore($id)],
-            'product_name' => 'required|min:1|max:50',
-            'price' => 'required|integer',
+            'category_id' => 'required|integer',
+            'sub_category_id' => 'required|integer',
+            'product_code' => ['required','string' ,'min:3', 'max:10', Rule::unique('products', 'product_code')->ignore($id)],
+            'product_name' => 'required|string|min:1|max:50',
+            'price' => 'required|numeric|min:1|digits_between:1,8',
             'product_image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|in:0,1',
             'description' => 'nullable|max:65530',
@@ -189,7 +196,7 @@ class ProductController extends Controller
     public function delete($id)
     {
         try {
-            $products = Product::where('id', $id)->first();
+            $products = Product::findOrFail($id);
 
             if (file_exists(public_path('images') . "/" . $products->product_image)) {
 

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
+use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|string|max:255',
         ]);
 
         Role::create(['name' => $request->name]);
@@ -33,7 +34,7 @@ class RoleController extends Controller
     public function permissionStore(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|string|max:255',
         ]);
 
         Permission::create(['name' => $request->name]);

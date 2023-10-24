@@ -27,7 +27,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_name' => 'required|unique:categories|max:255',
+            'category_name' => 'required|unique:categories|string|min:1|max:255',
         ]);
 
         try {
@@ -47,15 +47,22 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $editCategory = Category::where('id', $id)->first();
-        return view('backend.categories.editCategory', compact('editCategory'));
+        try {
+            // $editCategory = Category::where('id', $id)->first();
+            $editCategory = Category::findOrFail($id);
+            return view('backend.categories.editCategory', compact('editCategory'));
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request)
     {
 
         $request->validate([
-            'category_name' => 'required|max:255',
+            'category_name' => 'required|string|min:1|max:255',
         ]);
 
         try {
@@ -76,7 +83,7 @@ class CategoryController extends Controller
     public function delete($id)
     {
         try {
-            Category::where('id', $id)->first()->delete();
+            Category::findOrFail($id)->delete();
 
             // sweet alert
             toast('Category Deleted!', 'info');

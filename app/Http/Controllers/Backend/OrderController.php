@@ -20,11 +20,11 @@ class OrderController extends Controller
     {
         //! Order status -> 1=processing, 2=shipped, 3=delivered, 0= failed
         $request->validate([
-            'status' => 'required|in:1,2,3,0',
+            'status' => 'required|string|in:1,2,3,0',
         ]);
 
         try {
-            $order = Order::find($id);
+            $order = Order::findOrFail($id);
 
             $order->update([
                 'status' => $request->status,
