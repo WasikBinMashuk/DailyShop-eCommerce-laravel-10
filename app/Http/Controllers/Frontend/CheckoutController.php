@@ -25,15 +25,15 @@ class CheckoutController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'company_name' => 'string|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:50',
-            'country' => 'required|string|max:50',
+            'name' => 'required|string|min:1|max:255',
+            'company_name' => 'nullable|string|min:1|max:255',
+            'address' => 'required|string|min:1|max:255',
+            'city' => 'required|string|min:1|max:50',
+            'country' => 'required|string|min:1|max:50',
             'postcode' => 'required|numeric|digits_between:4,6',
             'mobile' => 'required|numeric|digits:11',
-            'email' => 'required|email|max:255',
-            'order_notes' => 'nullable',
+            'email' => 'required|string|email:rfc,dns|max:255',
+            'order_notes' => 'nullable|string|max:20000',
             // 'status' => 'integer',
         ]);
 

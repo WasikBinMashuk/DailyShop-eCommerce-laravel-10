@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -15,50 +16,60 @@ class CartController extends Controller
 
     public function addToCart($id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::findOrFail($id);
 
-        $cart = session()->get('cart', []);
+            $cart = session()->get('cart', []);
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                "product_name" => $product->product_name,
-                "price" => $product->price,
-                "product_image" => $product->product_image,
-                "quantity" => 1
-            ];
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity']++;
+            } else {
+                $cart[$id] = [
+                    "product_name" => $product->product_name,
+                    "price" => $product->price,
+                    "product_image" => $product->product_image,
+                    "quantity" => 1
+                ];
+            }
+
+            session()->put('cart', $cart);
+
+            toast('Product added in cart', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
         }
-
-        session()->put('cart', $cart);
-
-        toast('Product added in cart', 'success');
         return redirect()->back();
     }
 
     public function addToCartFromProduct(Request $request, $id)
     {
+        try {
 
-        $quantity = $request->quantity;
+            $quantity = $request->quantity;
 
-        $product = Product::find($id);
+            $product = Product::findOrFail($id);
 
-        $cart = session()->get('cart', []);
+            $cart = session()->get('cart', []);
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                "product_name" => $product->product_name,
-                "price" => $product->price,
-                "product_image" => $product->product_image,
-                "quantity" => $quantity
-            ];
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity']++;
+            } else {
+                $cart[$id] = [
+                    "product_name" => $product->product_name,
+                    "price" => $product->price,
+                    "product_image" => $product->product_image,
+                    "quantity" => $quantity
+                ];
+            }
+
+            session()->put('cart', $cart);
+
+            toast('Product added in cart', 'success');
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            toast('Something went wrong', 'error');
         }
-
-        session()->put('cart', $cart);
-
-        toast('Product added in cart', 'success');
         return redirect()->back();
     }
 

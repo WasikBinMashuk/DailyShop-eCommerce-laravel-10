@@ -26,7 +26,7 @@ class CustomerDashboardController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:20',
-            'email' =>  ['required', 'email', 'max:100', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
+            'email' =>  ['required','string' ,'email:rfc,dns', 'max:255', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
             'mobile' => 'required|numeric|digits:11',
         ]);
 
@@ -51,9 +51,9 @@ class CustomerDashboardController extends Controller
     public function addressUpdate(Request $request)
     {
         $request->validate([
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:50',
-            'country' => 'required|string|max:50',
+            'address' => 'required|string|min:1|max:255',
+            'city' => 'required|string|min:1|max:50',
+            'country' => 'required|string|min:1|max:50',
             'postcode' => 'required|numeric|digits_between:4,6',
         ]);
 
@@ -79,8 +79,8 @@ class CustomerDashboardController extends Controller
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'old_password' => 'required',
-            'password' => 'required|confirmed|min:6',
+            'old_password' => 'required|string',
+            'password' => 'required|string|confirmed|min:6',
         ]);
 
         try {

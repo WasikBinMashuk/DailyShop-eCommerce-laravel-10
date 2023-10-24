@@ -38,7 +38,7 @@ class CustomerAuthController extends Controller
     public function customerLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required|min:1|max:100|email',
+            'email' => 'required|string|email:rfc,dns|min:1|max:100',
             'password' => 'required|string',
         ]);
 
