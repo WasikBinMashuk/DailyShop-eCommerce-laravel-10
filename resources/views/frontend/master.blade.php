@@ -435,52 +435,44 @@
             window.location.href = url + "?lang=" + lang_code;
         });
     </script>
-</body>
 
-{{-- <script type="text/javascript">
+    {{-- MODAL auto open after validation fails --}}
     @if (count($errors) > 0)
-        $('#signin-modal').modal('show');
+        <script type="text/javascript">
+            @if (session('register_tab_open'))
+                $(document).ready(function() {
+                    $('#signin-modal').modal('show');
+                    document.getElementById('register-tab').classList.add('active');
+                    document.getElementById('register').classList.add('active', 'show');
+                    document.getElementById('signin').classList.remove('active', 'show');
+                    document.getElementById('signin-tab').classList.remove('active');
+                });
+                @php session()->forget('register_tab_open'); @endphp
+            @endif
+            @if (session('signin_tab_open'))
+                $(document).ready(function() {
+                    $('#signin-modal').modal('show');
+                    document.getElementById('signin-tab').classList.add('active');
+                    document.getElementById('signin').classList.add('active', 'show');
+                    document.getElementById('register').classList.remove('active', 'show');
+                });
+                @php session()->forget('signin_tab_open'); @endphp
+            @endif
+        </script>
     @endif
-</script> --}}
 
-{{-- MODAL auto open after validation fails --}}
-@if (count($errors) > 0)
-    <script type="text/javascript">
-        @if (session('register_tab_open'))
-            $(document).ready(function() {
-                $('#signin-modal').modal('show');
-                document.getElementById('register-tab').classList.add('active');
-                document.getElementById('register').classList.add('active', 'show');
-                document.getElementById('signin').classList.remove('active', 'show');
-                document.getElementById('signin-tab').classList.remove('active');
-            });
-            @php session()->forget('register_tab_open'); @endphp
-        @endif
-        @if (session('signin_tab_open'))
+    {{-- MODAL auto open and signin tab active script --}}
+    <script>
+        // Check if the session variable is set
+        @if (session('keep_modal_open'))
+            // Opening the modal using JavaScript
             $(document).ready(function() {
                 $('#signin-modal').modal('show');
                 document.getElementById('signin-tab').classList.add('active');
-                document.getElementById('signin').classList.add('active', 'show');
-                document.getElementById('register').classList.remove('active', 'show');
             });
-            @php session()->forget('signin_tab_open'); @endphp
+            @php session()->forget('keep_modal_open'); @endphp
         @endif
     </script>
-@endif
-
-{{-- MODAL auto open and signin tab active script --}}
-<script>
-    // Check if the session variable is set
-    @if (session('keep_modal_open'))
-        // Opening the modal using JavaScript
-        $(document).ready(function() {
-            $('#signin-modal').modal('show');
-            document.getElementById('signin-tab').classList.add('active');
-        });
-        @php session()->forget('keep_modal_open'); @endphp
-    @endif
-</script>
-
-
+</body>
 
 </html>

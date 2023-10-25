@@ -22,6 +22,7 @@ class Customer extends Authenticatable
         'city',
         'country',
         'postcode',
+        'otp_verified'
     ];
 
     protected $hidden = [

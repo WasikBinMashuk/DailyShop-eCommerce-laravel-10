@@ -10,10 +10,12 @@ use App\Jobs\SendEmailJob;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Otp;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -49,12 +51,35 @@ class CustomerAuthController extends Controller
         SendEmailJob::dispatch($customer->email);
 
         // Set a session variable to indicate the modal should be open
-        session()->put('keep_modal_open', true);
+        // session()->put('keep_modal_open', true);
+
+        // OTP generate
+        $otp = Otp::create([
+            'customer_id' => $customer->id,
+            'mobile' => $customer->mobile,
+            'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
+            'expire_at' => now()->addMinutes(3),
+        ]);
+
+        //passing the customerId using session
+        // session()->put('customerId', $customer->id);
+        $request->session()->put('customerId', $customer->id);
+
+        $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
+            'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
+            'sid' => 'SSLW',
+            'msisdn' => $otp->mobile,
+            'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
+            'csms_id' => uniqid(),
+        ]);
 
         // sweet alert
-        toast('Registered! Please Signin', 'success');
+        toast('Registered! Please Enter OTP', 'success');
 
-        return redirect()->back();
+        return redirect()->route('otp');
+
+
+        // return redirect()->back();
     }
 
     public function customerLogin(Request $request)
@@ -78,6 +103,38 @@ class CustomerAuthController extends Controller
 
 
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
+
+            //Checking if the customer is verified or not while login
+            if (Auth::guard('customer')->user()->otp_verified == 0) {
+                $request->session()->put('customerId', Auth::guard('customer')->user()->id);
+
+                // OTP generate
+                $otp = Otp::create([
+                    'customer_id' => Auth::guard('customer')->user()->id,
+                    'mobile' => Auth::guard('customer')->user()->mobile,
+                    'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
+                    'expire_at' => now()->addMinutes(3),
+                ]);
+
+                //passing the customerId using session
+                // session()->put('customerId', $customer->id);
+                $request->session()->put('customerId', Auth::guard('customer')->user()->id);
+
+                $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
+                    'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
+                    'sid' => 'SSLW',
+                    'msisdn' => $otp->mobile,
+                    'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
+                    'csms_id' => uniqid(),
+                ]);
+
+                Auth::guard('customer')->logout();
+
+                // sweet alert
+                Alert::warning('Not Verified', 'Please verify your account using OTP');
+
+                return redirect()->route('otp');
+            }
 
             //checking if the customer is blocked by admin
             if (Auth::guard('customer')->user()->status == 0) {
