@@ -42,4 +42,9 @@ class Product extends Model
     {
         return $query->where('status', $status);
     }
+
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

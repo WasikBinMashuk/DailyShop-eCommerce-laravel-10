@@ -14,13 +14,30 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CustomerAuthController extends Controller
 {
-    public function customerRegister(CustomerFormRequest $request)
+    public function customerRegister(Request $request)
     {
+        // $validated = $request->validated();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|min:1|max:30',
+            'email' => 'required|string|email|min:1|max:100|unique:customers',
+            'password' => 'required|string|confirmed|min:6|max:255',
+            'mobile' => 'required|numeric|digits:11',
+        ]);
+
+        if ($validator->fails()) {
+            // Set a session variable to indicate the modal should be open
+            session()->put('register_tab_open', true);
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $customer = Customer::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -31,18 +48,33 @@ class CustomerAuthController extends Controller
         // sending email to the customer using queue jobs
         SendEmailJob::dispatch($customer->email);
 
+        // Set a session variable to indicate the modal should be open
+        session()->put('keep_modal_open', true);
+
         // sweet alert
-        toast('Registered! Please Login', 'success');
+        toast('Registered! Please Signin', 'success');
 
         return redirect()->back();
     }
 
     public function customerLogin(Request $request)
     {
-        $request->validate([
+        // $request->validate([
+        //     'email' => 'required|string|email|min:1|max:100',
+        //     'password' => 'required|string',
+        // ]);
+        $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|min:1|max:100',
             'password' => 'required|string',
         ]);
+
+        if ($validator->fails()) {
+            // Set a session variable to indicate the modal should be open
+            session()->put('signin_tab_open', true);
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
 
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -59,6 +91,9 @@ class CustomerAuthController extends Controller
             }
             return redirect('customer/dashboard');
         } else {
+            // Set a session variable to indicate the modal should be open
+            session()->put('keep_modal_open', true);
+
             // sweet alert
             toast('Email or password invalid', 'warning');
             return redirect()->back();

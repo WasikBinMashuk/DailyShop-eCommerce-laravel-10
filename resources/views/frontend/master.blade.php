@@ -269,7 +269,7 @@
                                 </li>
                             </ul>
                             <div class="tab-content" id="tab-content-5">
-                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                <div class="tab-pane fade active show" id="signin" role="tabpanel"
                                     aria-labelledby="signin-tab">
                                     <form action="{{ route('customer.login') }}" method="POST">
                                         @csrf
@@ -277,7 +277,7 @@
                                             <label for="singin-email">{{ __('text.Email address') }} <b
                                                     class="required">*</b></label>
                                             <input type="text" class="form-control" id="singin-email"
-                                                name="email" required>
+                                                name="email" value="{{ old('email') }}" required>
                                             @error('email')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -437,7 +437,50 @@
     </script>
 </body>
 
+{{-- <script type="text/javascript">
+    @if (count($errors) > 0)
+        $('#signin-modal').modal('show');
+    @endif
+</script> --}}
 
-<!-- molla/index-2.html  22 Nov 2019 09:55:42 GMT -->
+{{-- MODAL auto open after validation fails --}}
+@if (count($errors) > 0)
+    <script type="text/javascript">
+        @if (session('register_tab_open'))
+            $(document).ready(function() {
+                $('#signin-modal').modal('show');
+                document.getElementById('register-tab').classList.add('active');
+                document.getElementById('register').classList.add('active', 'show');
+                document.getElementById('signin').classList.remove('active', 'show');
+                document.getElementById('signin-tab').classList.remove('active');
+            });
+            @php session()->forget('register_tab_open'); @endphp
+        @endif
+        @if (session('signin_tab_open'))
+            $(document).ready(function() {
+                $('#signin-modal').modal('show');
+                document.getElementById('signin-tab').classList.add('active');
+                document.getElementById('signin').classList.add('active', 'show');
+                document.getElementById('register').classList.remove('active', 'show');
+            });
+            @php session()->forget('signin_tab_open'); @endphp
+        @endif
+    </script>
+@endif
+
+{{-- MODAL auto open and signin tab active script --}}
+<script>
+    // Check if the session variable is set
+    @if (session('keep_modal_open'))
+        // Opening the modal using JavaScript
+        $(document).ready(function() {
+            $('#signin-modal').modal('show');
+            document.getElementById('signin-tab').classList.add('active');
+        });
+        @php session()->forget('keep_modal_open'); @endphp
+    @endif
+</script>
+
+
 
 </html>

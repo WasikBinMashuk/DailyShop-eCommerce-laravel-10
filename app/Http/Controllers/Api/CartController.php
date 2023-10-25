@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\Product;
 use Exception;
@@ -13,16 +14,10 @@ class CartController extends Controller
 {
     public function viewCart(Request $request)
     {
-        $carts = Cart::where('customer_id', auth('sanctum')->user()->id)->get();
+        $carts = Cart::with(['customer', 'product'])->where('customer_id', auth('sanctum')->user()->id)->get();
 
-        // foreach ($carts as $cart) {
-        //     $cd[] = [
-        //         "product_code" => $cart->product_id
-        //     ];
-        // }
-
-        if ($carts) {
-            return ApiResponseHelper::apiResponse('Success', '200', 'Order Details Success', $carts);
+        if ($carts->isNotEmpty()) {
+            return ApiResponseHelper::apiResponse('Success', '200', 'Order Details Success', CartResource::collection($carts));
         } else {
             return ApiResponseHelper::apiResponse('Failed', '422', 'Cart Empty');
         }
