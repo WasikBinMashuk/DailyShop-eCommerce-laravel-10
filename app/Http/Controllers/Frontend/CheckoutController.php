@@ -32,7 +32,7 @@ class CheckoutController extends Controller
             'country' => 'required|string|min:1|max:50',
             'postcode' => 'required|numeric|digits_between:4,6',
             'mobile' => 'required|numeric|digits:11',
-            'email' => 'required|string|email:rfc,dns|max:255',
+            'email' => 'required|string|email|max:255',
             'order_notes' => 'nullable|string|max:20000',
             // 'status' => 'integer',
         ]);

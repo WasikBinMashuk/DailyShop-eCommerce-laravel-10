@@ -60,7 +60,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|min:1|max:255',
-            'email' => 'required|string|email:rfc,dns|min:1|max:255|unique:users',
+            'email' => 'required|string|email|min:1|max:255|unique:users',
             'password' => 'required|string|confirmed|min:6|max:255',
             'mobile' => 'required|numeric|digits:11',
             'status' => 'required|string|in:0,1'
@@ -103,7 +103,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|min:1|max:255',
-            'email' => ['required','string' ,'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($request->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($request->id)],
             'mobile' => 'required|numeric|digits:11',
             'status' => 'required|string|in:0,1'
         ]);

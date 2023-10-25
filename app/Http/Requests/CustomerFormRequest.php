@@ -24,7 +24,7 @@ class CustomerFormRequest extends FormRequest
 
         return [
             'name' => 'required|string|min:1|max:30',
-            'email' => 'required|string|email:rfc,dns|min:1|max:100|unique:customers',
+            'email' => 'required|string|email|min:1|max:100|unique:customers',
             'password' => 'required|string|confirmed|min:6|max:255',
             'mobile' => 'required|numeric|digits:11',
         ];

@@ -75,7 +75,7 @@ class CustomerController extends Controller
     {
         $request->validate([
             'name' => 'required|string|min:1|max:30',
-            'email' => ['required', 'string', 'email:rfc,dns', 'min:1', 'max:100', Rule::unique('customers', 'email')->ignore($id)],
+            'email' => ['required', 'string', 'email', 'min:1', 'max:100', Rule::unique('customers', 'email')->ignore($id)],
             'mobile' => 'required|numeric|digits:11',
             'status' => 'required|string|in:0,1'
         ]);
