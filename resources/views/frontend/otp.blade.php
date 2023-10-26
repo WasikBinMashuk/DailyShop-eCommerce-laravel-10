@@ -77,7 +77,7 @@
 
             // Do timeout stuff here
             alert('Timeout for otp');
-            // @php session()->forget('otpOn'); @endphp
+            
         }
 
         timer(180);
