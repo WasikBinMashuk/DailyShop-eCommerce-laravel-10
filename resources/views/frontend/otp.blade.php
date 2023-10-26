@@ -12,9 +12,9 @@
         <div class="page-content">
             <div class="dashboard">
                 <div class="container">
-                    <div class="row">
+                    <div class="mt-5">
                         <div
-                            style="font-family: Arial, sans-serif; background-color: #f5f5f5; display: flex; justify-content: center; align-items: center;">
+                            style="font-family: Arial, sans-serif;  display: flex; justify-content: center; align-items: center;">
                             <div
                                 style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
                                 @if (\Session::has('success'))
@@ -23,16 +23,26 @@
                                         <a href="{{ route('otp.resend') }}">Resend OTP</a>
                                     </div>
                                 @endif
-                                <h2>Enter OTP</h2>
-                                <form action="{{ route('otp.verify') }}" method="post">
-                                    @csrf
-                                    <input type="text"
-                                        style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;"
-                                        name="otp_code" placeholder="Enter OTP" required>
-                                    <button type="submit"
-                                        style="background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; font-size: 16px; cursor: pointer;"
-                                        class="submit-button">Submit</button>
-                                </form>
+                                {{-- <a href="{{ route('otp.resend') }}">Request OTP</a> --}}
+                                {{-- <h2>Enter OTP</h2> --}}
+                                @if (session()->has('otpOn'))
+                                    <div>Your OTP will expire in <span id="timer"></span></div>
+                                    <form action="{{ route('otp.verify') }}" method="post">
+                                        @csrf
+                                        <input type="text"
+                                            style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;"
+                                            name="otp_code" placeholder="Enter OTP" required>
+                                        @error('otp_code')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                        <div style="display: flex; justify-content: center; ">
+                                            <button type="submit"
+                                                style="background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; font-size: 16px; cursor: pointer;"
+                                                class="submit-button">Submit</button>
+                                        </div>
+                                    </form>
+                                @endif
+
                             </div>
                         </div>
                     </div><!-- End .row -->
@@ -41,4 +51,35 @@
         </div><!-- End .page-content -->
     </div><!-- End .main -->
 
+    <script>
+        let timerOn = true;
+
+        function timer(remaining) {
+            var m = Math.floor(remaining / 60);
+            var s = remaining % 60;
+
+            m = m < 10 ? '0' + m : m;
+            s = s < 10 ? '0' + s : s;
+            document.getElementById('timer').innerHTML = m + ':' + s;
+            remaining -= 1;
+
+            if (remaining >= 0 && timerOn) {
+                setTimeout(function() {
+                    timer(remaining);
+                }, 1000);
+                return;
+            }
+
+            if (!timerOn) {
+                // Do validate stuff here
+                return;
+            }
+
+            // Do timeout stuff here
+            alert('Timeout for otp');
+            // @php session()->forget('otpOn'); @endphp
+        }
+
+        timer(180);
+    </script>
 @endsection

@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->tinyInteger('otp_verified')->default(0)->after('status')->comment('0 = not verified, 1 = verified');
+        Schema::create('otp_counts', function (Blueprint $table) {
+            $table->id();
+            $table->string('mobile', 11);
+            $table->integer('otp_count')->default(0);
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropColumn('otp_verified');
-        });
+        Schema::dropIfExists('otp_counts');
     }
 };

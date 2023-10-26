@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('otps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained();
             $table->string('mobile', 11);
             $table->string('otp_code', 6);
             $table->tinyInteger('isUsed')->default(0);

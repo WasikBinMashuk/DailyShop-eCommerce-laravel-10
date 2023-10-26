@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Otp;
+use App\Models\OtpCount;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use RealRashid\SweetAlert\Facades\Alert;
+
+use function Laravel\Prompts\alert;
 
 class CustomerAuthController extends Controller
 {
@@ -40,7 +43,13 @@ class CustomerAuthController extends Controller
                 ->withInput();
         }
 
-        $customer = Customer::create([
+        // $customer = Customer::create([
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => $request->password,
+        //     'mobile' => $request->mobile,
+        // ]);
+        $request->session()->put('customerInput', [
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
@@ -48,22 +57,35 @@ class CustomerAuthController extends Controller
         ]);
 
         // sending email to the customer using queue jobs
-        SendEmailJob::dispatch($customer->email);
+        // SendEmailJob::dispatch($customer->email);
 
         // Set a session variable to indicate the modal should be open
         // session()->put('keep_modal_open', true);
 
         // OTP generate
         $otp = Otp::create([
-            'customer_id' => $customer->id,
-            'mobile' => $customer->mobile,
+            'mobile' => $request->mobile,
             'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
             'expire_at' => now()->addMinutes(3),
         ]);
 
+        $otp_count = OtpCount::where('mobile', $request->mobile)->first();
+        if ($otp_count) {
+            $otp_count->update([
+                'otp_count' => $otp_count->otp_count + 1
+            ]);
+        } else {
+            OtpCount::create([
+                'mobile' => $request->mobile,
+                'otp_count' => 1,
+            ]);
+        }
+
         //passing the customerId using session
-        // session()->put('customerId', $customer->id);
-        $request->session()->put('customerId', $customer->id);
+        // $request->session()->put('customerId', $customer->id);
+
+        // otp page can be viewed after this session starts
+        $request->session()->put('otpOn', true);
 
         $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
             'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
@@ -74,7 +96,7 @@ class CustomerAuthController extends Controller
         ]);
 
         // sweet alert
-        toast('Registered! Please Enter OTP', 'success');
+        Alert::success('Registered', 'Please Enter OTP to complete registration');
 
         return redirect()->route('otp');
 
@@ -104,37 +126,40 @@ class CustomerAuthController extends Controller
 
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
 
-            //Checking if the customer is verified or not while login
-            if (Auth::guard('customer')->user()->otp_verified == 0) {
-                $request->session()->put('customerId', Auth::guard('customer')->user()->id);
+            // //Checking if the customer is verified or not while login
+            // if (Auth::guard('customer')->user()->otp_verified == 0) {
 
-                // OTP generate
-                $otp = Otp::create([
-                    'customer_id' => Auth::guard('customer')->user()->id,
-                    'mobile' => Auth::guard('customer')->user()->mobile,
-                    'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
-                    'expire_at' => now()->addMinutes(3),
-                ]);
+            //     // OTP generate
+            //     $otp = Otp::create([
+            //         'customer_id' => Auth::guard('customer')->user()->id,
+            //         'mobile' => Auth::guard('customer')->user()->mobile,
+            //         'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
+            //         'expire_at' => now()->addMinutes(3),
+            //     ]);
 
-                //passing the customerId using session
-                // session()->put('customerId', $customer->id);
-                $request->session()->put('customerId', Auth::guard('customer')->user()->id);
+            //     $otp_count = OtpCount::where('mobile', Auth::guard('customer')->user()->mobile)->first();
+            //     $otp_count->update([
+            //         'otp_count' => $otp_count->otp_count + 1
+            //     ]);
 
-                $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
-                    'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
-                    'sid' => 'SSLW',
-                    'msisdn' => $otp->mobile,
-                    'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
-                    'csms_id' => uniqid(),
-                ]);
+            //     //passing the customerId using session
+            //     $request->session()->put('customerId', Auth::guard('customer')->user()->id);
 
-                Auth::guard('customer')->logout();
+            //     $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
+            //         'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
+            //         'sid' => 'SSLW',
+            //         'msisdn' => $otp->mobile,
+            //         'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
+            //         'csms_id' => uniqid(),
+            //     ]);
 
-                // sweet alert
-                Alert::warning('Not Verified', 'Please verify your account using OTP');
+            //     Auth::guard('customer')->logout();
 
-                return redirect()->route('otp');
-            }
+            //     // sweet alert
+            //     Alert::warning('Not Verified', 'Please verify your account using OTP');
+
+            //     return redirect()->route('otp');
+            // }
 
             //checking if the customer is blocked by admin
             if (Auth::guard('customer')->user()->status == 0) {
