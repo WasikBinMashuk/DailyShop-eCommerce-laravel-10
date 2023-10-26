@@ -27,7 +27,7 @@ class CustomerDashboardController extends Controller
         $request->validate([
             'name' => 'required|string|max:20',
             'email' =>  ['required', 'string', 'email', 'max:255', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
-            'mobile' => 'required|numeric|digits:11',
+            'mobile' => ['required', 'numeric', 'digits:11', Rule::unique('customers')->ignore(Auth::guard('customer')->user()->id)],
         ]);
 
         try {
