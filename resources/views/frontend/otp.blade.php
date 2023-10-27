@@ -35,11 +35,18 @@
                                         @error('otp_code')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-                                        <div style="display: flex; justify-content: center; ">
-                                            <button type="submit"
+                                        <div class="d-flex justify-content-center" style="row-gap: 2-px">
+                                            <div>
+                                                <button type="submit"
                                                 style="background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; font-size: 16px; cursor: pointer;"
                                                 class="submit-button">Submit</button>
+                                            </div>
+                                            <div class="btn btn-outline-warning " style="border: none; border-radius: 4px; padding: 10px 10px; font-size: 16px; cursor: pointer;">
+                                                <a href="{{ route('otp.resend') }}" class="disabled-link text-black" id="otp-button">Resend OTP</a>
+                                            </div>
                                         </div>
+                                        
+                                        
                                     </form>
                                 @endif
 
@@ -76,7 +83,8 @@
             }
 
             // Do timeout stuff here
-            alert('Timeout for otp');
+            // alert('Timeout for otp');
+            document.getElementById('otp-button').classList.remove('disabled-link');
             
         }
 
