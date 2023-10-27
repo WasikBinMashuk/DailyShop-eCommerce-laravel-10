@@ -8,6 +8,7 @@ use App\Models\OtpCount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class OtpController extends Controller
 {
@@ -46,9 +47,11 @@ class OtpController extends Controller
                 // Set a session variable to indicate the modal should be open
                 session()->put('keep_modal_open', true);
 
-                //deleting the sessions used for otp
+                //deleting all the sessions used for otp
                 $request->session()->forget('customerInput');
                 $request->session()->forget('otpOn');
+                $request->session()->forget('timer_start');
+                $request->session()->forget('timer_duration');
 
                 // sweet alert
                 toast('You are verified! Please Signin', 'success');
@@ -66,41 +69,76 @@ class OtpController extends Controller
     {
         $request->session()->put('otpOn', true);
 
-        // $otp = Otp::where('customer_id', $request->session()->get('customerId'))->where('isUsed', 0)->first();
+        // fetching data for otp request limit per day, 10 per user and 1000 for all users
+        $today = now()->toDateString();
+        $totalDailyLimit = OtpCount::whereDate('created_at', $today)->sum('otp_count');
+        $totalDailyLimitOfUser = OtpCount::select('otp_count')->where('mobile', $request->session()->get('customerInput')['mobile'])->whereDate('created_at', $today)->get();
 
-        // $otp->update([
-        //     'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
-        //     'expire_at' => now()->addMinutes(3),
-        // ]);
+        //check if daily website limit and daily user's otp request limit is over
+        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
+
+            if (($totalDailyLimit <= 1000)) {
+                // $otp = Otp::where('customer_id', $request->session()->get('customerId'))->where('isUsed', 0)->first();
+
+                // $otp->update([
+                //     'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
+                //     'expire_at' => now()->addMinutes(3),
+                // ]);
 
 
-        $otp = Otp::create([
-            'mobile' => $request->session()->get('customerInput')['mobile'],
-            'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
-            'expire_at' => now()->addMinutes(3),
-        ]);
-        $otp_count = OtpCount::where('mobile', $request->session()->get('customerInput')['mobile'])->first();
+                $otp = Otp::create([
+                    'mobile' => $request->session()->get('customerInput')['mobile'],
+                    'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
+                    'expire_at' => now()->addMinutes(3),
+                ]);
 
-        if ($otp_count) {
-            $otp_count->update([
-                'otp_count' => $otp_count->otp_count + 1
-            ]);
+                $otp_count = OtpCount::where('mobile', $request->session()->get('customerInput')['mobile'])->first();
+
+                //increasing otp count per mobile number by every request
+                if ($otp_count) {
+                    $otp_count->update([
+                        'otp_count' => $otp_count->otp_count + 1
+                    ]);
+                } else {
+                    OtpCount::create([
+                        'mobile' => $request->session()->get('customerInput')['mobile'],
+                        'otp_count' => 1,
+                    ]);
+                }
+
+                //Sending otp to mobile by SMS
+                $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
+                    'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
+                    'sid' => 'SSLW',
+                    'msisdn' => $otp->mobile,
+                    'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
+                    'csms_id' => uniqid(),
+                ]);
+
+                // Start the timer for otp timeout
+                session(['timer_start' => now()]);
+                session(['timer_duration' => 180]);
+
+                return redirect()->back();
+            } else {
+                //deleting the sessions used for otp
+                $request->session()->forget('customerInput');
+                $request->session()->forget('otpOn');
+
+                // sweet alert
+                Alert::error('Limit Crossed', 'Daily OTP limit is over, try again tomorrow!');
+
+                return redirect()->route('home');
+            }
         } else {
-            OtpCount::create([
-                'mobile' => $request->session()->get('customerInput')['mobile'],
-                'otp_count' => 1,
-            ]);
+            //deleting the sessions used for otp
+            $request->session()->forget('customerInput');
+            $request->session()->forget('otpOn');
+
+            // sweet alert
+            Alert::error('Limit Crossed', 'Your OTP limit is over, try again tomorrow!');
+            return redirect()->route('home');
         }
-
-        $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
-            'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
-            'sid' => 'SSLW',
-            'msisdn' => $otp->mobile,
-            'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
-            'csms_id' => uniqid(),
-        ]);
-
-        return redirect()->back();
     }
 
     public function apiTesting()
