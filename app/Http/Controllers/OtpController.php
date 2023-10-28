@@ -29,10 +29,10 @@ class OtpController extends Controller
         ]);
 
         $otp = Otp::where('otp_code', $request->otp_code)->Where('mobile', $request->session()->get('customerInput')['mobile'])->orderBy('created_at', 'desc')->first();
-
         if ($otp) {
+            
             if (strtotime($otp->expire_at) > strtotime(now())) {
-
+                
                 Otp::where('id', $otp->id)->update([
                     'isUsed' => 1,
                 ]);
@@ -72,8 +72,8 @@ class OtpController extends Controller
         // fetching data for otp request limit per day, 10 per user and 1000 for all users
         $today = now()->toDateString();
         $totalDailyLimit = OtpCount::whereDate('created_at', $today)->sum('otp_count');
-        $totalDailyLimitOfUser = OtpCount::select('otp_count')->where('mobile', $request->session()->get('customerInput')['mobile'])->whereDate('created_at', $today)->get();
-
+        $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')->where('mobile', $request->session()->get('customerInput')['mobile'])->whereDate('created_at', $today)->get();
+        // dd(strtotime($totalDailyLimitOfUser[0]->updated_at->addMinutes(1)));
         //check if daily website limit and daily user's otp request limit is over
         if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
 
@@ -85,11 +85,17 @@ class OtpController extends Controller
                 //     'expire_at' => now()->addMinutes(3),
                 // ]);
 
+                //check : user cannot resend any request within 1 minute
+                if (strtotime($totalDailyLimitOfUser[0]->updated_at->addMinutes(1)) > strtotime(now())) {
+                    // sweet alert
+                    Alert::error('Wait for a minute');
+                    return redirect()->back();
+                }
 
                 $otp = Otp::create([
                     'mobile' => $request->session()->get('customerInput')['mobile'],
                     'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
-                    'expire_at' => now()->addMinutes(3),
+                    'expire_at' => now()->addMinutes(1),
                 ]);
 
                 $otp_count = OtpCount::where('mobile', $request->session()->get('customerInput')['mobile'])->first();
@@ -117,7 +123,7 @@ class OtpController extends Controller
 
                 // Start the timer for otp timeout
                 session(['timer_start' => now()]);
-                session(['timer_duration' => 180]);
+                session(['timer_duration' => 60]);
 
                 return redirect()->back();
             } else {

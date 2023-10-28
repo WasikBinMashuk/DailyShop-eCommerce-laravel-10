@@ -98,7 +98,7 @@
     
     <script>
         // Get the initial timer duration from the session
-        const initialDuration = {{ session('timer_duration', 180) }};
+        const initialDuration = {{ session('timer_duration', 60) }};
 
         const countdownElement = document.getElementById('countdown');
 
