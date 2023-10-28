@@ -96,6 +96,7 @@
         timer(180);
     </script> --}}
     
+    {{-- Timer for OTP session --}}
     <script>
         // Get the initial timer duration from the session
         const initialDuration = {{ session('timer_duration', 60) }};

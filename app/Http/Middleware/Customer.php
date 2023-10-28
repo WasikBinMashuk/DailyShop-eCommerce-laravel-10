@@ -17,6 +17,9 @@ class Customer
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::guard('customer')->check()) {
+            // Set a session variable to indicate the modal should be open
+            session()->put('keep_modal_open', true);
+            
             // sweet alert
             toast('Please login', 'warning');
             return redirect('/');

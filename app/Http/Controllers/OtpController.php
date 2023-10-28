@@ -30,9 +30,9 @@ class OtpController extends Controller
 
         $otp = Otp::where('otp_code', $request->otp_code)->Where('mobile', $request->session()->get('customerInput')['mobile'])->orderBy('created_at', 'desc')->first();
         if ($otp) {
-            
+
             if (strtotime($otp->expire_at) > strtotime(now())) {
-                
+
                 Otp::where('id', $otp->id)->update([
                     'isUsed' => 1,
                 ]);
@@ -72,19 +72,15 @@ class OtpController extends Controller
         // fetching data for otp request limit per day, 10 per user and 1000 for all users
         $today = now()->toDateString();
         $totalDailyLimit = OtpCount::whereDate('created_at', $today)->sum('otp_count');
-        $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')->where('mobile', $request->session()->get('customerInput')['mobile'])->whereDate('created_at', $today)->get();
-        // dd(strtotime($totalDailyLimitOfUser[0]->updated_at->addMinutes(1)));
+        $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')
+            ->where('mobile', $request->session()->get('customerInput')['mobile'])
+            ->whereDate('created_at', $today)
+            ->get();
+            
         //check if daily website limit and daily user's otp request limit is over
         if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
 
             if (($totalDailyLimit <= 1000)) {
-                // $otp = Otp::where('customer_id', $request->session()->get('customerId'))->where('isUsed', 0)->first();
-
-                // $otp->update([
-                //     'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
-                //     'expire_at' => now()->addMinutes(3),
-                // ]);
-
                 //check : user cannot resend any request within 1 minute
                 if (strtotime($totalDailyLimitOfUser[0]->updated_at->addMinutes(1)) > strtotime(now())) {
                     // sweet alert

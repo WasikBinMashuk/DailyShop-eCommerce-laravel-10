@@ -44,17 +44,10 @@ class CustomerAuthController extends Controller
                 ->withInput();
         }
 
-        // $customer = Customer::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'password' => $request->password,
-        //     'mobile' => $request->mobile,
-        // ]);
-
         // fetching data for otp request limit per day, 10 per user and 1000 for all users
         $today = now()->toDateString();
         $totalDailyLimit = OtpCount::whereDate('created_at', $today)->sum('otp_count');
-        $totalDailyLimitOfUser = OtpCount::select('otp_count','updated_at')->where('mobile', $request->mobile)->whereDate('created_at', $today)->get();
+        $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')->where('mobile', $request->mobile)->whereDate('created_at', $today)->get();
 
         //check if daily website limit and daily user's otp request limit is over
         if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
@@ -138,11 +131,6 @@ class CustomerAuthController extends Controller
             Alert::error('Limit Crossed', 'Your Otp limit is over, try again tomorrow!');
             return redirect()->route('home');
         }
-
-
-
-
-        // return redirect()->back();
     }
 
     public function customerLogin(Request $request)
@@ -164,43 +152,7 @@ class CustomerAuthController extends Controller
                 ->withInput();
         }
 
-
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
-
-            // //Checking if the customer is verified or not while login
-            // if (Auth::guard('customer')->user()->otp_verified == 0) {
-
-            //     // OTP generate
-            //     $otp = Otp::create([
-            //         'customer_id' => Auth::guard('customer')->user()->id,
-            //         'mobile' => Auth::guard('customer')->user()->mobile,
-            //         'otp_code' => env('APP_ENV') == 'local' ? '123456' : random_int(100000, 999999),
-            //         'expire_at' => now()->addMinutes(3),
-            //     ]);
-
-            //     $otp_count = OtpCount::where('mobile', Auth::guard('customer')->user()->mobile)->first();
-            //     $otp_count->update([
-            //         'otp_count' => $otp_count->otp_count + 1
-            //     ]);
-
-            //     //passing the customerId using session
-            //     $request->session()->put('customerId', Auth::guard('customer')->user()->id);
-
-            //     $response = Http::post('http://ismsapi.publicdemo.xyz/api/v3/send-sms', [
-            //         'api_token' => 'id21k6pn-hfecd5j0-8twu0ho3-5j0avf06-rbhikgtz',
-            //         'sid' => 'SSLW',
-            //         'msisdn' => $otp->mobile,
-            //         'sms' => "Your OTP: $otp->otp_code will expire in 3 minutes",
-            //         'csms_id' => uniqid(),
-            //     ]);
-
-            //     Auth::guard('customer')->logout();
-
-            //     // sweet alert
-            //     Alert::warning('Not Verified', 'Please verify your account using OTP');
-
-            //     return redirect()->route('otp');
-            // }
 
             //checking if the customer is blocked by admin
             if (Auth::guard('customer')->user()->status == 0) {
