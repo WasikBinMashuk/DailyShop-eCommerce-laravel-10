@@ -50,7 +50,7 @@ class CustomerAuthController extends Controller
         $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')->where('mobile', $request->mobile)->whereDate('created_at', $today)->get();
 
         //check if daily website limit and daily user's otp request limit is over
-        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
+        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count < 10) {
 
             if (($totalDailyLimit <= 1000)) {
                 $request->session()->put('customerInput', [
@@ -84,7 +84,7 @@ class CustomerAuthController extends Controller
                 $otp_count = OtpCount::where('mobile', $request->mobile)->first();
 
                 //logics for increasing otp count per mobile number by every request
-                if ($otp_count && (strtotime($otp_count->created_at) < strtotime(now()))) {
+                if ($otp_count && ($otp_count->created_at->toDateString() != $today)) {
 
                     //check if a user crossed his limit the otherday, deleting the old record and counting for today
                     $otp_count->delete();
@@ -99,7 +99,7 @@ class CustomerAuthController extends Controller
                         'otp_count' => $otp_count->otp_count + 1
                     ]);
                 } else {
-                    
+
                     //if new mobile number/user
                     OtpCount::create([
                         'mobile' => $request->mobile,

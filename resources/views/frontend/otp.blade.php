@@ -19,11 +19,11 @@
                                 style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; width: 350px;">
                                 @if (\Session::has('success'))
                                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                        <strong>{{ Session::get('success') }}</strong> 
+                                        <strong>{{ Session::get('success') }}</strong>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
+                                            <span aria-hidden="true">&times;</span>
                                         </button>
-                                      </div>
+                                    </div>
                                 @endif
                                 {{-- <a href="{{ route('otp.resend') }}">Request OTP</a> --}}
                                 {{-- <h2>Enter OTP</h2> --}}
@@ -40,7 +40,7 @@
                                         @error('otp_code')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-                                            {{-- <div>
+                                        {{-- <div>
                                                 <button type="submit"
                                                     style="background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; font-size: 16px; cursor: pointer;"
                                                     class="submit-button">Submit</button>
@@ -50,12 +50,13 @@
                                                 <a href="{{ route('otp.resend') }}" class="disabled-link text-black"
                                                     id="otp-resend-button">Resend OTP</a>
                                             </div> --}}
-                                            <div class="dropdown-cart-action">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                                <a href="{{ route('otp.resend') }}"
-                                                    class="btn btn-outline-primary-2 disabled-link" id="otp-resend-button"><span>Resend OTP</span><i
-                                                        class="icon-long-arrow-right "></i></a>
-                                            </div><!-- End .dropdown-cart-total -->
+                                        <div class="dropdown-cart-action">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <a href="{{ route('otp.resend') }}"
+                                                class="btn btn-outline-primary-2 disabled-link"
+                                                id="otp-resend-button"><span>Resend OTP</span><i
+                                                    class="icon-long-arrow-right "></i></a>
+                                        </div><!-- End .dropdown-cart-total -->
                                     </form>
                                 @endif
 
@@ -106,6 +107,7 @@
         const initialDuration = {{ session('timer_duration', 60) }};
 
         const countdownElement = document.getElementById('countdown');
+        var count = 1;
 
         function updateCountdown() {
             const now = new Date();
@@ -116,13 +118,17 @@
             if (remainingTime <= 0) {
                 countdownElement.textContent = 'Time expired';
                 document.getElementById('otp-resend-button').classList.remove('disabled-link');
-                // $.ajax({
-                //     url: '/otp/timedout',
-                //     type: 'GET',
-                //     success: function(response) {
-                //         // Handle the response, e.g., redirect to a login page
-                //     }
-                // });
+                
+                if (count == 1) {
+                    $.ajax({
+                        url: '/otp/timedout',
+                        type: 'GET',
+                        success: function(response) {
+                            // Handle the response, e.g., redirect to a login page
+                        }
+                    });
+                    count = count + 1;
+                }
             } else {
                 const minutes = Math.floor(remainingTime / 60);
                 const seconds = remainingTime % 60;

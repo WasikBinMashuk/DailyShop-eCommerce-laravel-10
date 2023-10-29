@@ -23,7 +23,7 @@ class OtpController extends Controller
 
     public function verify(Request $request)
     {
-
+        $request->session()->put('otpOn', true);
         $request->validate([
             'otp_code' => 'required|integer|digits_between:1,6',
         ]);
@@ -78,7 +78,7 @@ class OtpController extends Controller
             ->get();
 
         //check if daily website limit and daily user's otp request limit is over
-        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
+        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count < 10) {
 
             if (($totalDailyLimit <= 1000)) {
                 //check : user cannot resend any request within 1 minute
