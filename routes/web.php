@@ -165,6 +165,7 @@ Route::get('response/api', [OtpController::class, 'apiTesting']);
 Route::get('otp', [OtpController::class, 'otp'])->name('otp');
 Route::post('otp/verify', [OtpController::class, 'verify'])->name('otp.verify');
 Route::get('otp/resend', [OtpController::class, 'resend'])->name('otp.resend');
+Route::get('otp/timedout', [OtpController::class, 'timedOut']);
 
 // Route::get('/otp', function () {
 //     return view('frontend.otp');

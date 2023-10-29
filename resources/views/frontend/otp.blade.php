@@ -5,7 +5,7 @@
     <div class="">
         <div class="page-header text-center" style="background-image: url({{ asset('frontend/images/page-header-bg.jpg') }})">
             <div class="container">
-                <h1 class="page-title">{{ __('Enter OTP') }}</h1>
+                <h1 class="page-title">{{ __('OTP') }}</h1>
             </div><!-- End .container -->
         </div><!-- End .page-header -->
 
@@ -16,12 +16,14 @@
                         <div
                             style="font-family: Arial, sans-serif;  display: flex; justify-content: center; align-items: center;">
                             <div
-                                style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
+                                style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; width: 350px;">
                                 @if (\Session::has('success'))
-                                    <div class="alert alert-success" role="alert">
-                                        {{ Session::get('success') }}
-                                        {{-- <a href="{{ route('otp.resend') }}">Resend OTP</a> --}}
-                                    </div>
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong>{{ Session::get('success') }}</strong> 
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
                                 @endif
                                 {{-- <a href="{{ route('otp.resend') }}">Request OTP</a> --}}
                                 {{-- <h2>Enter OTP</h2> --}}
@@ -38,20 +40,22 @@
                                         @error('otp_code')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-                                        <div class="d-flex justify-content-center" style="row-gap: 2-px">
-                                            <div>
+                                            {{-- <div>
                                                 <button type="submit"
                                                     style="background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; font-size: 16px; cursor: pointer;"
                                                     class="submit-button">Submit</button>
                                             </div>
-                                            <div class="btn btn-outline-warning "
+                                            <div class="btn btn-outline-primary-2" id="otp-div"
                                                 style="border: none; border-radius: 4px; padding: 10px 10px; font-size: 16px; cursor: pointer;">
                                                 <a href="{{ route('otp.resend') }}" class="disabled-link text-black"
-                                                    id="otp-button">Resend OTP</a>
-                                            </div>
-                                        </div>
-
-
+                                                    id="otp-resend-button">Resend OTP</a>
+                                            </div> --}}
+                                            <div class="dropdown-cart-action">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                <a href="{{ route('otp.resend') }}"
+                                                    class="btn btn-outline-primary-2 disabled-link" id="otp-resend-button"><span>Resend OTP</span><i
+                                                        class="icon-long-arrow-right "></i></a>
+                                            </div><!-- End .dropdown-cart-total -->
                                     </form>
                                 @endif
 
@@ -95,7 +99,7 @@
 
         timer(180);
     </script> --}}
-    
+
     {{-- Timer for OTP session --}}
     <script>
         // Get the initial timer duration from the session
@@ -111,7 +115,14 @@
 
             if (remainingTime <= 0) {
                 countdownElement.textContent = 'Time expired';
-                document.getElementById('otp-button').classList.remove('disabled-link');
+                document.getElementById('otp-resend-button').classList.remove('disabled-link');
+                // $.ajax({
+                //     url: '/otp/timedout',
+                //     type: 'GET',
+                //     success: function(response) {
+                //         // Handle the response, e.g., redirect to a login page
+                //     }
+                // });
             } else {
                 const minutes = Math.floor(remainingTime / 60);
                 const seconds = remainingTime % 60;

@@ -83,12 +83,24 @@ class CustomerAuthController extends Controller
 
                 $otp_count = OtpCount::where('mobile', $request->mobile)->first();
 
-                //increasing otp count per mobile number by every request
-                if ($otp_count) {
+                //logics for increasing otp count per mobile number by every request
+                if ($otp_count && (strtotime($otp_count->created_at) < strtotime(now()))) {
+
+                    //check if a user crossed his limit the otherday, deleting the old record and counting for today
+                    $otp_count->delete();
+                    OtpCount::create([
+                        'mobile' => $request->mobile,
+                        'otp_count' => 1,
+                    ]);
+                } elseif ($otp_count) {
+
+                    //if user already requested one otp, increasing count value
                     $otp_count->update([
                         'otp_count' => $otp_count->otp_count + 1
                     ]);
                 } else {
+                    
+                    //if new mobile number/user
                     OtpCount::create([
                         'mobile' => $request->mobile,
                         'otp_count' => 1,

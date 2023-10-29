@@ -76,7 +76,7 @@ class OtpController extends Controller
             ->where('mobile', $request->session()->get('customerInput')['mobile'])
             ->whereDate('created_at', $today)
             ->get();
-            
+
         //check if daily website limit and daily user's otp request limit is over
         if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count <= 10) {
 
@@ -121,7 +121,8 @@ class OtpController extends Controller
                 session(['timer_start' => now()]);
                 session(['timer_duration' => 60]);
 
-                return redirect()->back();
+                // return redirect()->back();
+                return redirect()->route('otp');
             } else {
                 //deleting the sessions used for otp
                 $request->session()->forget('customerInput');
@@ -141,6 +142,11 @@ class OtpController extends Controller
             Alert::error('Limit Crossed', 'Your OTP limit is over, try again tomorrow!');
             return redirect()->route('home');
         }
+    }
+
+    public function timedOut(Request $request)
+    {
+        $request->session()->forget('otpOn');
     }
 
     public function apiTesting()
