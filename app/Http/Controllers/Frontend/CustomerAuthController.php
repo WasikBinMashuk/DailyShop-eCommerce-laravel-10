@@ -81,6 +81,7 @@ class CustomerAuthController extends Controller
                     'expire_at' => now()->addMinutes(1),
                 ]);
 
+                // some refactor code
                 $otp_count = OtpCount::where('mobile', $request->mobile)->first();
 
                 //logics for increasing otp count per mobile number by every request
