@@ -75,14 +75,14 @@ class OtpController extends Controller
         $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')
             ->where('mobile', $request->session()->get('customerInput')['mobile'])
             ->whereDate('created_at', $today)
-            ->get();
+            ->first();
 
         //check if daily website limit and daily user's otp request limit is over
-        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count < 10) {
+        if ($totalDailyLimitOfUser?->otp_count < 10) {
 
             if (($totalDailyLimit <= 1000)) {
                 //check : user cannot resend any request within 1 minute
-                if (strtotime($totalDailyLimitOfUser[0]->updated_at->addMinutes(1)) > strtotime(now())) {
+                if (strtotime($totalDailyLimitOfUser->updated_at->addMinutes(1)) > strtotime(now())) {
                     // sweet alert
                     Alert::error('Wait for a minute');
                     return redirect()->back();

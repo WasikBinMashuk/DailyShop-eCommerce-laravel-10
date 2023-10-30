@@ -47,10 +47,10 @@ class CustomerAuthController extends Controller
         // fetching data for otp request limit per day, 10 per user and 1000 for all users
         $today = now()->toDateString();
         $totalDailyLimit = OtpCount::whereDate('created_at', $today)->sum('otp_count');
-        $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')->where('mobile', $request->mobile)->whereDate('created_at', $today)->get();
+        $totalDailyLimitOfUser = OtpCount::select('otp_count', 'updated_at')->where('mobile', $request->mobile)->whereDate('created_at', $today)->first();
 
         //check if daily website limit and daily user's otp request limit is over
-        if ($totalDailyLimitOfUser->isEmpty() || $totalDailyLimitOfUser[0]->otp_count < 10) {
+        if ($totalDailyLimitOfUser?->otp_count < 10) {
 
             if (($totalDailyLimit <= 1000)) {
                 $request->session()->put('customerInput', [
@@ -61,7 +61,7 @@ class CustomerAuthController extends Controller
                 ]);
 
                 //check : User cannot resend any request within 1 minute (What if someone try to resubmit the registration form frequently)
-                if ($totalDailyLimitOfUser->isNotEmpty() && (strtotime($totalDailyLimitOfUser[0]->updated_at->addMinutes(1)) > strtotime(now()))) {
+                if ($totalDailyLimitOfUser && (strtotime($totalDailyLimitOfUser->updated_at->addMinutes(1)) > strtotime(now()))) {
                     // sweet alert
                     Alert::error('Wait for a minute');
                     return redirect()->back();
@@ -87,10 +87,13 @@ class CustomerAuthController extends Controller
                 if ($otp_count && ($otp_count->created_at->toDateString() != $today)) {
 
                     //check if a user crossed his limit the otherday, deleting the old record and counting for today
-                    $otp_count->delete();
-                    OtpCount::create([
-                        'mobile' => $request->mobile,
-                        'otp_count' => 1,
+                    // $otp_count->delete();
+                    // OtpCount::create([
+                    //     'mobile' => $request->mobile,
+                    //     'otp_count' => 1,
+                    // ]);
+                    $otp_count->update([
+                        'otp_count' => $otp_count->otp_count + 1
                     ]);
                 } elseif ($otp_count) {
 
