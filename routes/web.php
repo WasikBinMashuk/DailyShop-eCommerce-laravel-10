@@ -51,7 +51,7 @@ Route::middleware('auth')->prefix('email')->group(function () {
 Route::get('lang/change', [LangController::class, 'lang_change'])->name('lang.change');
 
 // AUTH group route for users, categories, subcategories and products
-Route::group(['middleware' => ['auth', 'verified']], function () {
+Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard']);
 
