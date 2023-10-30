@@ -12,5 +12,6 @@ class OtpCount extends Model
     protected $fillable = [
         'mobile',
         'otp_count',
+        'created_at',
     ];
 }
