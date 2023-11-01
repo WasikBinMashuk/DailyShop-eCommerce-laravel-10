@@ -17,6 +17,9 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\BD\DistrictController;
+use App\Http\Controllers\BD\DivisionController;
+use App\Http\Controllers\BD\ThanaController;
 use App\Http\Controllers\OtpController;
 use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
@@ -162,11 +165,23 @@ Route::get('send/mail', function () {
 });
 
 Route::get('response/api', [OtpController::class, 'apiTesting']);
-Route::get('otp', [OtpController::class, 'otp'])->name('otp');
-Route::post('otp/verify', [OtpController::class, 'verify'])->name('otp.verify');
-Route::get('otp/resend', [OtpController::class, 'resend'])->name('otp.resend');
-Route::get('otp/timedout', [OtpController::class, 'timedOut']);
+Route::prefix('otp')->group(function () {
+    Route::get('/', [OtpController::class, 'otp'])->name('otp');
+    Route::post('/verify', [OtpController::class, 'verify'])->name('otp.verify');
+    Route::get('/resend', [OtpController::class, 'resend'])->name('otp.resend');
+    Route::get('/timedout', [OtpController::class, 'timedOut']);
+});
+
 
 // Route::get('/otp', function () {
 //     return view('frontend.otp');
 // });
+
+// Sliders crud route in admin panel
+// Route::resource('sliders', SliderController::class);
+
+Route::resource('divisions', DivisionController::class);
+Route::resource('districts', DistrictController::class);
+Route::resource('thanas', ThanaController::class);
+// Dependant dropdown menu while Thana
+Route::post('/getDistricts', [ThanaController::class, 'getDistricts']);
