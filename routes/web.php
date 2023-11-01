@@ -17,7 +17,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\Backend\RoleController;
-use App\Http\Controllers\OtpController;
+use App\Http\Controllers\Frontend\OtpController;
 use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -161,11 +161,16 @@ Route::get('send/mail', function () {
     dd('Send mail successfully');
 });
 
+// OTP routes
+Route::prefix('otp')->group(function () {
+    Route::get('/', [OtpController::class, 'otp'])->name('otp');
+    Route::post('verify', [OtpController::class, 'verify'])->name('otp.verify');
+    Route::get('resend', [OtpController::class, 'resend'])->name('otp.resend');
+    Route::get('timedout', [OtpController::class, 'timedOut']);
+});
+
 Route::get('response/api', [OtpController::class, 'apiTesting']);
-Route::get('otp', [OtpController::class, 'otp'])->name('otp');
-Route::post('otp/verify', [OtpController::class, 'verify'])->name('otp.verify');
-Route::get('otp/resend', [OtpController::class, 'resend'])->name('otp.resend');
-Route::get('otp/timedout', [OtpController::class, 'timedOut']);
+
 
 // Route::get('/otp', function () {
 //     return view('frontend.otp');

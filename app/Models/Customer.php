@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,6 +25,14 @@ class Customer extends Authenticatable
         'postcode',
         'otp_verified'
     ];
+
+    //always setting first letter capital with Laravel Mutator
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => ucwords($value),
+        );
+    }
 
     protected $hidden = [
         'password',
