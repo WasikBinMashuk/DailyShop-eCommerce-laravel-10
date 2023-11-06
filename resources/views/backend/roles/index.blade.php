@@ -18,6 +18,7 @@
                                     <label class="form-label required">Roles</label>
                                     <div>
                                         <select name="role_id" class="form-select" id="role">
+                                            <option value="" selected disabled>Select something</option>
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach
@@ -27,13 +28,13 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="col-3 col-form-label pt-0">Permissions</label>
                                     <div class="col" id="permissions">
-                                        @foreach ($permissions as $permission)
+                                        {{-- @foreach ($permissions as $permission)
                                             <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="permission_id[]"
                                                     value="{{ $permission->id }}" />
                                                 <span class="form-check-label">{{ $permission->name }}</span>
                                             </label>
-                                        @endforeach
+                                        @endforeach --}}
 
                                     </div>
                                 </div>
@@ -109,7 +110,7 @@
     </div>
 
     {{-- Dependent checkbox jquery --}}
-    {{-- <script>
+    <script>
         jQuery(document).ready(function() {
             jQuery('#role').change(function() {
                 let cid = jQuery(this).val();
@@ -124,5 +125,5 @@
                 });
             });
         });
-    </script> --}}
+    </script>
 @endsection

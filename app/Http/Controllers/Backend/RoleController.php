@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\User;
@@ -47,10 +48,19 @@ class RoleController extends Controller
 
     public function rolePermissionStore(Request $request)
     {
+        //If no role is selected it will show an error toast
+        if (!$request->role_id) {
+            // sweet alert
+            toast('Select a role!', 'error');
+
+            return redirect()->back();
+        }
+        
         $permissions = $request->input('permission_id');
 
         $role = Role::findById($request->role_id);
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions([]); //This will remove all previous permissions from the role
+        $role->givePermissionTo($permissions); //This will add the new permissions if there is any
 
         // sweet alert
         toast('Role/Permissions added!', 'success');
@@ -60,8 +70,6 @@ class RoleController extends Controller
 
     public function getRole(Request $request)
     {
-        //INCOMPLETE........
-
         $cid = $request->post('cid');
 
         $allPermissions  = Permission::all();
@@ -70,14 +78,39 @@ class RoleController extends Controller
 
         $html = '';
 
-        foreach ($permissions as $permission) {
-
-            $html .= '<label class="form-check">
+        foreach ($allPermissions as $allPermission) {
+            $flag = 0;
+            foreach ($permissions as $permission) {
+                if ($allPermission->id == $permission->id) {
+                    $flag = 1;
+                }
+            }
+            if ($flag == 1) {
+                $html .= '<label class="form-check">
                         <input class="form-check-input" type="checkbox" name="permission_id[]"
-                            value="' . $permission->id . '" checked />
-                        <span class="form-check-label">' . $permission->name . '</span>
+                            value="' . $allPermission->id . '" checked />
+                        <span class="form-check-label">' . $allPermission->name . '</span>
                     </label>';
+            } else {
+                $html .= '<label class="form-check">
+                        <input class="form-check-input" type="checkbox" name="permission_id[]"
+                            value="' . $allPermission->id . '"  />
+                        <span class="form-check-label">' . $allPermission->name . '</span>
+                    </label>';
+            }
         }
         echo $html;
     }
+
+
+    // foreach ($permissions as $permission) {
+
+    //     $html .= '<label class="form-check">
+    //                 <input class="form-check-input" type="checkbox" name="permission_id[]"
+    //                     value="' . $permission->id . '" checked />
+    //                 <span class="form-check-label">' . $permission->name . '</span>
+    //             </label>';
+    // }
+    // echo $html;
+
 }
