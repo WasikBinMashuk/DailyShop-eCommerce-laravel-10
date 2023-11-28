@@ -4,6 +4,7 @@
         <div class="row">
             <div class="col-md-7 ">
                 <div class="row">
+                    {{-- Role/Permission --}}
                     <div class="card">
                         <form action="{{ route('roles.permission.store') }}" method="POST">
                             @csrf
@@ -46,6 +47,7 @@
                             </div>
                         </form>
                     </div>
+                    {{-- Asign Roles To User --}}
                     <div class="card mt-5">
                         <form action="{{ route('user.role.store') }}" method="POST">
                             @csrf
@@ -92,6 +94,7 @@
             </div>
             <div class="col-md-5 ">
                 <div class="row">
+                    {{-- Add roles --}}
                     <div class="col-md-12 ">
                         <form action="{{ route('roles.store') }}" method="POST">
                             @csrf
@@ -120,6 +123,7 @@
                             </div>
                         </form>
                     </div>
+                    {{-- Add permissions --}}
                     <div class="col-md-12 mt-5">
                         <form action="{{ route('permission.store') }}" method="POST">
                             @csrf
