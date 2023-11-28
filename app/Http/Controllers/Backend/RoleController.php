@@ -15,7 +15,8 @@ class RoleController extends Controller
     {
         $roles = Role::all();
         $permissions = Permission::all();
-        return view('backend.roles.index', compact('roles', 'permissions'));
+        $users = User::all();
+        return view('backend.roles.index', compact('roles', 'permissions', 'users'));
     }
 
     public function store(Request $request)
@@ -55,7 +56,7 @@ class RoleController extends Controller
 
             return redirect()->back();
         }
-        
+
         $permissions = $request->input('permission_id');
 
         $role = Role::findById($request->role_id);
@@ -68,7 +69,29 @@ class RoleController extends Controller
         return redirect()->back();
     }
 
-    public function getRole(Request $request)
+    public function userRoleStore(Request $request)
+    {
+        //If no user is selected it will show an error toast
+        if (!$request->user_id) {
+            // sweet alert
+            toast('Select a User!', 'error');
+
+            return redirect()->back();
+        }
+
+        $roles = $request->input('role_id');
+
+        $user = User::find($request->user_id);
+        $user->syncRoles([]); //This will remove all previous roles of the user
+        $user->syncRoles($roles); //This will add the new roles if there is any
+
+        // sweet alert
+        toast('Role/Permissions added!', 'success');
+
+        return redirect()->back();
+    }
+
+    public function getPermissions(Request $request)
     {
         $cid = $request->post('cid');
 
@@ -96,6 +119,42 @@ class RoleController extends Controller
                         <input class="form-check-input" type="checkbox" name="permission_id[]"
                             value="' . $allPermission->id . '"  />
                         <span class="form-check-label">' . $allPermission->name . '</span>
+                    </label>';
+            }
+        }
+        echo $html;
+    }
+
+    public function getUserRole(Request $request)
+    {
+        $cid = $request->post('cid');
+
+        $allRoles  = Role::all();
+
+        $user = User::find($cid); // Replace with your user instance
+
+        $roleIds = $user->roles->pluck('id')->toArray();
+
+        $html = '';
+
+        foreach ($allRoles as $allRole) {
+            $flag = 0;
+            foreach ($roleIds as $roleId) {
+                if ($allRole->id == $roleId) {
+                    $flag = 1;
+                }
+            }
+            if ($flag == 1) {
+                $html .= '<label class="form-check">
+                        <input class="form-check-input" type="checkbox" name="role_id[]"
+                            value="' . $allRole->id . '" checked />
+                        <span class="form-check-label">' . $allRole->name . '</span>
+                    </label>';
+            } else {
+                $html .= '<label class="form-check">
+                        <input class="form-check-input" type="checkbox" name="role_id[]"
+                            value="' . $allRole->id . '"  />
+                        <span class="form-check-label">' . $allRole->name . '</span>
                     </label>';
             }
         }
