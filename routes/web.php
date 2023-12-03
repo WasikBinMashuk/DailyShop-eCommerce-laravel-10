@@ -113,11 +113,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('/roles/permission/store', [RoleController::class, 'permissionStore'])->name('permission.store');
         Route::post('/roles/permissions/store', [RoleController::class, 'rolePermissionStore'])->name('roles.permission.store');
         Route::post('/user/roles/store', [RoleController::class, 'userRoleStore'])->name('user.role.store');
+        Route::post('/user/permissions/store', [RoleController::class, 'userPermissionStore'])->name('user.permissions.store');
     });
 
     // Dependant Role-Permission Checkbox AJAX call route
     Route::post('/getPermissions', [RoleController::class, 'getPermissions']);
     Route::post('/getUserRole', [RoleController::class, 'getUserRole']);
+    Route::post('/getUserPermission', [RoleController::class, 'getUserPermission']);
 });
 
 

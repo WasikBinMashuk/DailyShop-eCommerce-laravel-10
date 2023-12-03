@@ -22,10 +22,10 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'roleName' => 'required|string|max:255',
         ]);
 
-        Role::create(['name' => $request->name]);
+        Role::create(['name' => $request->roleName]);
 
         // sweet alert
         toast('New Role added!', 'success');
@@ -36,10 +36,10 @@ class RoleController extends Controller
     public function permissionStore(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'permissionName' => 'required|string|max:255',
         ]);
 
-        Permission::create(['name' => $request->name]);
+        Permission::create(['name' => $request->permissionName]);
 
         // sweet alert
         toast('New Permission added!', 'success');
@@ -64,7 +64,7 @@ class RoleController extends Controller
         $role->givePermissionTo($permissions); //This will add the new permissions if there is any
 
         // sweet alert
-        toast('Role/Permissions added!', 'success');
+        toast('Permissions assigned to Roles!!', 'success');
 
         return redirect()->back();
     }
@@ -74,7 +74,7 @@ class RoleController extends Controller
         //If no user is selected it will show an error toast
         if (!$request->user_id) {
             // sweet alert
-            toast('Select a User!', 'error');
+            toast('Select an User!', 'error');
 
             return redirect()->back();
         }
@@ -86,7 +86,29 @@ class RoleController extends Controller
         $user->syncRoles($roles); //This will add the new roles if there is any
 
         // sweet alert
-        toast('Role/Permissions added!', 'success');
+        toast('Roles assigned to User!', 'success');
+
+        return redirect()->back();
+    }
+
+    public function userPermissionStore(Request $request)
+    {
+        //If no user is selected it will show an error toast
+        if (!$request->user_id) {
+            // sweet alert
+            toast('Select an User!', 'error');
+
+            return redirect()->back();
+        }
+
+        $permissions = $request->input('permission_id');
+
+        $user = User::find($request->user_id);
+        $user->syncPermissions([]); //This will remove all previous roles of the user
+        $user->syncPermissions($permissions); //This will add the new roles if there is any
+
+        // sweet alert
+        toast('Permissions assigned to User!', 'success');
 
         return redirect()->back();
     }
@@ -155,6 +177,42 @@ class RoleController extends Controller
                         <input class="form-check-input" type="checkbox" name="role_id[]"
                             value="' . $allRole->id . '"  />
                         <span class="form-check-label">' . $allRole->name . '</span>
+                    </label>';
+            }
+        }
+        echo $html;
+    }
+
+    public function getUserPermission(Request $request)
+    {
+        $cid = $request->post('cid');
+
+        $allPermissions  = Permission::all();
+
+        $user = User::find($cid);
+
+        $usersPermissions = $user->permissions;
+
+        $html = '';
+
+        foreach ($allPermissions as $allPermission) {
+            $flag = 0;
+            foreach ($usersPermissions as $usersPermission) {
+                if ($allPermission->id == $usersPermission->id) {
+                    $flag = 1;
+                }
+            }
+            if ($flag == 1) {
+                $html .= '<label class="form-check">
+                        <input class="form-check-input" type="checkbox" name="permission_id[]"
+                            value="' . $allPermission->id . '" checked />
+                        <span class="form-check-label">' . $allPermission->name . '</span>
+                    </label>';
+            } else {
+                $html .= '<label class="form-check">
+                        <input class="form-check-input" type="checkbox" name="permission_id[]"
+                            value="' . $allPermission->id . '"  />
+                        <span class="form-check-label">' . $allPermission->name . '</span>
                     </label>';
             }
         }
