@@ -24,7 +24,7 @@ class SubCategoryController extends Controller
             ->orderBy('sub_category_name', 'ASC')
             ->paginate(10);
 
-        return view('backend.categories.Subcategories', compact('subCategories'));
+        return view('backend.categories.subCategories', compact('subCategories'));
     }
 
     public function createSubCat()
