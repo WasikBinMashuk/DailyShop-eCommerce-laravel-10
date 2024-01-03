@@ -120,7 +120,7 @@
             jQuery('#category').change(function() {
                 let cid = jQuery(this).val();
                 jQuery.ajax({
-                    url: '/getSubCategory',
+                    url: "{{ route('product.getSubCategory') }}",
                     type: 'post',
                     data: 'cid=' + cid + '&_token={{ csrf_token() }}',
                     success: function(result) {
